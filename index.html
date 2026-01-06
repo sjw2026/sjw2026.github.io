@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>sjw2026 | Indices</title>
+
   <style>
     body{
       margin:0;
@@ -14,7 +15,7 @@
     .container{ padding:12px; }
     .card{
       width:100%;
-      max-width:560px;     /* 왼쪽 상단 + 가로 여유 */
+      max-width:560px;
       background:#fff;
       border:1px solid #e5e7eb;
       border-radius:14px;
@@ -24,7 +25,7 @@
     .row{
       margin:8px 0;
       border-radius:12px;
-      overflow:hidden;     /* 위젯 모서리 깔끔하게 */
+      overflow:hidden;
       border:1px solid #eef2f7;
     }
     .note{
@@ -35,131 +36,50 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="card">
+<div class="container">
+<div class="card">
 
-      <!-- KOSPI -->
-      <div class="row">
-        <div class="tradingview-widget-container">
-          <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-          {
-            "symbol": "TVC:KOSPI",
-            "width": "100%",
-            "height": 72,
-            "locale": "kr",
-            "dateRange": "1D",
-            "colorTheme": "light",
-            "isTransparent": false,
-            "autosize": true,
-            "largeChartUrl": ""
-          }
-          </script>
-        </div>
-      </div>
+<!-- 공통 설정: dateRange = 5D -->
 
-      <!-- KOSDAQ -->
-      <div class="row">
-        <div class="tradingview-widget-container">
-          <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-          {
-            "symbol": "TVC:KOSDAQ",
-            "width": "100%",
-            "height": 72,
-            "locale": "kr",
-            "dateRange": "1D",
-            "colorTheme": "light",
-            "isTransparent": false,
-            "autosize": true,
-            "largeChartUrl": ""
-          }
-          </script>
-        </div>
-      </div>
+<div class="row">
+<script src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js">
+{"symbol":"KRX:KOSPI","dateRange":"5D","locale":"kr","colorTheme":"light","isTransparent":false,"autosize":true}
+</script>
+</div>
 
-      <!-- S&P 500 -->
-      <div class="row">
-        <div class="tradingview-widget-container">
-          <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-          {
-            "symbol": "TVC:SPX",
-            "width": "100%",
-            "height": 72,
-            "locale": "kr",
-            "dateRange": "1D",
-            "colorTheme": "light",
-            "isTransparent": false,
-            "autosize": true,
-            "largeChartUrl": ""
-          }
-          </script>
-        </div>
-      </div>
+<div class="row">
+<script src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js">
+{"symbol":"KRX:KOSDAQ","dateRange":"5D","locale":"kr","colorTheme":"light","isTransparent":false,"autosize":true}
+</script>
+</div>
 
-      <!-- NASDAQ 100 -->
-      <div class="row">
-        <div class="tradingview-widget-container">
-          <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-          {
-            "symbol": "NASDAQ:NDX",
-            "width": "100%",
-            "height": 72,
-            "locale": "kr",
-            "dateRange": "1D",
-            "colorTheme": "light",
-            "isTransparent": false,
-            "autosize": true,
-            "largeChartUrl": ""
-          }
-          </script>
-        </div>
-      </div>
+<div class="row">
+<script src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js">
+{"symbol":"SP:SPX","dateRange":"5D","locale":"kr","colorTheme":"light","isTransparent":false,"autosize":true}
+</script>
+</div>
 
-      <!-- DOW JONES -->
-      <div class="row">
-        <div class="tradingview-widget-container">
-          <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-          {
-            "symbol": "TVC:DJI",
-            "width": "100%",
-            "height": 72,
-            "locale": "kr",
-            "dateRange": "1D",
-            "colorTheme": "light",
-            "isTransparent": false,
-            "autosize": true,
-            "largeChartUrl": ""
-          }
-          </script>
-        </div>
-      </div>
+<div class="row">
+<script src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js">
+{"symbol":"NASDAQ:NDX","dateRange":"5D","locale":"kr","colorTheme":"light","isTransparent":false,"autosize":true}
+</script>
+</div>
 
-      <!-- HANG SENG -->
-      <div class="row">
-        <div class="tradingview-widget-container">
-          <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-          {
-            "symbol": "TVC:HSI",
-            "width": "100%",
-            "height": 72,
-            "locale": "kr",
-            "dateRange": "1D",
-            "colorTheme": "light",
-            "isTransparent": false,
-            "autosize": true,
-            "largeChartUrl": ""
-          }
-          </script>
-        </div>
-      </div>
+<div class="row">
+<script src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js">
+{"symbol":"DJ:DJI","dateRange":"5D","locale":"kr","colorTheme":"light","isTransparent":false,"autosize":true}
+</script>
+</div>
 
-      <div class="note">TradingView 제공 · 시장별 실시간/지연 데이터</div>
-    </div>
-  </div>
+<div class="row">
+<script src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js">
+{"symbol":"HSI:HSI","dateRange":"5D","locale":"kr","colorTheme":"light","isTransparent":false,"autosize":true}
+</script>
+</div>
+
+<div class="note">TradingView 제공 · 시장별 실시간/지연 데이터</div>
+
+</div>
+</div>
 </body>
 </html>
