@@ -9,15 +9,18 @@
     :root{
       --bg0:#070a10;
       --bg1:#0b1020;
+
       --panel: rgba(255,255,255,.05);
       --panel2: rgba(255,255,255,.035);
       --stroke: rgba(255,255,255,.10);
+
       --text: rgba(255,255,255,.88);
       --muted: rgba(255,255,255,.55);
-      --link: #cfe0ff;
-      --link2:#9bbcff;
+
       --shadow: 0 18px 40px rgba(0,0,0,.45);
       --radius: 16px;
+
+      --sidebarW: 74px;
     }
 
     *{ box-sizing:border-box; }
@@ -32,10 +35,133 @@
         linear-gradient(180deg, var(--bg1), var(--bg0));
     }
 
+    /* ===== Layout ===== */
     .wrap{
       max-width: 1440px;
       margin: 0 auto;
       padding: 18px 14px 30px;
+      padding-left: calc(14px + var(--sidebarW)); /* 사이드바 공간 */
+    }
+
+    /* ===== AI Sidebar (SVG) ===== */
+    .ai-sidebar{
+      position: fixed;
+      top: 50%;
+      left: 14px;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 200;
+      width: var(--sidebarW);
+      align-items: center;
+      pointer-events: auto;
+    }
+
+    .ai-btn{
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 12px 26px rgba(0,0,0,.45);
+      position: relative;
+      overflow: hidden;
+      transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+    }
+
+    .ai-btn::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(60px 60px at 30% 20%, rgba(255,255,255,.22), transparent 60%);
+      opacity:.55;
+      pointer-events:none;
+    }
+
+    .ai-btn:hover{
+      transform: translateY(-2px) scale(1.04);
+      border-color: rgba(255,255,255,.26);
+      box-shadow: 0 18px 44px rgba(0,0,0,.62);
+    }
+
+    /* Tooltip */
+    .ai-btn .tip{
+      position:absolute;
+      left: 64px;
+      top: 50%;
+      transform: translateY(-50%);
+      white-space: nowrap;
+      font-size: 12px;
+      color: rgba(255,255,255,.88);
+      background: rgba(15,20,30,.86);
+      border: 1px solid rgba(255,255,255,.14);
+      padding: 7px 10px;
+      border-radius: 12px;
+      box-shadow: 0 18px 44px rgba(0,0,0,.55);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .12s ease, transform .12s ease;
+    }
+    .ai-btn:hover .tip{
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+    }
+
+    /* SVG */
+    .ai-btn svg{
+      width: 26px;
+      height: 26px;
+      opacity: .96;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,.35));
+    }
+
+    /* Brand-ish gradients (추상 심볼 + 컬러) */
+    .ai-chatgpt{
+      background: linear-gradient(135deg, rgba(16,163,127,.95), rgba(10,122,95,.92));
+    }
+    .ai-gemini{
+      background: linear-gradient(135deg, rgba(66,133,244,.96), rgba(123,97,255,.92));
+    }
+    .ai-claude{
+      background: linear-gradient(135deg, rgba(249,115,22,.95), rgba(251,113,133,.92));
+    }
+    .ai-perplexity{
+      background: linear-gradient(135deg, rgba(99,102,241,.95), rgba(34,211,238,.88));
+    }
+
+    /* Mobile: sidebar -> top bar */
+    @media (max-width: 900px){
+      .wrap{
+        padding-left: 14px;
+        padding-top: 88px;
+      }
+      .ai-sidebar{
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        flex-direction: row;
+        width: auto;
+        gap: 10px;
+        background: rgba(255,255,255,.04);
+        border: 1px solid rgba(255,255,255,.12);
+        border-radius: 999px;
+        padding: 8px 10px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 14px 36px rgba(0,0,0,.5);
+      }
+      .ai-btn .tip{
+        left: 50%;
+        top: 68px;
+        transform: translateX(-50%);
+      }
+      .ai-btn:hover .tip{
+        transform: translateX(-50%);
+      }
     }
 
     /* ===== Top area ===== */
@@ -80,7 +206,7 @@
       border-color: rgba(155,188,255,.22);
       background: rgba(10,14,22,.72);
     }
-    .icon{
+    .sicon{
       width:34px;
       height:34px;
       border-radius: 12px;
@@ -90,7 +216,7 @@
       background: rgba(255,255,255,.04);
       flex: 0 0 auto;
     }
-    .icon svg{ width:18px; height:18px; opacity:.95; }
+    .sicon svg{ width:18px; height:18px; opacity:.95; }
 
     .search input{
       width:100%;
@@ -146,7 +272,7 @@
       list-style:none;
     }
     .links a{
-      color: var(--link);
+      color: rgba(255,255,255,.88);
       text-decoration: none;
       display:flex;
       align-items:center;
@@ -158,7 +284,6 @@
       transition: background .12s ease, border-color .12s ease, transform .12s ease;
     }
     .links a:hover{
-      color: #ffffff;
       border-color: rgba(155,188,255,.22);
       background: rgba(155,188,255,.10);
       transform: translateY(-1px);
@@ -180,7 +305,6 @@
       background: rgba(255,255,255,.03);
     }
 
-    /* footer */
     footer{
       margin-top: 14px;
       color: var(--muted);
@@ -189,20 +313,61 @@
       justify-content:space-between;
       flex-wrap:wrap;
       gap:8px;
+      opacity:.85;
     }
   </style>
 </head>
 
 <body>
+  <!-- 왼쪽 AI 아이콘 바 (SVG 고급 버전) -->
+  <nav class="ai-sidebar" aria-label="AI shortcuts">
+    <a class="ai-btn ai-chatgpt" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" aria-label="ChatGPT">
+      <!-- 추상 로고: 6각 루프 느낌 -->
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 3.2c1.8 0 3.4.8 4.5 2.1 1.9.1 3.4 1.7 3.4 3.6 0 .6-.1 1.2-.4 1.7.9 1.1 1.2 2.7.6 4.1-.6 1.5-2 2.4-3.6 2.5-.7 1.5-2.2 2.6-4 2.6-1 0-2-.3-2.8-.8-1.7.5-3.6-.3-4.5-2-.4-.8-.5-1.7-.3-2.5C4 13.8 3.2 12.6 3.2 11.2c0-1.8 1.2-3.3 2.8-3.8C6.7 5 8.2 3.2 10.2 3.2c.7 0 1.3.1 1.8.3Z" stroke="rgba(255,255,255,.92)" stroke-width="1.3" opacity=".95"/>
+        <path d="M8.2 7.4 12 9.6l3.8-2.2M12 9.6v4.5l-3.8 2.2M12 9.6l3.8 2.2v4.5" stroke="rgba(255,255,255,.9)" stroke-width="1.2" opacity=".8"/>
+      </svg>
+      <span class="tip">ChatGPT</span>
+    </a>
+
+    <a class="ai-btn ai-gemini" href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" aria-label="Gemini">
+      <!-- 추상 로고: 스파크/별 -->
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 2.8l1.7 5.7 5.7 1.7-5.7 1.7L12 17.6l-1.7-5.7-5.7-1.7 5.7-1.7L12 2.8Z" fill="rgba(255,255,255,.92)" opacity=".92"/>
+        <path d="M18.8 13.5l.8 2.7 2.7.8-2.7.8-.8 2.7-.8-2.7-2.7-.8 2.7-.8.8-2.7Z" fill="rgba(255,255,255,.88)" opacity=".78"/>
+      </svg>
+      <span class="tip">Gemini</span>
+    </a>
+
+    <a class="ai-btn ai-claude" href="https://claude.ai/" target="_blank" rel="noopener noreferrer" aria-label="Claude">
+      <!-- 추상 로고: 펜촉/대화 느낌 -->
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 3.2c3.8 0 6.8 2.5 6.8 5.6 0 2.5-2 4.7-5 5.4L12 20.8l-1.8-6.6c-3-.7-5-2.9-5-5.4 0-3.1 3-5.6 6.8-5.6Z" stroke="rgba(255,255,255,.92)" stroke-width="1.3" opacity=".95"/>
+        <path d="M9.2 9.6h5.6" stroke="rgba(255,255,255,.88)" stroke-width="1.3" stroke-linecap="round" opacity=".85"/>
+        <path d="M9.8 12.2h4.4" stroke="rgba(255,255,255,.88)" stroke-width="1.3" stroke-linecap="round" opacity=".7"/>
+      </svg>
+      <span class="tip">Claude</span>
+    </a>
+
+    <a class="ai-btn ai-perplexity" href="https://www.perplexity.ai/" target="_blank" rel="noopener noreferrer" aria-label="Perplexity">
+      <!-- 추상 로고: P/컴퍼스 느낌 -->
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 3.4c4.7 0 8.6 3.9 8.6 8.6S16.7 20.6 12 20.6 3.4 16.7 3.4 12 7.3 3.4 12 3.4Z" stroke="rgba(255,255,255,.9)" stroke-width="1.3" opacity=".9"/>
+        <path d="M9 8.2h4.2c1.8 0 3 1.1 3 2.7 0 1.7-1.2 2.7-3 2.7H9V8.2Z" stroke="rgba(255,255,255,.92)" stroke-width="1.3" opacity=".9"/>
+        <path d="M9 13.6v2.8" stroke="rgba(255,255,255,.92)" stroke-width="1.3" opacity=".9" stroke-linecap="round"/>
+      </svg>
+      <span class="tip">Perplexity</span>
+    </a>
+  </nav>
+
   <div class="wrap">
-    <!-- 상단 검색/위젯 영역 -->
+    <!-- 검색/위젯 -->
     <div class="topbar">
       <div class="slot">
         <div class="search-grid">
-          <!-- ✅ 2) 위치 변경: Google 먼저 -->
+          <!-- Google -->
           <form class="search" action="https://www.google.com/search" method="get" target="_blank">
-            <div class="icon" aria-hidden="true" title="Google">
-              <!-- G 아이콘(추상) -->
+            <div class="sicon" aria-hidden="true" title="Google">
               <svg viewBox="0 0 24 24" fill="none">
                 <path d="M12 3a9 9 0 1 0 0 18c2.6 0 5.8-1.2 7.3-4.9.6-1.5.7-2.9.6-4.1H12v3h4.7c-.5 2.2-2.4 4-4.7 4a6 6 0 1 1 0-12c1.5 0 2.8.5 3.8 1.5l2.1-2.1C16.3 3.8 14.3 3 12 3Z" fill="rgba(155,188,255,.95)"/>
               </svg>
@@ -211,10 +376,9 @@
             <button type="submit">Search</button>
           </form>
 
-          <!-- ✅ Naver -->
+          <!-- Naver -->
           <form class="search" action="https://search.naver.com/search.naver" method="get" target="_blank">
-            <div class="icon" aria-hidden="true" title="Naver">
-              <!-- N 아이콘 -->
+            <div class="sicon" aria-hidden="true" title="Naver">
               <svg viewBox="0 0 24 24" fill="none">
                 <path d="M7 6h3.2l3.8 5.7V6H17v12h-3.2L10 12.3V18H7V6Z" fill="rgba(130,255,194,.95)"/>
               </svg>
@@ -223,10 +387,9 @@
             <button type="submit">Search</button>
           </form>
 
-          <!-- ✅ 3) YouTube 검색 추가 -->
+          <!-- YouTube -->
           <form class="search" action="https://www.youtube.com/results" method="get" target="_blank">
-            <div class="icon" aria-hidden="true" title="YouTube">
-              <!-- 재생 아이콘 -->
+            <div class="sicon" aria-hidden="true" title="YouTube">
               <svg viewBox="0 0 24 24" fill="none">
                 <path d="M10 16V8l7 4-7 4Z" fill="rgba(255,140,140,.95)"/>
                 <path d="M21 12s0-3.4-.4-5c-.2-.8-.9-1.4-1.7-1.6C17.4 5 12 5 12 5s-5.4 0-6.9.4c-.8.2-1.5.8-1.7 1.6C3 8.6 3 12 3 12s0 3.4.4 5c.2.8.9 1.4 1.7 1.6C6.6 19 12 19 12 19s5.4 0 6.9-.4c.8-.2 1.5-.8 1.7-1.6.4-1.6.4-5 .4-5Z" stroke="rgba(255,140,140,.75)" stroke-width="1.2"/>
@@ -242,7 +405,7 @@
       <div class="slot" id="top-slot"></div>
     </div>
 
-    <!-- 링크 영역 -->
+    <!-- 링크 그리드 -->
     <div class="grid" id="grid"></div>
 
     <footer>
@@ -252,7 +415,6 @@
   </div>
 
   <script>
-    // ✅ 링크는 여기만 수정하면 됨 (섹션별 카드 = 1칸)
     const LINK_SECTIONS = [
       { items: [
         { label: "구글 캘린더", url: "https://calendar.google.com/calendar/r" },
@@ -323,6 +485,7 @@
         { label: "단독", url: "https://search.naver.com/search.naver?sm=tab_hty.top&where=news&ssc=tab.news.all&query=%5B%EB%8B%A8%EB%8F%85%5D&oquery=%5B%EB%8B%A8%EB%8F%85%5D&tqi=iHb7rdpzL8wssAcB4%2BNssssstpZ-249659&nso=so%3Ar%2Cp%3Aall%2Ca%3Aall&service_area=1&sort=0" },
         { label: "속보", url: "https://search.naver.com/search.naver?where=news&query=%5B%EC%86%8D%EB%B3%B4%5D&sm=tab_opt&sort=1&photo=0&field=0&pd=0&ds=&de=&docid=&related=0&mynews=0&office_type=0&office_section_code=0&news_office_checked=&nso=so%3Add%2Cp%3Aall&is_sug_officeid=0&office_category=0&service_area=1" }
       ]},
+
       { items: [
         { label: "유튜브 인급동", url: "https://www.youtube.com/feed/trending?bp=6gQJRkVleHBsb3Jl" },
         { label: "구글 트렌드", url: "https://trends.google.co.kr/trending?geo=KR&hl=ko" },
@@ -402,7 +565,6 @@
           if(!item?.label || !item?.url) continue;
 
           const li = document.createElement("li");
-
           const a = document.createElement("a");
           a.href = item.url;
           a.target = "_blank";
