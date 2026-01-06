@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>sjw2026 | 주요 증시</title>
+  <title>sjw2026 | Market</title>
 
   <style>
     body {
@@ -13,25 +13,20 @@
       color: #111827;
     }
 
+    /* 페이지 왼쪽 상단 여백 */
     .container {
-      padding: 20px;
+      padding: 16px;
     }
 
-    /* 왼쪽 상단 카드 */
+    /* 가로 폭 확장된 카드 */
     .market-card {
       width: 100%;
-      max-width: 420px;
+      max-width: 640px; /* ← 기존 420px → 640px */
       background: #ffffff;
       border: 1px solid #e5e7eb;
-      border-radius: 14px;
-      padding: 14px 14px 10px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-    }
-
-    .market-card h1 {
-      font-size: 16px;
-      margin: 0 0 10px;
-      font-weight: 600;
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.06);
     }
 
     .note {
@@ -44,31 +39,30 @@
 
 <body>
   <div class="container">
-    <!-- 왼쪽 상단: 주요 증시 -->
     <div class="market-card">
-      <h1>📈 주요 증시 등락률</h1>
 
+      <!-- TradingView: Market Quotes 위젯 -->
       <div class="tradingview-widget-container">
         <div class="tradingview-widget-container__widget"></div>
+
         <script
           type="text/javascript"
           src="https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js"
           async>
         {
           "width": "100%",
-          "height": 320,
+          "height": 300,
           "symbolsGroups": [
             {
               "name": "Indices",
               "symbols": [
-                  { "name": "KRX:KOSPI", "displayName": "KOSPI" },
-                  { "name": "KRX:KOSDAQ", "displayName": "KOSDAQ" },
-                  { "name": "SP:SPX", "displayName": "S&P 500" },
-                  { "name": "NASDAQ:NDX", "displayName": "NASDAQ 100" },
-                  { "name": "TVC:DJI", "displayName": "DOW" },
-                  { "name": "HSI:HSI", "displayName": "HANG SENG" }
+                { "name": "TVC:KOSPI", "displayName": "KOSPI" },
+                { "name": "KRX:KOSDAQ", "displayName": "KOSDAQ" },
+                { "name": "SP:SPX", "displayName": "S&P 500" },
+                { "name": "NASDAQ:NDX", "displayName": "NASDAQ 100" },
+                { "name": "TVC:DJI", "displayName": "DOW JONES" },
+                { "name": "HSI:HSI", "displayName": "HANG SENG" }
               ]
-
             }
           ],
           "showSymbolLogo": false,
@@ -80,11 +74,10 @@
       </div>
 
       <div class="note">
-        ※ 데이터 제공: TradingView (시장별 실시간/지연)
+        TradingView 제공 · 시장별 실시간/지연 데이터
       </div>
+
     </div>
   </div>
 </body>
 </html>
-
-
