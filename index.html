@@ -3,40 +3,52 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>sjw2026 | Market</title>
+  <title>sjw2026 | Indices</title>
 
   <style>
-    body {
-      margin: 0;
+    body{
+      margin:0;
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
-      background: #f9fafb;
+      background:#f9fafb;
     }
 
-    .container {
-      padding: 12px;
+    .container{
+      padding:12px;
     }
 
-    /* 카드 */
-    .market-card {
-      width: 100%;
-      max-width: 520px;          /* ← 핵심: 일부 컬럼 잘리게 */
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      border-radius: 14px;
-      padding: 8px;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.06);
-      overflow: hidden;          /* ← 오른쪽 컬럼 숨김 */
+    /* 왼쪽 상단 카드 */
+    .market-card{
+      width:100%;
+      max-width:560px;          /* 핵심: Chg%까지만 보이게 하는 폭 */
+      background:#fff;
+      border:1px solid #e5e7eb;
+      border-radius:14px;
+      padding:8px;
+      box-shadow:0 8px 18px rgba(0,0,0,0.06);
+      position:relative;
+      overflow:hidden;          /* 가로 스크롤/우측 컬럼 숨김 */
     }
 
-    /* 위젯 컨테이너 강제 클리핑 */
-    .tradingview-widget-container {
-      overflow: hidden;
+    /* Open / High / Low 컬럼 가림막 */
+    .market-card::after{
+      content:"";
+      position:absolute;
+      top:0;
+      right:0;
+      width:160px;              /* ← Open부터 확실히 잘리는 폭 */
+      height:100%;
+      background:#fff;
+      pointer-events:none;
     }
 
-    .note {
-      font-size: 11px;
-      color: #6b7280;
-      margin-top: 4px;
+    .tradingview-widget-container{
+      overflow:hidden;
+    }
+
+    .note{
+      margin-top:6px;
+      font-size:11px;
+      color:#6b7280;
     }
   </style>
 </head>
@@ -48,31 +60,32 @@
       <div class="tradingview-widget-container">
         <div class="tradingview-widget-container__widget"></div>
 
+        <!-- ⚠️ 이 JSON은 그대로 유지 (조금만 깨져도 기본 리스트로 바뀜) -->
         <script
           type="text/javascript"
           src="https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js"
           async>
-        {
-          "width": "100%",
-          "height": 240,        /* ← 세로도 줄여서 컴팩트 */
-          "symbolsGroups": [
-            {
-              "name": "Indices",
-              "symbols": [
-                { "name": "TVC:KOSPI", "displayName": "KOSPI" },
-                { "name": "KRX:KOSDAQ", "displayName": "KOSDAQ" },
-                { "name": "SP:SPX", "displayName": "S&P 500" },
-                { "name": "NASDAQ:NDX", "displayName": "NASDAQ 100" },
-                { "name": "TVC:DJI", "displayName": "DOW JONES" },
-                { "name": "HSI:HSI", "displayName": "HANG SENG" }
-              ]
-            }
-          ],
-          "showSymbolLogo": false,
-          "colorTheme": "light",
-          "isTransparent": true,
-          "locale": "kr"
-        }
+{
+  "width": "100%",
+  "height": 240,
+  "symbolsGroups": [
+    {
+      "name": "Indices",
+      "symbols": [
+        { "name": "TVC:KOSPI", "displayName": "KOSPI" },
+        { "name": "KRX:KOSDAQ", "displayName": "KOSDAQ" },
+        { "name": "SP:SPX", "displayName": "S&P 500" },
+        { "name": "NASDAQ:NDX", "displayName": "NASDAQ 100" },
+        { "name": "TVC:DJI", "displayName": "DOW JONES" },
+        { "name": "HSI:HSI", "displayName": "HANG SENG" }
+      ]
+    }
+  ],
+  "showSymbolLogo": false,
+  "colorTheme": "light",
+  "isTransparent": true,
+  "locale": "en"
+}
         </script>
       </div>
 
@@ -84,4 +97,5 @@
   </div>
 </body>
 </html>
+
 
