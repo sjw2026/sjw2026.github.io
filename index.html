@@ -3,164 +3,359 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>sjw2026 | Indices</title>
+  <title>sjw2026</title>
 
   <style>
+    :root{
+      --bg: #0b0f14;
+      --panel: #121a24;
+      --panel-2: #101722;
+      --border: rgba(255,255,255,.10);
+      --text: rgba(255,255,255,.88);
+      --muted: rgba(255,255,255,.55);
+      --link: #8ab4ff;
+      --link-hover: #b9d1ff;
+      --shadow: 0 10px 24px rgba(0,0,0,.35);
+      --radius: 14px;
+    }
+    *{ box-sizing:border-box; }
     body{
       margin:0;
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
-      background:#f9fafb;
-      color:#111827;
+      background: radial-gradient(1200px 800px at 15% 0%, #111b2a 0%, var(--bg) 55%);
+      color: var(--text);
     }
-    .container{ padding:12px; }
-    .card{
+    .wrap{
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 18px 14px 28px;
+    }
+
+    /* 상단: 검색 + 빈 슬롯(추후 위젯용) */
+    .topbar{
+      display:flex;
+      gap:12px;
+      align-items:stretch;
+      flex-wrap:wrap;
+      margin-bottom: 14px;
+    }
+    .slot{
+      flex: 1 1 360px;
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 12px;
+      min-height: 56px;
+    }
+
+    .search-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .search{
+      flex: 1 1 320px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      padding: 10px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    .search input{
       width:100%;
-      max-width:560px;
-      background:#fff;
-      border:1px solid #e5e7eb;
-      border-radius:14px;
-      padding:10px;
-      box-shadow:0 8px 18px rgba(0,0,0,0.06);
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-size: 14px;
     }
-    .row{
-      margin:8px 0;
-      border-radius:12px;
-      overflow:hidden;
-      border:1px solid #eef2f7;
+    .search button{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 8px 10px;
+      cursor:pointer;
+      font-size: 13px;
+      white-space: nowrap;
     }
-    .note{
-      margin-top:8px;
-      font-size:11px;
-      color:#6b7280;
+    .search button:hover{ background: rgba(255,255,255,.09); }
+
+    /* 링크 그리드 */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(6, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .card{
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 12px;
+      min-height: 210px;
+    }
+    .links{
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+      margin:0;
+      padding:0;
+      list-style:none;
+    }
+    .links a{
+      color: var(--link);
+      text-decoration: none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      background: rgba(255,255,255,.02);
+    }
+    .links a:hover{
+      color: var(--link-hover);
+      border-color: rgba(138,180,255,.25);
+      background: rgba(138,180,255,.08);
+    }
+    .tag{
+      font-size: 11px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-left:auto;
+    }
+
+    footer{
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 12px;
+      display:flex;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    @media (max-width: 1280px){
+      .grid{ grid-template-columns: repeat(3, minmax(200px, 1fr)); }
+    }
+    @media (max-width: 720px){
+      .grid{ grid-template-columns: 1fr; }
+      .card{ min-height: auto; }
     }
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="card">
+  <div class="wrap">
 
-      <!-- KOSPI -->
-      <div class="row">
-        <div class="tradingview-widget-container">
-          <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-          {
-            "symbol": "TVC:KOSPI",
-            "width": "100%",
-            "height": 72,
-            "locale": "kr",
-            "dateRange": "5D",
-            "colorTheme": "light",
-            "isTransparent": false,
-            "autosize": true,
-            "largeChartUrl": ""
-          }
-          </script>
+    <div class="topbar">
+      <!-- 검색만: 타이틀/라벨 없음 -->
+      <div class="slot">
+        <div class="search-row">
+          <form class="search" action="https://search.naver.com/search.naver" method="get" target="_blank">
+            <input name="query" placeholder="네이버 검색" autocomplete="off" />
+            <button type="submit">Naver</button>
+          </form>
+
+          <form class="search" action="https://www.google.com/search" method="get" target="_blank">
+            <input name="q" placeholder="구글 검색" autocomplete="off" />
+            <button type="submit">Google</button>
+          </form>
         </div>
       </div>
 
-      <!-- KOSDAQ -->
-      <div class="row">
-        <div class="tradingview-widget-container">
-          <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-          {
-            "symbol": "TVC:KOSDAQ",
-            "width": "100%",
-            "height": 72,
-            "locale": "kr",
-            "dateRange": "5D",
-            "colorTheme": "light",
-            "isTransparent": false,
-            "autosize": true,
-            "largeChartUrl": ""
-          }
-          </script>
-        </div>
-      </div>
-
-      <!-- S&P 500 -->
-      <div class="row">
-        <div class="tradingview-widget-container">
-          <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-          {
-            "symbol": "TVC:SPX",
-            "width": "100%",
-            "height": 72,
-            "locale": "kr",
-            "dateRange": "5D",
-            "colorTheme": "light",
-            "isTransparent": false,
-            "autosize": true,
-            "largeChartUrl": ""
-          }
-          </script>
-        </div>
-      </div>
-
-      <!-- NASDAQ 100 -->
-      <div class="row">
-        <div class="tradingview-widget-container">
-          <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-          {
-            "symbol": "NASDAQ:NDX",
-            "width": "100%",
-            "height": 72,
-            "locale": "kr",
-            "dateRange": "5D",
-            "colorTheme": "light",
-            "isTransparent": false,
-            "autosize": true,
-            "largeChartUrl": ""
-          }
-          </script>
-        </div>
-      </div>
-
-      <!-- DOW JONES -->
-      <div class="row">
-        <div class="tradingview-widget-container">
-          <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-          {
-            "symbol": "TVC:DJI",
-            "width": "100%",
-            "height": 72,
-            "locale": "kr",
-            "dateRange": "5D",
-            "colorTheme": "light",
-            "isTransparent": false,
-            "autosize": true,
-            "largeChartUrl": ""
-          }
-          </script>
-        </div>
-      </div>
-
-      <!-- HANG SENG -->
-      <div class="row">
-        <div class="tradingview-widget-container">
-          <div class="tradingview-widget-container__widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-          {
-            "symbol": "TVC:HSI",
-            "width": "100%",
-            "height": 72,
-            "locale": "kr",
-            "dateRange": "5D",
-            "colorTheme": "light",
-            "isTransparent": false,
-            "autosize": true,
-            "largeChartUrl": ""
-          }
-          </script>
-        </div>
-      </div>
-
-      <div class="note">TradingView 제공 · 시장별 실시간/지연 데이터</div>
+      <!-- 추후 위젯/템플릿 자리: 아무 것도 표시 안 함 -->
+      <div class="slot" id="top-slot"></div>
     </div>
+
+    <div class="grid" id="grid"></div>
+
+    <footer>
+      <div>© sjw2026</div>
+      <div>수정: <code style="color:var(--muted);">LINK_SECTIONS</code>만 편집</div>
+    </footer>
   </div>
+
+  <script>
+    // ✅ 링크는 여기만 수정하면 됨
+    const LINK_SECTIONS = [
+      { items: [
+        { label: "구글 캘린더", url: "https://calendar.google.com/calendar/r" },
+        { label: "서진욱 기자", url: "https://media.naver.com/journalist/008/31377" },
+        { label: "와이파이레터", url: "https://ictwifi.stibee.com/" },
+        { label: "네이버 뉴스", url: "https://news.naver.com/" },
+        { label: "아무튼 주말", url: "https://www.chosun.com/nsearch/?query=%EC%95%84%EB%AC%B4%ED%8A%BC%2C%20%EC%A3%BC%EB%A7%90&page=1&siteid=&sort=1&date_period=&date_start=&date_end=&writer=&field=&emd_word=&expt_word=&opt_chk=false&app_check=0&website=www,chosun&category=" },
+        { label: "칼럼", url: "https://news.naver.com/main/opinion/todayColumn.nhn" }
+      ]},
+      { items: [
+        { label: "기사 입력기", url: "https://mod.mt.co.kr/login" },
+        { label: "머니투데이", url: "http://www.mt.co.kr/" },
+        { label: "머투 포데", url: "https://mpd.mt.co.kr/" },
+        { label: "머투 인트라", url: "http://intra.mt.co.kr/login.html" },
+        { label: "머투 메일", url: "https://outlook.office.com/owa/?realm=mt.co.kr&exsvurl=1&ll-cc=1042&modurl=0" },
+        { label: "구글 메일", url: "https://mail.google.com/mail/u/0/#inbox" }
+      ]},
+      { items: [
+        { label: "구글 드라이브", url: "https://drive.google.com/drive/my-drive" },
+        { label: "네이버 사전", url: "https://dict.naver.com/" },
+        { label: "구글 번역기", url: "https://translate.google.com/" },
+        { label: "네이버 번역기", url: "https://papago.naver.com/" },
+        { label: "구글 지도", url: "https://www.google.co.kr/maps" },
+        { label: "네이버 지도", url: "https://map.naver.com/" }
+      ]},
+      { items: [
+        { label: "의안 정보 시스템", url: "http://likms.assembly.go.kr/bill/main.do" },
+        { label: "의사 일정", url: "https://www.assembly.go.kr/portal/na/agenda/agendaSchl.do?menuNo=600015" },
+        { label: "의사중계시스템", url: "http://assembly.webcast.go.kr/" },
+        { label: "외국 입법 정보", url: "https://law.nanet.go.kr/foreignlaw/newForeignLawissue/list.do?isMenu=Y" },
+        { label: "입법조사처 보고서", url: "https://www.nars.go.kr/report/list.do?cmsCode=CM0043" },
+        { label: "무료 이미지-픽사베이", url: "https://pixabay.com/" }
+      ]},
+      { items: [
+        { label: "과기부 보도자료", url: "https://www.msit.go.kr/bbs/list.do?sCode=user&mPid=238&mId=113" },
+        { label: "문체부 보도자료", url: "https://www.mcst.go.kr/kor/s_notice/press/pressList.jsp" },
+        { label: "방통위 보도자료", url: "https://kcc.go.kr/user.do?boardId=1113&page=A05030000&dc=K05030000" },
+        { label: "공정위 보도자료", url: "https://www.ftc.go.kr/www/ReportUserList.do?key=10&rpttype=1" },
+        { label: "국회 과방위", url: "https://science.na.go.kr:444/science/index.do" },
+        { label: "국회 정무위", url: "https://policy.na.go.kr:444/policy/index.do?extendedParam=site_id=policy" }
+      ]},
+      { items: [
+        { label: "전자공시시스템", url: "http://dart.fss.or.kr/" },
+        { label: "와이즈리포트", url: "https://www.wisereport.co.kr/" },
+        { label: "인베스팅닷컴", url: "https://kr.investing.com/indices/major-indices" },
+        { label: "Finviz", url: "https://finviz.com/" },
+        { label: "거래소 데이터", url: "http://data.krx.co.kr/contents/MDC/MAIN/main/index.cmd" },
+        { label: "예탁원 세이브로", url: "https://seibro.or.kr/websquare/control.jsp?w2xPath=/IPORTAL/user/index.xml" }
+      ]},
+
+      { items: [
+        { label: "내 블로그", url: "https://blog.naver.com/shineway2011" },
+        { label: "자산가계부", url: "https://docs.google.com/spreadsheets/d/1gKxQ71ADmEp7YG6jZejnL1Bj7zIZk7iplqZvtZYWNqM/edit?gid=0#gid=0" },
+        { label: "네이버 증권", url: "https://finance.naver.com/sise/" },
+        { label: "KRX 데이터", url: "https://data.krx.co.kr/contents/MDC/MAIN/main/index.cmd" }
+      ]},
+      { items: [
+        { label: "퍼플렉시티", url: "https://www.perplexity.ai/" },
+        { label: "챗GPT", url: "https://chatgpt.com/" },
+        { label: "링크드인", url: "https://www.linkedin.com/feed/" },
+        { label: "정책 브리핑", url: "https://www.korea.kr/news/policyNewsList.do" }
+      ]},
+      { items: [
+        { label: "위클리비즈", url: "http://weeklybiz.chosun.com/" },
+        { label: "커피팟", url: "https://coffeepot.me/" },
+        { label: "미라클레터", url: "https://mirakle.mk.co.kr/list.php?sc=51800017" },
+        { label: "딥다이브", url: "https://www.donga.com/news/Series/70010000001020" },
+        { label: "단독", url: "https://search.naver.com/search.naver?sm=tab_hty.top&where=news&ssc=tab.news.all&query=%5B%EB%8B%A8%EB%8F%85%5D&oquery=%5B%EB%8B%A8%EB%8F%85%5D&tqi=iHb7rdpzL8wssAcB4%2BNssssstpZ-249659&nso=so%3Ar%2Cp%3Aall%2Ca%3Aall&service_area=1&sort=0" },
+        { label: "속보", url: "https://search.naver.com/search.naver?where=news&query=%5B%EC%86%8D%EB%B3%B4%5D&sm=tab_opt&sort=1&photo=0&field=0&pd=0&ds=&de=&docid=&related=0&mynews=0&office_type=0&office_section_code=0&news_office_checked=&nso=so%3Add%2Cp%3Aall&is_sug_officeid=0&office_category=0&service_area=1" }
+      ]},
+      { items: [
+        { label: "유튜브 인급동", url: "https://www.youtube.com/feed/trending?bp=6gQJRkVleHBsb3Jl" },
+        { label: "구글 트렌드", url: "https://trends.google.co.kr/trending?geo=KR&hl=ko" },
+        { label: "빅카인즈", url: "https://www.bigkinds.or.kr/" },
+        { label: "대내20대연구소", url: "https://www.20slab.org/Column" },
+        { label: "교보 베셀", url: "https://store.kyobobook.co.kr/bestseller/online/daily?page=1" }
+      ]},
+      { items: [
+        { label: "지디넷코리아", url: "https://zdnet.co.kr/" },
+        { label: "테크크런치", url: "https://techcrunch.com/" },
+        { label: "더버지", url: "https://www.theverge.com/" },
+        { label: "컴퓨터월드", url: "https://www.computerworld.com/news/" },
+        { label: "네이버 IT 뉴스", url: "https://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=105" }
+      ]},
+      { items: [
+        { label: "코인마켓캡", url: "https://coinmarketcap.com/ko/" },
+        { label: "업비트", url: "https://upbit.com/exchange?code=CRIX.UPBIT.KRW-BTC" },
+        { label: "빗썸", url: "https://www.bithumb.com/trade/order/BTC_KRW" },
+        { label: "쟁글 리서치", url: "https://xangle.io/insight/research" },
+        { label: "코빗 리서치", url: "https://www.korbit.co.kr/market/research" }
+      ]},
+
+      { items: [
+        { label: "스티비", url: "https://www.stibee.com/" },
+        { label: "브런치", url: "https://brunch.co.kr/@shineway2011" },
+        { label: "네이버 블로그", url: "https://blog.naver.com/shineway2011" },
+        { label: "클로바노트", url: "https://clovanote.naver.com/" }
+      ]},
+      { items: [
+        { label: "바이브", url: "https://vibe.naver.com/today" },
+        { label: "유튜브", url: "https://www.youtube.com/" },
+        { label: "페이스북", url: "https://www.facebook.com/" },
+        { label: "링크드인", url: "https://www.linkedin.com/feed/" },
+        { label: "인스타그램", url: "https://www.instagram.com/seowoog/" },
+        { label: "트위터", url: "https://twitter.com/" }
+      ]},
+      { items: [
+        { label: "스포티비", url: "https://www.spotvnow.co.kr/" },
+        { label: "티빙", url: "https://www.tving.com/onboarding" },
+        { label: "넷플릭스", url: "https://www.netflix.com/browse" },
+        { label: "쿠팡플레이", url: "https://play.coupang.com/" },
+        { label: "디즈니플러스", url: "https://www.disneyplus.com/ko-kr" },
+        { label: "샥톡", url: "https://sharktalk.imweb.me/index" }
+      ]},
+      { items: [
+        { label: "콘텐츠진흥원", url: "http://www.kocca.kr/cop/bbs/list/B0000147.do?menuNo=201825" },
+        { label: "정보통신정책연구원", url: "https://www.kisdi.re.kr/index.do" },
+        { label: "IT 파인드", url: "http://www.itfind.or.kr/main.do" },
+        { label: "보고서 모음-SERI", url: "http://www.seri.org/ic/icRPdsZoneL.html?g_menu=06&s_menu=0613" },
+        { label: "TED", url: "https://www.ted.com/talks?language=ko" }
+      ]},
+      { items: [
+        { label: "네이버 장보기", url: "https://shopping.naver.com/ns/home" },
+        { label: "내 블로그-비망록", url: "https://blog.naver.com/shineway0102" },
+        { label: "네이버웹툰", url: "https://comic.naver.com/webtoon/weekday.nhn" }
+      ]},
+      { items: [
+        { label: "모두의 풋살", url: "https://cafe.naver.com/haha999" },
+        { label: "서경축구클럽", url: "https://cafe.daum.net/skfootball/IxUe" },
+        { label: "대한민국FC", url: "https://cafe.daum.net/soxxer/WM9W" },
+        { label: "서울시 예약", url: "http://yeyak.seoul.go.kr/main.web" }
+      ]}
+    ];
+
+    function render(){
+      const grid = document.getElementById("grid");
+      grid.innerHTML = "";
+
+      for(const section of LINK_SECTIONS){
+        const card = document.createElement("section");
+        card.className = "card";
+
+        const ul = document.createElement("ul");
+        ul.className = "links";
+
+        for(const item of section.items){
+          if(!item?.label || !item?.url) continue;
+
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+          a.href = item.url;
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+          a.textContent = item.label;
+
+          if(item.note){
+            const span = document.createElement("span");
+            span.className = "tag";
+            span.textContent = item.note;
+            a.appendChild(span);
+          }
+
+          li.appendChild(a);
+          ul.appendChild(li);
+        }
+
+        card.appendChild(ul);
+        grid.appendChild(card);
+      }
+    }
+
+    render();
+  </script>
 </body>
 </html>
