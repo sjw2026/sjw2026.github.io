@@ -1,687 +1,324 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>sjw2026</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sjw2026</title>
 
-  <style>
-    :root{
-      --bg0:#070a10;
-      --bg1:#0b1020;
+<style>
+:root{
+  --bg0:#070a10;
+  --bg1:#0b1020;
+  --stroke:rgba(255,255,255,.10);
+  --text:rgba(255,255,255,.88);
+  --muted:rgba(255,255,255,.55);
+  --shadow:0 18px 40px rgba(0,0,0,.45);
+  --radius:16px;
+  --sidebarW:74px;
+}
 
-      --stroke: rgba(255,255,255,.10);
-      --text: rgba(255,255,255,.88);
-      --muted: rgba(255,255,255,.55);
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(1100px 800px at 10% -10%, rgba(79,140,255,.22), transparent 55%),
+    radial-gradient(900px 700px at 95% 0%, rgba(176,106,255,.18), transparent 60%),
+    linear-gradient(180deg,var(--bg1),var(--bg0));
+}
 
-      --shadow: 0 18px 40px rgba(0,0,0,.45);
-      --radius: 16px;
+/* ===== Layout ===== */
+.wrap{
+  max-width:1440px;
+  margin:0 auto;
+  padding:18px 14px 30px;
+  padding-left:calc(14px + var(--sidebarW));
+}
 
-      --sidebarW: 74px;
-    }
+/* ===== Top ===== */
+.topbar{
+  display:flex;
+  gap:12px;
+  align-items:stretch;
+  margin-bottom:14px;
+}
 
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(1100px 800px at 10% -10%, rgba(79,140,255,.22) 0%, rgba(79,140,255,0) 55%),
-        radial-gradient(900px 700px at 95% 0%, rgba(176,106,255,.18) 0%, rgba(176,106,255,0) 60%),
-        linear-gradient(180deg, var(--bg1), var(--bg0));
-    }
+.slot{
+  border-radius:var(--radius);
+  border:1px solid var(--stroke);
+  background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(10px);
+  padding:12px;
+}
 
-    /* ===== Layout ===== */
-    .wrap{
-      max-width: 1440px;
-      margin: 0 auto;
-      padding: 18px 14px 30px;
-      padding-left: calc(14px + var(--sidebarW));
-    }
+.stack-slot{
+  flex:2 1 740px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
 
-    /* ===== AI Sidebar (SVG) ===== */
-    .ai-sidebar{
-      position: fixed;
-      top: 50%;
-      left: 14px;
-      transform: translateY(-50%);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 200;
-      width: var(--sidebarW);
-      align-items: center;
-      pointer-events: auto;
-    }
-    .ai-btn{
-      width: 56px;
-      height: 56px;
-      border-radius: 18px;
-      display: grid;
-      place-items: center;
-      text-decoration: none;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 12px 26px rgba(0,0,0,.45);
-      position: relative;
-      overflow: hidden;
-      transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
-    }
-    .ai-btn::before{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      background: radial-gradient(60px 60px at 30% 20%, rgba(255,255,255,.22), transparent 60%);
-      opacity:.55;
-      pointer-events:none;
-    }
-    .ai-btn:hover{
-      transform: translateY(-2px) scale(1.04);
-      border-color: rgba(255,255,255,.26);
-      box-shadow: 0 18px 44px rgba(0,0,0,.62);
-    }
-    .ai-btn .tip{
-      position:absolute;
-      left: 64px;
-      top: 50%;
-      transform: translateY(-50%);
-      white-space: nowrap;
-      font-size: 12px;
-      color: rgba(255,255,255,.88);
-      background: rgba(15,20,30,.86);
-      border: 1px solid rgba(255,255,255,.14);
-      padding: 7px 10px;
-      border-radius: 12px;
-      box-shadow: 0 18px 44px rgba(0,0,0,.55);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .12s ease, transform .12s ease;
-    }
-    .ai-btn:hover .tip{ opacity: 1; }
-    .ai-btn svg{
-      width: 26px;
-      height: 26px;
-      opacity: .96;
-      filter: drop-shadow(0 6px 10px rgba(0,0,0,.35));
-    }
-    .ai-chatgpt{ background: linear-gradient(135deg, rgba(16,163,127,.95), rgba(10,122,95,.92)); }
-    .ai-gemini{ background: linear-gradient(135deg, rgba(66,133,244,.96), rgba(123,97,255,.92)); }
-    .ai-claude{ background: linear-gradient(135deg, rgba(249,115,22,.95), rgba(251,113,133,.92)); }
-    .ai-perplexity{ background: linear-gradient(135deg, rgba(99,102,241,.95), rgba(34,211,238,.88)); }
+.weather-slot{
+  flex:1 1 320px;
+  display:flex;
+}
 
-    /* Mobile: sidebar -> top bar */
-    @media (max-width: 900px){
-      .wrap{ padding-left: 14px; padding-top: 88px; }
-      .ai-sidebar{
-        top: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        flex-direction: row;
-        width: auto;
-        gap: 10px;
-        background: rgba(255,255,255,.04);
-        border: 1px solid rgba(255,255,255,.12);
-        border-radius: 999px;
-        padding: 8px 10px;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 14px 36px rgba(0,0,0,.5);
-      }
-      .ai-btn .tip{
-        left: 50%;
-        top: 68px;
-        transform: translateX(-50%);
-      }
-    }
+/* ===== Search ===== */
+.search-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
 
-    /* ===== Shared card ===== */
-    .slot, .card{
-      border-radius: var(--radius);
-      border: 1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-    }
-    .slot{ padding: 12px; }
-    .card{ padding: 12px; min-height: 210px; }
+.search{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid var(--stroke);
+  background:rgba(10,14,22,.55);
+}
 
-    /* ===== Topbar: LEFT(stack) + RIGHT(weather) height match ===== */
-    .topbar{
-      display:flex;
-      gap:12px;
-      align-items: stretch; /* 핵심: 좌/우 높이 동일 */
-      margin-bottom: 14px;
-    }
+.search input{
+  flex:1;
+  background:none;
+  border:0;
+  outline:none;
+  color:var(--text);
+}
 
-    .stack-slot{
-      flex: 2 1 740px;
-      display:flex;
-      flex-direction: column;
-      gap: 12px;
-      min-width: 0;
-    }
+/* ===== Calendar + Memo ===== */
+.bottom-row{
+  flex:1;
+  display:flex;
+  gap:12px;
+}
 
-    .weather-slot{
-      flex: 1 1 320px;
-      display:flex;
-      min-width: 0;
-    }
+.calendar-inner,
+.memo-inner{
+  flex:1;
+  border-radius:14px;
+  border:1px solid var(--stroke);
+  background:rgba(7,10,16,.85);
+  overflow:hidden;
+}
 
-    @media (max-width: 980px){
-      .topbar{ flex-direction: column; }
-      .weather-slot{ min-height: 220px; }
-    }
+.calendar-inner iframe{
+  width:100%;
+  height:100%;
+  border:0;
+  filter:brightness(.82);
+}
 
-    /* ===== Search grid ===== */
-    .search-grid{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(220px, 1fr));
-      gap: 10px;
-    }
-    @media (max-width: 980px){
-      .search-grid{ grid-template-columns: 1fr; }
-    }
+/* ===== Weather ===== */
+.weather{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  border-radius:14px;
+  border:1px solid var(--stroke);
+  background:rgba(10,14,22,.55);
+  padding:12px;
+}
 
-    .search{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid var(--stroke);
-      background: rgba(10,14,22,.55);
-      transition: transform .12s ease, border-color .12s ease, background .12s ease;
-    }
-    .search:hover{
-      transform: translateY(-1px);
-      border-color: rgba(155,188,255,.22);
-      background: rgba(10,14,22,.72);
-    }
-    .sicon{
-      width:34px;
-      height:34px;
-      border-radius: 12px;
-      display:grid;
-      place-items:center;
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.04);
-      flex: 0 0 auto;
-    }
-    .sicon svg{ width:18px; height:18px; opacity:.95; }
-    .search input{
-      width:100%;
-      background: transparent;
-      border: 0;
-      outline: none;
-      color: var(--text);
-      font-size: 14px;
-    }
-    .search input::placeholder{ color: rgba(255,255,255,.40); }
-    .search button{
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.05);
-      color: var(--text);
-      border-radius: 12px;
-      padding: 8px 10px;
-      cursor:pointer;
-      font-size: 13px;
-      white-space: nowrap;
-      transition: background .12s ease, border-color .12s ease;
-    }
-    .search button:hover{
-      background: rgba(155,188,255,.12);
-      border-color: rgba(155,188,255,.22);
-    }
+.weather-top{
+  display:flex;
+  justify-content:space-between;
+}
 
-    /* ===== Calendar (fills remaining height in LEFT stack) ===== */
-    .calendar-inner{
-      flex: 1 1 auto;              /* 핵심: 남은 높이를 캘린더가 먹음 */
-      overflow: hidden;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(7,10,16,.85); /* 어두운 배경 */
-      min-height: 160px;           /* 너무 눌리지 않게 안전장치 */
-    }
-    .calendar-inner iframe{
-      width: 100%;
-      height: 100%;
-      border: 0;
-      background: #070a10;
-      filter: brightness(0.82) contrast(1.08) saturate(0.92);
-    }
+.weather-city{
+  font-size:18px;
+  font-weight:600;
+}
 
-    /* ===== Weather ===== */
-    .weather{
-      flex: 1;
-      height: 100%;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(10,14,22,.55);
-      padding: 12px;
-      display:flex;
-      flex-direction:column;
-      gap: 8px;
-    }
-    .weather-top{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap: 10px;
-    }
-    .weather-title{ font-size: 13px; color: rgba(255,255,255,.82); }
-    .weather-city{ font-size: 18px; font-weight: 650; letter-spacing: .2px; }
-    .weather-main{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap: 10px;
-      margin-top: 2px;
-    }
-    .weather-temp{ font-size: 42px; font-weight: 750; line-height: 1; }
-    .weather-desc{ color: var(--muted); font-size: 12px; margin-top: 6px; }
-    .weather-kv{
-      display:flex;
-      gap: 8px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-      align-items:center;
-    }
-    .pill{
-      font-size: 12px;
-      color: rgba(255,255,255,.78);
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.04);
-      padding: 6px 10px;
-      border-radius: 999px;
-      white-space: nowrap;
-    }
-    .weather-actions{
-      display:flex;
-      gap:8px;
-      margin-top: auto;
-    }
-    .weather-actions button, .weather-actions a{
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.04);
-      color: rgba(255,255,255,.78);
-      border-radius: 12px;
-      padding: 8px 10px;
-      cursor:pointer;
-      font-size: 12px;
-      text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:6px;
-      flex:1;
-    }
-    .weather-actions button:hover, .weather-actions a:hover{
-      background: rgba(155,188,255,.10);
-      border-color: rgba(155,188,255,.20);
-    }
+.weather-temp{
+  font-size:42px;
+  font-weight:700;
+  line-height:1;
+}
 
-    /* ===== Link grid ===== */
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(6, minmax(180px, 1fr));
-      gap: 12px;
-      margin-top: 14px;
-    }
-    @media (max-width: 1280px){ .grid{ grid-template-columns: repeat(3, minmax(200px, 1fr)); } }
-    @media (max-width: 720px){ .grid{ grid-template-columns: 1fr; } }
+.weather-desc{
+  font-size:12px;
+  color:var(--muted);
+}
 
-    .links{
-      display:flex;
-      flex-direction:column;
-      gap: 8px;
-      margin:0;
-      padding:0;
-      list-style:none;
-    }
-    .links a{
-      color: rgba(255,255,255,.88);
-      text-decoration: none;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding: 9px 10px;
-      border-radius: 12px;
-      border: 1px solid transparent;
-      background: rgba(255,255,255,.02);
-      transition: background .12s ease, border-color .12s ease, transform .12s ease;
-    }
-    .links a:hover{
-      border-color: rgba(155,188,255,.22);
-      background: rgba(155,188,255,.10);
-      transform: translateY(-1px);
-    }
-    .dot{
-      width:7px; height:7px;
-      border-radius:999px;
-      background: rgba(155,188,255,.75);
-      flex: 0 0 auto;
-      box-shadow: 0 0 0 3px rgba(155,188,255,.12);
-    }
+.weather-kv{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
 
-    footer{
-      margin-top: 14px;
-      color: var(--muted);
-      font-size: 12px;
-      display:flex;
-      justify-content:space-between;
-      flex-wrap:wrap;
-      gap:8px;
-      opacity:.85;
-    }
-  </style>
+/* 🔹 3시간 단위 타임라인 */
+.weather-hours{
+  display:flex;
+  gap:6px;
+  margin-top:8px;
+}
+
+.hour{
+  flex:1;
+  text-align:center;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.03);
+  padding:6px 4px;
+  font-size:11px;
+}
+
+.hour .t{
+  font-size:13px;
+  font-weight:600;
+}
+
+/* ===== Grid ===== */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(6,minmax(180px,1fr));
+  gap:12px;
+  margin-top:14px;
+}
+
+.card{
+  border-radius:var(--radius);
+  border:1px solid var(--stroke);
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.03));
+  box-shadow:var(--shadow);
+  padding:12px;
+}
+
+.links{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.links a{
+  color:var(--text);
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 10px;
+  border-radius:12px;
+}
+
+.dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#9bbcff;
+}
+
+footer{
+  margin-top:14px;
+  font-size:12px;
+  color:var(--muted);
+}
+</style>
 </head>
 
 <body>
-  <!-- 왼쪽 AI 아이콘 바 -->
-  <nav class="ai-sidebar" aria-label="AI shortcuts">
-    <a class="ai-btn ai-chatgpt" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" aria-label="ChatGPT">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M12 3.2c1.8 0 3.4.8 4.5 2.1 1.9.1 3.4 1.7 3.4 3.6 0 .6-.1 1.2-.4 1.7.9 1.1 1.2 2.7.6 4.1-.6 1.5-2 2.4-3.6 2.5-.7 1.5-2.2 2.6-4 2.6-1 0-2-.3-2.8-.8-1.7.5-3.6-.3-4.5-2-.4-.8-.5-1.7-.3-2.5C4 13.8 3.2 12.6 3.2 11.2c0-1.8 1.2-3.3 2.8-3.8C6.7 5 8.2 3.2 10.2 3.2c.7 0 1.3.1 1.8.3Z" stroke="rgba(255,255,255,.92)" stroke-width="1.3" opacity=".95"/>
-        <path d="M8.2 7.4 12 9.6l3.8-2.2M12 9.6v4.5l-3.8 2.2M12 9.6l3.8 2.2v4.5" stroke="rgba(255,255,255,.9)" stroke-width="1.2" opacity=".8"/>
-      </svg>
-      <span class="tip">ChatGPT</span>
-    </a>
 
-    <a class="ai-btn ai-gemini" href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" aria-label="Gemini">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M12 2.8l1.7 5.7 5.7 1.7-5.7 1.7L12 17.6l-1.7-5.7-5.7-1.7 5.7-1.7L12 2.8Z" fill="rgba(255,255,255,.92)" opacity=".92"/>
-        <path d="M18.8 13.5l.8 2.7 2.7.8-2.7.8-.8 2.7-.8-2.7-2.7-.8 2.7-.8.8-2.7Z" fill="rgba(255,255,255,.88)" opacity=".78"/>
-      </svg>
-      <span class="tip">Gemini</span>
-    </a>
+<div class="wrap">
 
-    <a class="ai-btn ai-claude" href="https://claude.ai/" target="_blank" rel="noopener noreferrer" aria-label="Claude">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M12 3.2c3.8 0 6.8 2.5 6.8 5.6 0 2.5-2 4.7-5 5.4L12 20.8l-1.8-6.6c-3-.7-5-2.9-5-5.4 0-3.1 3-5.6 6.8-5.6Z" stroke="rgba(255,255,255,.92)" stroke-width="1.3" opacity=".95"/>
-        <path d="M9.2 9.6h5.6" stroke="rgba(255,255,255,.88)" stroke-width="1.3" stroke-linecap="round" opacity=".85"/>
-        <path d="M9.8 12.2h4.4" stroke="rgba(255,255,255,.88)" stroke-width="1.3" stroke-linecap="round" opacity=".7"/>
-      </svg>
-      <span class="tip">Claude</span>
-    </a>
+<!-- TOP -->
+<div class="topbar">
 
-    <a class="ai-btn ai-perplexity" href="https://www.perplexity.ai/" target="_blank" rel="noopener noreferrer" aria-label="Perplexity">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M12 3.4c4.7 0 8.6 3.9 8.6 8.6S16.7 20.6 12 20.6 3.4 16.7 3.4 12 7.3 3.4 12 3.4Z" stroke="rgba(255,255,255,.9)" stroke-width="1.3" opacity=".9"/>
-        <path d="M9 8.2h4.2c1.8 0 3 1.1 3 2.7 0 1.7-1.2 2.7-3 2.7H9V8.2Z" stroke="rgba(255,255,255,.92)" stroke-width="1.3" opacity=".9"/>
-        <path d="M9 13.6v2.8" stroke="rgba(255,255,255,.92)" stroke-width="1.3" opacity=".9" stroke-linecap="round"/>
-      </svg>
-      <span class="tip">Perplexity</span>
-    </a>
-  </nav>
-
-  <div class="wrap">
-    <!-- 상단: LEFT(검색+캘린더) + RIGHT(날씨) -->
-    <div class="topbar">
-      <!-- LEFT: 검색 + 캘린더(남은높이 자동) -->
-      <div class="slot stack-slot">
-        <div class="search-grid">
-          <!-- Google -->
-          <form class="search" action="https://www.google.com/search" method="get" target="_blank">
-            <div class="sicon" aria-hidden="true" title="Google">
-              <svg viewBox="0 0 24 24" fill="none">
-                <path d="M12 3a9 9 0 1 0 0 18c2.6 0 5.8-1.2 7.3-4.9.6-1.5.7-2.9.6-4.1H12v3h4.7c-.5 2.2-2.4 4-4.7 4a6 6 0 1 1 0-12c1.5 0 2.8.5 3.8 1.5l2.1-2.1C16.3 3.8 14.3 3 12 3Z" fill="rgba(155,188,255,.95)"/>
-              </svg>
-            </div>
-            <input name="q" placeholder="Google 검색" autocomplete="off" />
-            <button type="submit">Search</button>
-          </form>
-
-          <!-- Naver -->
-          <form class="search" action="https://search.naver.com/search.naver" method="get" target="_blank">
-            <div class="sicon" aria-hidden="true" title="Naver">
-              <svg viewBox="0 0 24 24" fill="none">
-                <path d="M7 6h3.2l3.8 5.7V6H17v12h-3.2L10 12.3V18H7V6Z" fill="rgba(130,255,194,.95)"/>
-              </svg>
-            </div>
-            <input name="query" placeholder="Naver 검색" autocomplete="off" />
-            <button type="submit">Search</button>
-          </form>
-
-          <!-- YouTube -->
-          <form class="search" action="https://www.youtube.com/results" method="get" target="_blank">
-            <div class="sicon" aria-hidden="true" title="YouTube">
-              <svg viewBox="0 0 24 24" fill="none">
-                <path d="M10 16V8l7 4-7 4Z" fill="rgba(255,140,140,.95)"/>
-                <path d="M21 12s0-3.4-.4-5c-.2-.8-.9-1.4-1.7-1.6C17.4 5 12 5 12 5s-5.4 0-6.9.4c-.8.2-1.5.8-1.7 1.6C3 8.6 3 12 3 12s0 3.4.4 5c.2.8.9 1.4 1.7 1.6C6.6 19 12 19 12 19s5.4 0 6.9-.4c.8-.2 1.5-.8 1.7-1.6.4-1.6.4-5 .4-5Z" stroke="rgba(255,140,140,.75)" stroke-width="1.2"/>
-              </svg>
-            </div>
-            <input name="search_query" placeholder="YouTube 검색" autocomplete="off" />
-            <button type="submit">Search</button>
-          </form>
-        </div>
-
-        <!-- 캘린더: LEFT 스택에서 남은 높이 전부 사용 -->
-        <div class="calendar-inner">
-          <iframe
-            title="Google Calendar Agenda"
-            src="https://calendar.google.com/calendar/embed?mode=AGENDA&showTitle=0&showPrint=0&showCalendars=0&showTabs=0&showTz=0&wkst=1&bgcolor=%23070a10&ctz=Asia%2FSeoul&src=shineway2011%40gmail.com"
-            frameborder="0"
-            scrolling="no">
-          </iframe>
-        </div>
-      </div>
-
-      <!-- RIGHT: 날씨 -->
-      <div class="slot weather-slot">
-        <div class="weather" id="weatherBox">
-          <div class="weather-top">
-            <div>
-              <div class="weather-title">서울 실시간 날씨</div>
-              <div class="weather-city">Seoul</div>
-            </div>
-            <div class="pill" id="weatherTime">로딩…</div>
-          </div>
-
-          <div class="weather-main">
-            <div>
-              <div class="weather-temp" id="weatherTemp">--°</div>
-              <div class="weather-desc" id="weatherDesc">불러오는 중…</div>
-            </div>
-            <div class="weather-kv">
-              <div class="pill" id="weatherWind">바람 --</div>
-              <div class="pill" id="weatherHum">습도 --</div>
-            </div>
-          </div>
-
-          <div class="weather-actions">
-            <button type="button" onclick="loadWeather()">새로고침</button>
-            <a href="https://www.weather.go.kr/" target="_blank" rel="noopener noreferrer">기상청</a>
-          </div>
-        </div>
-      </div>
+  <div class="slot stack-slot">
+    <div class="search-grid">
+      <form class="search" action="https://www.google.com/search" target="_blank">
+        <input name="q" placeholder="Google 검색">
+      </form>
+      <form class="search" action="https://search.naver.com/search.naver" target="_blank">
+        <input name="query" placeholder="Naver 검색">
+      </form>
+      <form class="search" action="https://www.youtube.com/results" target="_blank">
+        <input name="search_query" placeholder="YouTube 검색">
+      </form>
     </div>
 
-    <!-- 링크 그리드 -->
-    <div class="grid" id="grid"></div>
-
-    <footer>
-      <div>© sjw2026</div>
-      <div>수정은 <code style="color:rgba(255,255,255,.55);">LINK_SECTIONS</code>만</div>
-    </footer>
+    <div class="bottom-row">
+      <div class="calendar-inner">
+        <iframe src="https://calendar.google.com/calendar/embed?mode=AGENDA&showTitle=0&showCalendars=0&ctz=Asia%2FSeoul&src=shineway2011%40gmail.com"></iframe>
+      </div>
+      <div class="memo-inner"></div>
+    </div>
   </div>
 
-  <script>
-    // ===== 링크 섹션 =====
-    const LINK_SECTIONS = [
-      { items: [
-        { label: "구글 캘린더", url: "https://calendar.google.com/calendar/r" },
-        { label: "서진욱 기자", url: "https://media.naver.com/journalist/008/31377" },
-        { label: "와이파이레터", url: "https://ictwifi.stibee.com/" },
-        { label: "정책 브리핑", url: "https://www.korea.kr/news/policyNewsList.do" },
-        { label: "네이버 뉴스", url: "https://news.naver.com/" },
-        { label: "자동 기사 검색", url: "https://docs.google.com/spreadsheets/d/1uQe607gALy8mN0wJRcBoklGWYXcDwH-6Y9oDt4QkLzo/edit?gid=0#gid=0" }
-      ]},
+  <!-- WEATHER -->
+  <div class="slot weather-slot">
+    <div class="weather">
+      <div class="weather-top">
+        <div class="weather-city">서울</div>
+        <div id="weatherTime">--</div>
+      </div>
 
-      { items: [
-        { label: "기사 입력기", url: "https://mod.mt.co.kr/login" },
-        { label: "머투 인트라", url: "http://intra.mt.co.kr/login.html" },
-        { label: "머니투데이", url: "http://www.mt.co.kr/" },
-        { label: "머투 포데", url: "https://mpd.mt.co.kr/" },
-        { label: "머투 메일", url: "https://outlook.office.com/owa/?realm=mt.co.kr&exsvurl=1&ll-cc=1042&modurl=0" },
-        { label: "구글 메일", url: "https://mail.google.com/mail/u/0/#inbox" }
-      ]},
+      <div>
+        <div class="weather-temp" id="weatherTemp">--°</div>
+        <div class="weather-desc" id="weatherDesc">로딩중</div>
+      </div>
 
-      { items: [
-        { label: "구글 드라이브", url: "https://drive.google.com/drive/my-drive" },
-        { label: "클로바노트", url: "https://clovanote.naver.com/" },
-        { label: "구글 번역기", url: "https://translate.google.com/" },
-        { label: "네이버 번역기", url: "https://papago.naver.com/" },
-        { label: "네이버 지도", url: "https://map.naver.com/" },
-        { label: "네이버 사전", url: "https://dict.naver.com/" }
-      ]},
+      <div class="weather-kv">
+        <div id="weatherWind">바람 --</div>
+        <div id="weatherHum">습도 --</div>
+      </div>
 
-      { items: [
-        { label: "의안 정보 시스템", url: "http://likms.assembly.go.kr/bill/main.do" },
-        { label: "입법조사처 보고서", url: "https://www.nars.go.kr/report/list.do?cmsCode=CM0043" },
-        { label: "전자공시시스템", url: "http://dart.fss.or.kr/" },
-        { label: "빅카인즈", url: "https://www.bigkinds.or.kr/" }
-      ]},
+      <!-- 🔹 3시간 단위 -->
+      <div class="weather-hours" id="weatherHours"></div>
+    </div>
+  </div>
 
-      { items: [
-        { label: "바이브", url: "https://vibe.naver.com/today" },
-        { label: "페이스북", url: "https://www.facebook.com/" },
-        { label: "링크드인", url: "https://www.linkedin.com/feed/" },
-        { label: "인스타그램", url: "https://www.instagram.com/seowoog/" },
-        { label: "X(트위터)", url: "https://twitter.com/" },
-        { label: "브런치", url: "https://brunch.co.kr/@shineway2011" }
-      ]},
+</div>
 
-      { items: [
-        { label: "유튜브 인급동", url: "https://www.youtube.com/feed/trending?bp=6gQJRkVleHBsb3Jl" },
-        { label: "구글 트렌드", url: "https://trends.google.co.kr/trending?geo=KR&hl=ko" },
-        { label: "교보 베셀", url: "https://store.kyobobook.co.kr/bestseller/online/daily?page=1" },
-        { label: "인베스팅닷컴", url: "https://kr.investing.com/indices/major-indices" },
-        { label: "Finviz", url: "https://finviz.com/" }
-      ]},
+<footer>© sjw2026</footer>
 
-      { items: [
-        { label: "내 블로그", url: "https://blog.naver.com/shineway2011" },
-        { label: "네이버 증권", url: "https://finance.naver.com/sise/" },
-        { label: "업비트", url: "https://upbit.com/exchange?code=CRIX.UPBIT.KRW-BTC" },
-        { label: "와이즈리포트", url: "https://www.wisereport.co.kr/" },
-        { label: "ETF CHECK", url: "https://www.etfcheck.co.kr/mobile/main" },
-        { label: "등락률", url: "https://docs.google.com/spreadsheets/d/1QhyZTNZmZCDxe2VnY3B-PWufQrubSDo8OHlIMK54d1g/edit?gid=0#gid=0" }
-      ]},
+</div>
 
-      { items: [
-        { label: "위클리비즈", url: "http://weeklybiz.chosun.com/" },
-        { label: "미라클레터", url: "https://mirakle.mk.co.kr/list.php?sc=51800017" },
-        { label: "딥다이브", url: "https://www.donga.com/news/Series/70010000001020" },
-        { label: "아무튼 주말", url: "https://www.chosun.com/nsearch/?query=%EC%95%84%EB%AC%B4%ED%8A%BC%2C%20%EC%A3%BC%EB%A7%90&page=1&siteid=&sort=1&date_period=&date_start=&date_end=&writer=&field=&emd_word=&expt_word=&opt_chk=false&app_check=0&website=www,chosun&category=" },
-        { label: "칼럼", url: "https://news.naver.com/main/opinion/todayColumn.nhn" }
-      ]},
+<script>
+const SEOUL={lat:37.5665,lon:126.978};
 
-      { items: [
-        { label: "쿠팡플레이", url: "https://www.coupangplay.com/" },
-        { label: "스포티비", url: "https://www.spotvnow.co.kr/" },
-        { label: "티빙", url: "https://www.tving.com/onboarding" },
-        { label: "넷플릭스", url: "https://www.netflix.com/browse" },
-        { label: "디즈니플러스", url: "https://www.disneyplus.com/ko-kr" },
-        { label: "샥톡", url: "https://sharktalk.imweb.me/index" }
-      ]},
+function wc(code){
+  return {
+    0:"☀️",1:"🌤",2:"⛅",3:"☁️",
+    61:"🌧",63:"🌧",65:"🌧",
+    71:"❄️"
+  }[code]||"🌥";
+}
 
-      { items: [
-        { label: "쿠팡", url: "https://www.coupang.com/" },
-        { label: "네이버 스토어", url: "https://shopping.naver.com/ns/home" },
-        { label: "내 블로그-비망록", url: "https://blog.naver.com/shineway0102" },
-        { label: "모두의 풋살", url: "https://cafe.naver.com/haha999" },
-        { label: "서경축구클럽", url: "https://cafe.daum.net/skfootball/IxUe" }
-      ]}
-    ];
+async function loadWeather(){
+  const url=`https://api.open-meteo.com/v1/forecast?latitude=${SEOUL.lat}&longitude=${SEOUL.lon}&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&hourly=temperature_2m,weather_code&timezone=Asia%2FSeoul`;
+  const r=await fetch(url); const j=await r.json();
+  const c=j.current;
 
-    function render(){
-      const grid = document.getElementById("grid");
-      grid.innerHTML = "";
+  weatherTemp.textContent=c.temperature_2m+"°";
+  weatherDesc.textContent=wc(c.weather_code);
+  weatherWind.textContent="바람 "+c.wind_speed_10m+"km/h";
+  weatherHum.textContent="습도 "+c.relative_humidity_2m+"%";
+  weatherTime.textContent=c.time.slice(11,16);
 
-      for(const section of LINK_SECTIONS){
-        const card = document.createElement("section");
-        card.className = "card";
-
-        const ul = document.createElement("ul");
-        ul.className = "links";
-
-        for(const item of section.items){
-          if(!item?.label || !item?.url) continue;
-
-          const li = document.createElement("li");
-          const a = document.createElement("a");
-          a.href = item.url;
-          a.target = "_blank";
-          a.rel = "noopener noreferrer";
-
-          const dot = document.createElement("span");
-          dot.className = "dot";
-          a.appendChild(dot);
-
-          const text = document.createElement("span");
-          text.textContent = item.label;
-          a.appendChild(text);
-
-          li.appendChild(a);
-          ul.appendChild(li);
-        }
-
-        card.appendChild(ul);
-        grid.appendChild(card);
-      }
+  const now=new Date(c.time).getHours();
+  weatherHours.innerHTML="";
+  j.hourly.time.forEach((t,i)=>{
+    const h=new Date(t).getHours();
+    if(h>=now && h%3===0 && weatherHours.children.length<4){
+      const d=document.createElement("div");
+      d.className="hour";
+      d.innerHTML=`${h}시<br>${wc(j.hourly.weather_code[i])}<div class="t">${j.hourly.temperature_2m[i]}°</div>`;
+      weatherHours.appendChild(d);
     }
+  });
+}
 
-    // ===== 날씨(Open-Meteo) =====
-    const SEOUL = { lat: 37.5665, lon: 126.9780 };
+loadWeather();
+</script>
 
-    function wcText(code){
-      const m = {
-        0:"맑음", 1:"대체로 맑음", 2:"부분적으로 흐림", 3:"흐림",
-        45:"안개", 48:"착빙 안개",
-        51:"이슬비(약)", 53:"이슬비(중)", 55:"이슬비(강)",
-        61:"비(약)", 63:"비(중)", 65:"비(강)",
-        71:"눈(약)", 73:"눈(중)", 75:"눈(강)",
-        80:"소나기(약)", 81:"소나기(중)", 82:"소나기(강)",
-        95:"뇌우", 96:"뇌우+우박(약)", 99:"뇌우+우박(강)"
-      };
-      return m[code] ?? ("코드 " + code);
-    }
-
-    async function loadWeather(){
-      const tEl = document.getElementById("weatherTemp");
-      const dEl = document.getElementById("weatherDesc");
-      const wEl = document.getElementById("weatherWind");
-      const hEl = document.getElementById("weatherHum");
-      const timeEl = document.getElementById("weatherTime");
-
-      try{
-        const url =
-          `https://api.open-meteo.com/v1/forecast?latitude=${SEOUL.lat}&longitude=${SEOUL.lon}` +
-          `&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&timezone=Asia%2FSeoul`;
-
-        const res = await fetch(url, { cache: "no-store" });
-        if(!res.ok) throw new Error("날씨 HTTP " + res.status);
-        const json = await res.json();
-
-        const cur = json.current || {};
-        tEl.textContent = (cur.temperature_2m ?? "--") + "°";
-        dEl.textContent = wcText(cur.weather_code ?? -1);
-        wEl.textContent = "바람 " + (cur.wind_speed_10m ?? "--") + " km/h";
-        hEl.textContent = "습도 " + (cur.relative_humidity_2m ?? "--") + "%";
-        timeEl.textContent = cur.time ? cur.time.replace("T"," ") : "업데이트";
-      }catch(e){
-        tEl.textContent = "--°";
-        dEl.textContent = "날씨 로딩 실패";
-        wEl.textContent = "바람 --";
-        hEl.textContent = "습도 --";
-        timeEl.textContent = "오류";
-      }
-    }
-
-    // init
-    render();
-    loadWeather();
-  </script>
 </body>
 </html>
