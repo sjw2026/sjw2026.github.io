@@ -10,9 +10,7 @@
       --bg0:#070a10;
       --bg1:#0b1020;
 
-      --panel: rgba(255,255,255,.05);
       --stroke: rgba(255,255,255,.10);
-
       --text: rgba(255,255,255,.88);
       --muted: rgba(255,255,255,.55);
 
@@ -72,7 +70,6 @@
       overflow: hidden;
       transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
     }
-
     .ai-btn::before{
       content:"";
       position:absolute;
@@ -81,13 +78,11 @@
       opacity:.55;
       pointer-events:none;
     }
-
     .ai-btn:hover{
       transform: translateY(-2px) scale(1.04);
       border-color: rgba(255,255,255,.26);
       box-shadow: 0 18px 44px rgba(0,0,0,.62);
     }
-
     .ai-btn .tip{
       position:absolute;
       left: 64px;
@@ -109,14 +104,12 @@
       opacity: 1;
       transform: translateY(-50%) translateX(0);
     }
-
     .ai-btn svg{
       width: 26px;
       height: 26px;
       opacity: .96;
       filter: drop-shadow(0 6px 10px rgba(0,0,0,.35));
     }
-
     .ai-chatgpt{ background: linear-gradient(135deg, rgba(16,163,127,.95), rgba(10,122,95,.92)); }
     .ai-gemini{ background: linear-gradient(135deg, rgba(66,133,244,.96), rgba(123,97,255,.92)); }
     .ai-claude{ background: linear-gradient(135deg, rgba(249,115,22,.95), rgba(251,113,133,.92)); }
@@ -148,24 +141,25 @@
       }
     }
 
+    /* ===== Common slot/card ===== */
+    .slot, .card{
+      border-radius: var(--radius);
+      border: 1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .slot{ padding: 12px; min-height: 64px; }
+    .card{ padding: 12px; min-height: 210px; }
+
     /* ===== Top area ===== */
     .topbar{
       display:flex;
       gap:12px;
       flex-wrap:wrap;
       align-items:stretch;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
-    .slot{
-      border-radius: var(--radius);
-      border: 1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      box-shadow: var(--shadow);
-      padding: 12px;
-      min-height: 64px;
-      backdrop-filter: blur(10px);
-    }
-
     .slot.search-slot{ flex: 2 1 740px; }
     .slot.weather-slot{ flex: 1 1 320px; }
 
@@ -315,6 +309,41 @@
       border-color: rgba(155,188,255,.20);
     }
 
+    /* ===== Calendar below search ===== */
+    .calendar-row{
+      display:flex;
+      gap:12px;
+      align-items:stretch;
+      margin-bottom: 14px;
+    }
+
+    /* 가로 1.5배 느낌: max-width를 넉넉히 주고 왼쪽 정렬 */
+    .calendar-slot{
+      flex: 1 1 980px;
+      max-width: 980px;
+      padding: 0;
+      overflow: hidden;
+      height: 260px; /* 세로: 상단바와 분리되어 “상단바 높이”는 안 올라감 */
+    }
+    .calendar-slot iframe{
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #070a10;
+      filter: brightness(0.82) contrast(1.08) saturate(0.92);
+    }
+    /* 오른쪽 빈 공간 채움(레이아웃 안정용) */
+    .calendar-spacer{
+      flex: 999 1 0;
+      min-width: 0;
+    }
+
+    @media (max-width: 980px){
+      .calendar-row{ flex-direction: column; }
+      .calendar-slot{ max-width: 100%; }
+      .calendar-spacer{ display:none; }
+    }
+
     /* ===== Link grid ===== */
     .grid{
       display:grid;
@@ -324,16 +353,6 @@
     }
     @media (max-width: 1280px){ .grid{ grid-template-columns: repeat(3, minmax(200px, 1fr)); } }
     @media (max-width: 720px){ .grid{ grid-template-columns: 1fr; } }
-
-    .card{
-      border-radius: var(--radius);
-      border: 1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
-      box-shadow: var(--shadow);
-      padding: 12px;
-      min-height: 210px;
-      backdrop-filter: blur(10px);
-    }
 
     .links{
       display:flex;
@@ -366,86 +385,6 @@
       background: rgba(155,188,255,.75);
       flex: 0 0 auto;
       box-shadow: 0 0 0 3px rgba(155,188,255,.12);
-    }
-
-    /* ===== Calendar card ===== */
-    .calendar-card{
-      padding: 0;
-      overflow: hidden;
-      min-height: 210px;
-    }
-    .calendar-card iframe{
-      width: 100%;
-      height: 100%;
-      border: 0;
-      background: #070a10;
-      filter: brightness(0.82) contrast(1.08) saturate(0.92);
-    }
-
-    /* ===== News card ===== */
-    .news-head{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom: 10px;
-    }
-    .news-title{
-      font-size: 13px;
-      color: rgba(255,255,255,.82);
-    }
-    .news-actions{
-      display:flex;
-      gap:8px;
-      align-items:center;
-    }
-    .news-actions button, .news-actions a{
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.04);
-      color: rgba(255,255,255,.78);
-      border-radius: 10px;
-      padding: 6px 8px;
-      cursor:pointer;
-      font-size: 12px;
-      text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-    }
-    .news-actions button:hover, .news-actions a:hover{
-      background: rgba(155,188,255,.10);
-      border-color: rgba(155,188,255,.20);
-    }
-    .news-list{
-      list-style:none;
-      margin:0;
-      padding:0;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-    .news-item a{
-      display:block;
-      text-decoration:none;
-      color: rgba(255,255,255,.86);
-      padding: 9px 10px;
-      border-radius: 12px;
-      border: 1px solid transparent;
-      background: rgba(255,255,255,.02);
-      transition: background .12s ease, border-color .12s ease, transform .12s ease;
-    }
-    .news-item a:hover{
-      border-color: rgba(155,188,255,.22);
-      background: rgba(155,188,255,.10);
-      transform: translateY(-1px);
-    }
-    .news-meta{
-      margin-top: 4px;
-      font-size: 11px;
-      color: var(--muted);
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
     }
 
     footer{
@@ -500,7 +439,7 @@
   </nav>
 
   <div class="wrap">
-    <!-- 상단: 검색 + 날씨(원위치) -->
+    <!-- 상단: 검색 + 날씨 -->
     <div class="topbar">
       <div class="slot search-slot">
         <div class="search-grid">
@@ -569,29 +508,30 @@
       </div>
     </div>
 
-    <!-- 메인 그리드 -->
+    <!-- ✅ 캘린더: 검색 아래로 이동(상단바 높이 영향 없음) -->
+    <div class="calendar-row">
+      <div class="slot calendar-slot">
+        <iframe
+          title="Google Calendar Agenda"
+          src="https://calendar.google.com/calendar/embed?mode=AGENDA&showTitle=0&showPrint=0&showCalendars=0&showTabs=0&showTz=0&wkst=1&bgcolor=%23070a10&ctz=Asia%2FSeoul&src=shineway2011%40gmail.com"
+          frameborder="0"
+          scrolling="no">
+        </iframe>
+      </div>
+      <div class="calendar-spacer"></div>
+    </div>
+
+    <!-- 링크 그리드 -->
     <div class="grid" id="grid"></div>
 
     <footer>
       <div>© sjw2026</div>
-      <div>
-        수정은 <code style="color:rgba(255,255,255,.55);">LINK_SECTIONS</code> /
-        <code style="color:rgba(255,255,255,.55);">NEWS_RSS_URL</code>만
-      </div>
+      <div>수정은 <code style="color:rgba(255,255,255,.55);">LINK_SECTIONS</code>만</div>
     </footer>
   </div>
 
   <script>
-    // ✅ Google Calendar (공개 캘린더만 정상)
-    const CALENDAR_IFRAME_SRC =
-      "https://calendar.google.com/calendar/embed?mode=AGENDA&showTitle=0&showPrint=0&showCalendars=0&showTabs=0&showTz=0&wkst=1&bgcolor=%23070a10&ctz=Asia%2FSeoul&src=shineway2011%40gmail.com";
-
-    // ✅ 뉴스: Google News RSS
-    const NEWS_RSS_URL = "https://news.google.com/rss?hl=ko&gl=KR&ceid=KR:ko";
-
     // ===== 링크 섹션 =====
-    // 요청: 쿠팡/캘린더/뉴스를 "쿠팡플레이 줄 옆"에 붙이기 위해
-    // "쿠팡플레이 섹션" 바로 다음에 3개 카드를 연달아 넣는 방식으로 처리.
     const LINK_SECTIONS = [
       { items: [
         { label: "구글 캘린더", url: "https://calendar.google.com/calendar/r" },
@@ -661,8 +601,7 @@
         { label: "칼럼", url: "https://news.naver.com/main/opinion/todayColumn.nhn" }
       ]},
 
-      // ✅ 쿠팡플레이 카드 (앵커)
-      { id: "streaming", items: [
+      { items: [
         { label: "쿠팡플레이", url: "https://www.coupangplay.com/" },
         { label: "스포티비", url: "https://www.spotvnow.co.kr/" },
         { label: "티빙", url: "https://www.tving.com/onboarding" },
@@ -671,238 +610,56 @@
         { label: "샥톡", url: "https://sharktalk.imweb.me/index" }
       ]},
 
-      // ✅ 요청: 쿠팡 / 캘린더 / 뉴스 => 쿠팡플레이 "옆"에 붙이기
-      // => streaming 카드 다음에 3개 카드가 연달아 렌더링되게 "스페셜 섹션"으로 분리
-      { id: "coupang_links", items: [
+      { items: [
         { label: "쿠팡", url: "https://www.coupang.com/" },
         { label: "네이버 스토어", url: "https://shopping.naver.com/ns/home" },
         { label: "내 블로그-비망록", url: "https://blog.naver.com/shineway0102" },
         { label: "모두의 풋살", url: "https://cafe.naver.com/haha999" },
         { label: "서경축구클럽", url: "https://cafe.daum.net/skfootball/IxUe" }
-      ]},
-      { id: "calendar_embed", items: [] }, // 캘린더 카드
-      { id: "news_embed", items: [] }      // 뉴스 카드
+      ]}
     ];
-
-    function makeLinksCard(section){
-      const card = document.createElement("section");
-      card.className = "card";
-      if(section?.id) card.dataset.sectionId = section.id;
-
-      const ul = document.createElement("ul");
-      ul.className = "links";
-
-      for(const item of (section.items || [])){
-        if(!item?.label || !item?.url) continue;
-
-        const li = document.createElement("li");
-        const a = document.createElement("a");
-        a.href = item.url;
-        a.target = "_blank";
-        a.rel = "noopener noreferrer";
-
-        const dot = document.createElement("span");
-        dot.className = "dot";
-        a.appendChild(dot);
-
-        const text = document.createElement("span");
-        text.textContent = item.label;
-        a.appendChild(text);
-
-        li.appendChild(a);
-        ul.appendChild(li);
-      }
-
-      card.appendChild(ul);
-      return card;
-    }
-
-    function makeCalendarCard(){
-      const card = document.createElement("section");
-      card.className = "card calendar-card";
-      card.dataset.sectionId = "calendar_embed";
-
-      const iframe = document.createElement("iframe");
-      iframe.title = "Google Calendar Agenda";
-      iframe.src = CALENDAR_IFRAME_SRC;
-      iframe.setAttribute("frameborder", "0");
-      iframe.setAttribute("scrolling", "no");
-
-      card.appendChild(iframe);
-      return card;
-    }
-
-    function makeNewsCard(){
-      const card = document.createElement("section");
-      card.className = "card";
-      card.dataset.sectionId = "news_embed";
-
-      const head = document.createElement("div");
-      head.className = "news-head";
-
-      const title = document.createElement("div");
-      title.className = "news-title";
-      title.textContent = "NewsCatcher · Google News Top 10";
-
-      const actions = document.createElement("div");
-      actions.className = "news-actions";
-
-      const openBtn = document.createElement("a");
-      openBtn.href = "https://news.google.com/topstories?hl=ko&gl=KR&ceid=KR:ko";
-      openBtn.target = "_blank";
-      openBtn.rel = "noopener noreferrer";
-      openBtn.textContent = "열기";
-
-      const refreshBtn = document.createElement("button");
-      refreshBtn.type = "button";
-      refreshBtn.textContent = "새로고침";
-      refreshBtn.addEventListener("click", () => loadNews());
-
-      actions.appendChild(openBtn);
-      actions.appendChild(refreshBtn);
-
-      head.appendChild(title);
-      head.appendChild(actions);
-
-      const ul = document.createElement("ul");
-      ul.className = "news-list";
-      ul.id = "news-list";
-
-      ul.innerHTML = `<li class="news-item"><a href="#" onclick="return false;">불러오는 중…<div class="news-meta">RSS 로딩</div></a></li>`;
-
-      card.appendChild(head);
-      card.appendChild(ul);
-      return card;
-    }
 
     function render(){
       const grid = document.getElementById("grid");
       grid.innerHTML = "";
 
       for(const section of LINK_SECTIONS){
-        if(section.id === "calendar_embed"){
-          grid.appendChild(makeCalendarCard());
-          continue;
-        }
-        if(section.id === "news_embed"){
-          grid.appendChild(makeNewsCard());
-          continue;
-        }
-        grid.appendChild(makeLinksCard(section));
-      }
-    }
+        const card = document.createElement("section");
+        card.className = "card";
 
-    // ===== 뉴스 로딩 (프록시 3단 fallback + RSS 본문 추출) =====
-    function extractRssXml(text){
-      const start = text.indexOf("<rss");
-      const end = text.lastIndexOf("</rss>");
-      if(start !== -1 && end !== -1){
-        return text.slice(start, end + "</rss>".length);
-      }
-      const start2 = text.indexOf("<?xml");
-      const end2 = text.lastIndexOf("</rss>");
-      if(start2 !== -1 && end2 !== -1){
-        return text.slice(start2, end2 + "</rss>".length);
-      }
-      return text; // 그대로 시도
-    }
+        const ul = document.createElement("ul");
+        ul.className = "links";
 
-    async function fetchText(url){
-      const res = await fetch(url, { cache: "no-store" });
-      if(!res.ok) throw new Error("HTTP " + res.status);
-      return await res.text();
-    }
+        for(const item of section.items){
+          if(!item?.label || !item?.url) continue;
 
-    async function fetchRssWithFallback(rssUrl){
-      // 1) direct
-      try{
-        return await fetchText(rssUrl);
-      }catch(_){}
-
-      // 2) allorigins raw
-      try{
-        const proxied = "https://api.allorigins.win/raw?url=" + encodeURIComponent(rssUrl);
-        return await fetchText(proxied);
-      }catch(_){}
-
-      // 3) allorigins get (JSON)
-      try{
-        const proxied = "https://api.allorigins.win/get?url=" + encodeURIComponent(rssUrl);
-        const txt = await fetchText(proxied);
-        const json = JSON.parse(txt);
-        if(json && json.contents) return json.contents;
-        throw new Error("AllOrigins(get) contents 없음");
-      }catch(_){}
-
-      // 4) jina proxy
-      // r.jina.ai 는 본문을 텍스트로 중계함 (CORS 우회용)
-      const jina = "https://r.jina.ai/" + rssUrl;
-      return await fetchText(jina);
-    }
-
-    function parseRss(xmlText){
-      const cleaned = extractRssXml(xmlText);
-      const doc = new DOMParser().parseFromString(cleaned, "text/xml");
-      const items = Array.from(doc.querySelectorAll("item")).slice(0, 10);
-
-      return items.map(it => {
-        const title = it.querySelector("title")?.textContent?.trim() || "";
-        const link  = it.querySelector("link")?.textContent?.trim() || "";
-        const pub   = it.querySelector("pubDate")?.textContent?.trim() || "";
-        const source = it.querySelector("source")?.textContent?.trim() || "Google News";
-        return { title, link, pub, source };
-      }).filter(x => x.title && x.link);
-    }
-
-    async function loadNews(){
-      const ul = document.getElementById("news-list");
-      if(!ul) return;
-
-      ul.innerHTML = `<li class="news-item"><a href="#" onclick="return false;">불러오는 중…<div class="news-meta">RSS 로딩</div></a></li>`;
-
-      try{
-        const xmlText = await fetchRssWithFallback(NEWS_RSS_URL);
-        const items = parseRss(xmlText);
-
-        if(items.length === 0){
-          ul.innerHTML =
-            `<li class="news-item"><a href="#" onclick="return false;">뉴스가 비어있어요<div class="news-meta">RSS 파싱 결과 0건</div></a></li>`;
-          return;
-        }
-
-        ul.innerHTML = "";
-        for(const it of items){
           const li = document.createElement("li");
-          li.className = "news-item";
-
           const a = document.createElement("a");
-          a.href = it.link;
+          a.href = item.url;
           a.target = "_blank";
           a.rel = "noopener noreferrer";
-          a.textContent = it.title;
 
-          const meta = document.createElement("div");
-          meta.className = "news-meta";
-          const d = it.pub ? new Date(it.pub) : null;
-          const time = d && !isNaN(d) ? d.toLocaleString("ko-KR", { timeZone: "Asia/Seoul" }) : (it.pub || "");
-          meta.innerHTML = `<span>${it.source}</span><span>·</span><span>${time}</span>`;
+          const dot = document.createElement("span");
+          dot.className = "dot";
+          a.appendChild(dot);
 
-          a.appendChild(meta);
+          const text = document.createElement("span");
+          text.textContent = item.label;
+          a.appendChild(text);
+
           li.appendChild(a);
           ul.appendChild(li);
         }
-      }catch(e){
-        ul.innerHTML =
-          `<li class="news-item"><a href="#" onclick="return false;">뉴스를 불러오지 못했어요<div class="news-meta">${String(e.message || e)}</div></a></li>`;
+
+        card.appendChild(ul);
+        grid.appendChild(card);
       }
     }
 
-    // ===== 날씨 (Open-Meteo, 서울 좌표) =====
-    // GitHub Pages에서 CORS 잘 되는 편이라 임베드 대신 "카드형 실시간 표시"로 처리
+    // ===== 날씨(Open-Meteo) =====
     const SEOUL = { lat: 37.5665, lon: 126.9780 };
 
     function wcText(code){
-      // 최소 매핑(필요하면 더 늘릴 수 있음)
       const m = {
         0:"맑음", 1:"대체로 맑음", 2:"부분적으로 흐림", 3:"흐림",
         45:"안개", 48:"착빙 안개",
@@ -923,7 +680,6 @@
       const timeEl = document.getElementById("weatherTime");
 
       try{
-        // current + humidity
         const url =
           `https://api.open-meteo.com/v1/forecast?latitude=${SEOUL.lat}&longitude=${SEOUL.lon}` +
           `&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&timezone=Asia%2FSeoul`;
@@ -955,7 +711,6 @@
 
     // init
     render();
-    loadNews();
     loadWeather();
   </script>
 </body>
