@@ -16,7 +16,6 @@
   --radius:16px;
   --sidebarW:74px;
 }
-
 *{box-sizing:border-box;}
 html,body{height:100%;}
 body{
@@ -44,7 +43,6 @@ body{
   align-items:stretch;
   margin-bottom:14px;
 }
-
 .slot{
   border-radius:var(--radius);
   border:1px solid var(--stroke);
@@ -53,14 +51,12 @@ body{
   backdrop-filter:blur(10px);
   padding:12px;
 }
-
 .stack-slot{
   flex:2 1 740px;
   display:flex;
   flex-direction:column;
   gap:12px;
 }
-
 .weather-slot{
   flex:1 1 320px;
   display:flex;
@@ -72,7 +68,6 @@ body{
   grid-template-columns:repeat(3,1fr);
   gap:10px;
 }
-
 .search{
   display:flex;
   align-items:center;
@@ -82,7 +77,6 @@ body{
   border:1px solid var(--stroke);
   background:rgba(10,14,22,.55);
 }
-
 .search input{
   flex:1;
   background:none;
@@ -97,7 +91,6 @@ body{
   display:flex;
   gap:12px;
 }
-
 .calendar-inner,
 .memo-inner{
   flex:1;
@@ -105,14 +98,69 @@ body{
   border:1px solid var(--stroke);
   background:rgba(7,10,16,.85);
   overflow:hidden;
+  min-height: 320px; /* 상단 균형 */
 }
-
 .calendar-inner iframe{
   width:100%;
   height:100%;
   border:0;
   filter:brightness(.82);
 }
+
+/* ===== Memo (Todo) ===== */
+.memo-inner{
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.memo-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.memo-title{ font-weight:700; }
+.memo-date{ color:var(--muted); font-size:12px; }
+
+.todo-input{
+  width:100%;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(10,14,22,.55);
+  color:rgba(255,255,255,.88);
+  outline:none;
+  font-size:14px;
+}
+.todo-input::placeholder{ color:rgba(255,255,255,.45); }
+
+.todo-list{
+  list-style:none;
+  padding:0;
+  margin:0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  overflow:auto;
+}
+.todo-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.03);
+}
+.todo-item.done{
+  opacity:.45;
+  text-decoration:line-through;
+}
+.todo-check{ cursor:pointer; user-select:none; }
+.todo-text{ flex:1; font-size:14px; }
+.todo-priority{ cursor:pointer; user-select:none; }
+.todo-delete{ cursor:pointer; opacity:.65; user-select:none; }
+.todo-delete:hover{ opacity:1; }
 
 /* ===== Weather ===== */
 .weather{
@@ -125,41 +173,21 @@ body{
   background:rgba(10,14,22,.55);
   padding:12px;
 }
-
 .weather-top{
   display:flex;
   justify-content:space-between;
 }
+.weather-city{ font-size:18px; font-weight:600; }
+.weather-temp{ font-size:42px; font-weight:700; line-height:1; }
+.weather-desc{ font-size:12px; color:var(--muted); }
+.weather-kv{ display:flex; gap:8px; flex-wrap:wrap; }
 
-.weather-city{
-  font-size:18px;
-  font-weight:600;
-}
-
-.weather-temp{
-  font-size:42px;
-  font-weight:700;
-  line-height:1;
-}
-
-.weather-desc{
-  font-size:12px;
-  color:var(--muted);
-}
-
-.weather-kv{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-
-/* 🔹 3시간 단위 타임라인 */
+/* 3시간 단위 타임라인 */
 .weather-hours{
   display:flex;
   gap:6px;
   margin-top:8px;
 }
-
 .hour{
   flex:1;
   text-align:center;
@@ -169,28 +197,29 @@ body{
   padding:6px 4px;
   font-size:11px;
 }
+.hour .t{ font-size:13px; font-weight:600; }
 
-.hour .t{
-  font-size:13px;
-  font-weight:600;
-}
-
-/* ===== Grid ===== */
+/* ===== Link Grid ===== */
 .grid{
   display:grid;
   grid-template-columns:repeat(6,minmax(180px,1fr));
   gap:12px;
   margin-top:14px;
 }
-
+@media (max-width:1280px){
+  .grid{ grid-template-columns:repeat(3,minmax(200px,1fr)); }
+}
+@media (max-width:720px){
+  .grid{ grid-template-columns:1fr; }
+}
 .card{
   border-radius:var(--radius);
   border:1px solid var(--stroke);
   background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.03));
   box-shadow:var(--shadow);
   padding:12px;
+  min-height: 210px;
 }
-
 .links{
   list-style:none;
   margin:0;
@@ -199,7 +228,6 @@ body{
   flex-direction:column;
   gap:8px;
 }
-
 .links a{
   color:var(--text);
   text-decoration:none;
@@ -208,11 +236,17 @@ body{
   gap:10px;
   padding:8px 10px;
   border-radius:12px;
+  background:rgba(255,255,255,.02);
+  border:1px solid transparent;
+  transition: .12s ease;
 }
-
+.links a:hover{
+  border-color:rgba(155,188,255,.22);
+  background:rgba(155,188,255,.10);
+  transform: translateY(-1px);
+}
 .dot{
-  width:7px;
-  height:7px;
+  width:7px;height:7px;
   border-radius:50%;
   background:#9bbcff;
 }
@@ -221,103 +255,429 @@ footer{
   margin-top:14px;
   font-size:12px;
   color:var(--muted);
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
 }
 </style>
 </head>
 
 <body>
-
 <div class="wrap">
 
-<!-- TOP -->
-<div class="topbar">
+  <!-- TOP -->
+  <div class="topbar">
 
-  <div class="slot stack-slot">
-    <div class="search-grid">
-      <form class="search" action="https://www.google.com/search" target="_blank">
-        <input name="q" placeholder="Google 검색">
-      </form>
-      <form class="search" action="https://search.naver.com/search.naver" target="_blank">
-        <input name="query" placeholder="Naver 검색">
-      </form>
-      <form class="search" action="https://www.youtube.com/results" target="_blank">
-        <input name="search_query" placeholder="YouTube 검색">
-      </form>
-    </div>
-
-    <div class="bottom-row">
-      <div class="calendar-inner">
-        <iframe src="https://calendar.google.com/calendar/embed?mode=AGENDA&showTitle=0&showCalendars=0&ctz=Asia%2FSeoul&src=shineway2011%40gmail.com"></iframe>
+    <div class="slot stack-slot">
+      <div class="search-grid">
+        <form class="search" action="https://www.google.com/search" target="_blank">
+          <input name="q" placeholder="Google 검색">
+        </form>
+        <form class="search" action="https://search.naver.com/search.naver" target="_blank">
+          <input name="query" placeholder="Naver 검색">
+        </form>
+        <form class="search" action="https://www.youtube.com/results" target="_blank">
+          <input name="search_query" placeholder="YouTube 검색">
+        </form>
       </div>
-      <div class="memo-inner"></div>
+
+      <div class="bottom-row">
+        <div class="calendar-inner">
+          <iframe
+            title="Google Calendar Agenda"
+            src="https://calendar.google.com/calendar/embed?mode=AGENDA&showTitle=0&showPrint=0&showCalendars=0&showTabs=0&showTz=0&wkst=1&ctz=Asia%2FSeoul&src=shineway2011%40gmail.com">
+          </iframe>
+        </div>
+
+        <div class="memo-inner">
+          <div class="memo-head">
+            <div class="memo-title">오늘 할 일</div>
+            <div class="memo-date" id="memoDate"></div>
+          </div>
+
+          <input id="todoInput" class="todo-input" placeholder="할 일을 입력하고 Enter" autocomplete="off">
+          <ul class="todo-list" id="todoList"></ul>
+        </div>
+      </div>
     </div>
+
+    <!-- WEATHER -->
+    <div class="slot weather-slot">
+      <div class="weather">
+        <div class="weather-top">
+          <div class="weather-city">서울</div>
+          <div id="weatherTime">--</div>
+        </div>
+
+        <div>
+          <div class="weather-temp" id="weatherTemp">--°</div>
+          <div class="weather-desc" id="weatherDesc">로딩중</div>
+        </div>
+
+        <div class="weather-kv">
+          <div id="weatherWind">바람 --</div>
+          <div id="weatherHum">습도 --</div>
+        </div>
+
+        <div class="weather-hours" id="weatherHours"></div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- WEATHER -->
-  <div class="slot weather-slot">
-    <div class="weather">
-      <div class="weather-top">
-        <div class="weather-city">서울</div>
-        <div id="weatherTime">--</div>
-      </div>
+  <!-- ✅ 링크 카드 그리드 -->
+  <div class="grid" id="grid"></div>
 
-      <div>
-        <div class="weather-temp" id="weatherTemp">--°</div>
-        <div class="weather-desc" id="weatherDesc">로딩중</div>
-      </div>
-
-      <div class="weather-kv">
-        <div id="weatherWind">바람 --</div>
-        <div id="weatherHum">습도 --</div>
-      </div>
-
-      <!-- 🔹 3시간 단위 -->
-      <div class="weather-hours" id="weatherHours"></div>
-    </div>
-  </div>
-
-</div>
-
-<footer>© sjw2026</footer>
+  <footer>
+    <div>© sjw2026</div>
+    <div>링크 수정은 <code>LINK_SECTIONS</code>만</div>
+  </footer>
 
 </div>
 
 <script>
-const SEOUL={lat:37.5665,lon:126.978};
+/* =========================
+   링크 섹션 (네가 쓰던 풀버전)
+   ========================= */
+const LINK_SECTIONS = [
+  { items: [
+    { label: "구글 캘린더", url: "https://calendar.google.com/calendar/r" },
+    { label: "서진욱 기자", url: "https://media.naver.com/journalist/008/31377" },
+    { label: "와이파이레터", url: "https://ictwifi.stibee.com/" },
+    { label: "네이버 뉴스", url: "https://news.naver.com/" },
+    { label: "아무튼 주말", url: "https://www.chosun.com/nsearch/?query=%EC%95%84%EB%AC%B4%ED%8A%BC%2C%20%EC%A3%BC%EB%A7%90&page=1&siteid=&sort=1&date_period=&date_start=&date_end=&writer=&field=&emd_word=&expt_word=&opt_chk=false&app_check=0&website=www,chosun&category=" },
+    { label: "칼럼", url: "https://news.naver.com/main/opinion/todayColumn.nhn" }
+  ]},
+
+  { items: [
+    { label: "기사 입력기", url: "https://mod.mt.co.kr/login" },
+    { label: "머니투데이", url: "http://www.mt.co.kr/" },
+    { label: "머투 포데", url: "https://mpd.mt.co.kr/" },
+    { label: "머투 인트라", url: "http://intra.mt.co.kr/login.html" },
+    { label: "머투 메일", url: "https://outlook.office.com/owa/?realm=mt.co.kr&exsvurl=1&ll-cc=1042&modurl=0" },
+    { label: "구글 메일", url: "https://mail.google.com/mail/u/0/#inbox" }
+  ]},
+
+  { items: [
+    { label: "구글 드라이브", url: "https://drive.google.com/drive/my-drive" },
+    { label: "네이버 사전", url: "https://dict.naver.com/" },
+    { label: "구글 번역기", url: "https://translate.google.com/" },
+    { label: "네이버 번역기", url: "https://papago.naver.com/" },
+    { label: "구글 지도", url: "https://www.google.co.kr/maps" },
+    { label: "네이버 지도", url: "https://map.naver.com/" }
+  ]},
+
+  { items: [
+    { label: "의안 정보 시스템", url: "http://likms.assembly.go.kr/bill/main.do" },
+    { label: "의사 일정", url: "https://www.assembly.go.kr/portal/na/agenda/agendaSchl.do?menuNo=600015" },
+    { label: "의사중계시스템", url: "http://assembly.webcast.go.kr/" },
+    { label: "외국 입법 정보", url: "https://law.nanet.go.kr/foreignlaw/newForeignLawissue/list.do?isMenu=Y" },
+    { label: "입법조사처 보고서", url: "https://www.nars.go.kr/report/list.do?cmsCode=CM0043" },
+    { label: "무료 이미지-픽사베이", url: "https://pixabay.com/" }
+  ]},
+
+  { items: [
+    { label: "과기부 보도자료", url: "https://www.msit.go.kr/bbs/list.do?sCode=user&mPid=238&mId=113" },
+    { label: "문체부 보도자료", url: "https://www.mcst.go.kr/kor/s_notice/press/pressList.jsp" },
+    { label: "방통위 보도자료", url: "https://kcc.go.kr/user.do?boardId=1113&page=A05030000&dc=K05030000" },
+    { label: "공정위 보도자료", url: "https://www.ftc.go.kr/www/ReportUserList.do?key=10&rpttype=1" },
+    { label: "국회 과방위", url: "https://science.na.go.kr:444/science/index.do" },
+    { label: "국회 정무위", url: "https://policy.na.go.kr:444/policy/index.do?extendedParam=site_id=policy" }
+  ]},
+
+  { items: [
+    { label: "전자공시시스템", url: "http://dart.fss.or.kr/" },
+    { label: "와이즈리포트", url: "https://www.wisereport.co.kr/" },
+    { label: "인베스팅닷컴", url: "https://kr.investing.com/indices/major-indices" },
+    { label: "Finviz", url: "https://finviz.com/" },
+    { label: "거래소 데이터", url: "http://data.krx.co.kr/contents/MDC/MAIN/main/index.cmd" },
+    { label: "예탁원 세이브로", url: "https://seibro.or.kr/websquare/control.jsp?w2xPath=/IPORTAL/user/index.xml" }
+  ]},
+
+  { items: [
+    { label: "내 블로그", url: "https://blog.naver.com/shineway2011" },
+    { label: "자산가계부", url: "https://docs.google.com/spreadsheets/d/1gKxQ71ADmEp7YG6jZejnL1Bj7zIZk7iplqZvtZYWNqM/edit?gid=0#gid=0" },
+    { label: "네이버 증권", url: "https://finance.naver.com/sise/" },
+    { label: "KRX 데이터", url: "http://data.krx.co.kr/contents/MDC/MAIN/main/index.cmd" }
+  ]},
+
+  { items: [
+    { label: "퍼플렉시티", url: "https://www.perplexity.ai/" },
+    { label: "챗GPT", url: "https://chatgpt.com/" },
+    { label: "링크드인", url: "https://www.linkedin.com/feed/" },
+    { label: "정책 브리핑", url: "https://www.korea.kr/news/policyNewsList.do" }
+  ]},
+
+  { items: [
+    { label: "위클리비즈", url: "http://weeklybiz.chosun.com/" },
+    { label: "커피팟", url: "https://coffeepot.me/" },
+    { label: "미라클레터", url: "https://mirakle.mk.co.kr/list.php?sc=51800017" },
+    { label: "딥다이브", url: "https://www.donga.com/news/Series/70010000001020" },
+    { label: "단독", url: "https://search.naver.com/search.naver?sm=tab_hty.top&where=news&ssc=tab.news.all&query=%5B%EB%8B%A8%EB%8F%85%5D&oquery=%5B%EB%8B%A8%EB%8F%85%5D&tqi=iHb7rdpzL8wssAcB4%2BNssssstpZ-249659&nso=so%3Ar%2Cp%3Aall%2Ca%3Aall&service_area=1&sort=0" },
+    { label: "속보", url: "https://search.naver.com/search.naver?where=news&query=%5B%EC%86%8D%EB%B3%B4%5D&sm=tab_opt&sort=1&photo=0&field=0&pd=0&ds=&de=&docid=&related=0&mynews=0&office_type=0&office_section_code=0&news_office_checked=&nso=so%3Add%2Cp%3Aall&is_sug_officeid=0&office_category=0&service_area=1" }
+  ]},
+
+  { items: [
+    { label: "유튜브 인급동", url: "https://www.youtube.com/feed/trending?bp=6gQJRkVleHBsb3Jl" },
+    { label: "구글 트렌드", url: "https://trends.google.co.kr/trending?geo=KR&hl=ko" },
+    { label: "빅카인즈", url: "https://www.bigkinds.or.kr/" },
+    { label: "대내20대연구소", url: "https://www.20slab.org/Column" },
+    { label: "교보 베셀", url: "https://store.kyobobook.co.kr/bestseller/online/daily?page=1" }
+  ]},
+
+  { items: [
+    { label: "지디넷코리아", url: "https://zdnet.co.kr/" },
+    { label: "테크크런치", url: "https://techcrunch.com/" },
+    { label: "더버지", url: "https://www.theverge.com/" },
+    { label: "컴퓨터월드", url: "https://www.computerworld.com/news/" },
+    { label: "네이버 IT 뉴스", url: "https://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=105" }
+  ]},
+
+  { items: [
+    { label: "코인마켓캡", url: "https://coinmarketcap.com/ko/" },
+    { label: "업비트", url: "https://upbit.com/exchange?code=CRIX.UPBIT.KRW-BTC" },
+    { label: "빗썸", url: "https://www.bithumb.com/trade/order/BTC_KRW" },
+    { label: "쟁글 리서치", url: "https://xangle.io/insight/research" },
+    { label: "코빗 리서치", url: "https://www.korbit.co.kr/market/research" }
+  ]},
+
+  { items: [
+    { label: "스티비", url: "https://www.stibee.com/" },
+    { label: "브런치", url: "https://brunch.co.kr/@shineway2011" },
+    { label: "네이버 블로그", url: "https://blog.naver.com/shineway2011" },
+    { label: "클로바노트", url: "https://clovanote.naver.com/" }
+  ]},
+
+  { items: [
+    { label: "바이브", url: "https://vibe.naver.com/today" },
+    { label: "유튜브", url: "https://www.youtube.com/" },
+    { label: "페이스북", url: "https://www.facebook.com/" },
+    { label: "링크드인", url: "https://www.linkedin.com/feed/" },
+    { label: "인스타그램", url: "https://www.instagram.com/seowoog/" },
+    { label: "트위터", url: "https://twitter.com/" }
+  ]},
+
+  { items: [
+    { label: "스포티비", url: "https://www.spotvnow.co.kr/" },
+    { label: "티빙", url: "https://www.tving.com/onboarding" },
+    { label: "넷플릭스", url: "https://www.netflix.com/browse" },
+    { label: "쿠팡플레이", url: "https://play.coupang.com/" },
+    { label: "디즈니플러스", url: "https://www.disneyplus.com/ko-kr" },
+    { label: "샥톡", url: "https://sharktalk.imweb.me/index" }
+  ]},
+
+  { items: [
+    { label: "콘텐츠진흥원", url: "http://www.kocca.kr/cop/bbs/list/B0000147.do?menuNo=201825" },
+    { label: "정보통신정책연구원", url: "https://www.kisdi.re.kr/index.do" },
+    { label: "IT 파인드", url: "http://www.itfind.or.kr/main.do" },
+    { label: "보고서 모음-SERI", url: "http://www.seri.org/ic/icRPdsZoneL.html?g_menu=06&s_menu=0613" },
+    { label: "TED", url: "https://www.ted.com/talks?language=ko" }
+  ]},
+
+  { items: [
+    { label: "네이버 장보기", url: "https://shopping.naver.com/ns/home" },
+    { label: "내 블로그-비망록", url: "https://blog.naver.com/shineway0102" },
+    { label: "네이버웹툰", url: "https://comic.naver.com/webtoon/weekday.nhn" }
+  ]},
+
+  { items: [
+    { label: "모두의 풋살", url: "https://cafe.naver.com/haha999" },
+    { label: "서경축구클럽", url: "https://cafe.daum.net/skfootball/IxUe" },
+    { label: "대한민국FC", url: "https://cafe.daum.net/soxxer/WM9W" },
+    { label: "서울시 예약", url: "http://yeyak.seoul.go.kr/main.web" }
+  ]}
+];
+
+function renderLinks(){
+  const grid = document.getElementById("grid");
+  if(!grid) return;
+  grid.innerHTML = "";
+
+  for(const section of LINK_SECTIONS){
+    const card = document.createElement("section");
+    card.className = "card";
+
+    const ul = document.createElement("ul");
+    ul.className = "links";
+
+    for(const item of (section.items || [])){
+      if(!item?.label || !item?.url) continue;
+
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = item.url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+
+      const dot = document.createElement("span");
+      dot.className = "dot";
+
+      const text = document.createElement("span");
+      text.textContent = item.label;
+
+      a.appendChild(dot);
+      a.appendChild(text);
+      li.appendChild(a);
+      ul.appendChild(li);
+    }
+
+    card.appendChild(ul);
+    grid.appendChild(card);
+  }
+}
+
+/* =========================
+   Todo (저장형)
+   ========================= */
+const TODO_KEY = "sjw2026_todo_list_v1";
+const PRIORITY = ["▫️","⭐","🔥"];
+
+function todayLabel(){
+  const d = new Date();
+  const w = ["일","월","화","수","목","금","토"][d.getDay()];
+  return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()} (${w})`;
+}
+
+function loadTodos(){ return JSON.parse(localStorage.getItem(TODO_KEY) || "[]"); }
+function saveTodos(todos){ localStorage.setItem(TODO_KEY, JSON.stringify(todos)); }
+
+function renderTodos(){
+  const ul = document.getElementById("todoList");
+  const todos = loadTodos();
+  ul.innerHTML = "";
+
+  const sorted = [...todos.filter(t=>!t.done), ...todos.filter(t=>t.done)];
+  sorted.forEach((t, idxSorted) => {
+    const li = document.createElement("li");
+    li.className = "todo-item" + (t.done ? " done" : "");
+
+    li.innerHTML = `
+      <span class="todo-check">✔</span>
+      <span class="todo-text"></span>
+      <span class="todo-priority"></span>
+      <span class="todo-delete">✕</span>
+    `;
+    li.querySelector(".todo-text").textContent = t.text;
+    li.querySelector(".todo-priority").textContent = PRIORITY[t.p ?? 1];
+
+    li.querySelector(".todo-check").onclick = () => {
+      // 원본 todos에서 같은 항목 찾기
+      const todos2 = loadTodos();
+      const targetIndex = todos2.findIndex(x => x.id === t.id);
+      if(targetIndex > -1){
+        todos2[targetIndex].done = !todos2[targetIndex].done;
+        saveTodos(todos2);
+        renderTodos();
+      }
+    };
+
+    li.querySelector(".todo-priority").onclick = () => {
+      const todos2 = loadTodos();
+      const targetIndex = todos2.findIndex(x => x.id === t.id);
+      if(targetIndex > -1){
+        todos2[targetIndex].p = ((todos2[targetIndex].p ?? 1) + 1) % PRIORITY.length;
+        saveTodos(todos2);
+        renderTodos();
+      }
+    };
+
+    li.querySelector(".todo-delete").onclick = () => {
+      const todos2 = loadTodos().filter(x => x.id !== t.id);
+      saveTodos(todos2);
+      renderTodos();
+    };
+
+    ul.appendChild(li);
+  });
+}
+
+/* =========================
+   Weather (안전 버전 + 3시간)
+   ========================= */
+const SEOUL = { lat:37.5665, lon:126.978 };
 
 function wc(code){
   return {
     0:"☀️",1:"🌤",2:"⛅",3:"☁️",
+    45:"🌫",48:"🌫",
+    51:"🌦",53:"🌦",55:"🌦",
     61:"🌧",63:"🌧",65:"🌧",
-    71:"❄️"
-  }[code]||"🌥";
+    71:"❄️",73:"❄️",75:"❄️"
+  }[code] || "🌥";
 }
 
 async function loadWeather(){
-  const url=`https://api.open-meteo.com/v1/forecast?latitude=${SEOUL.lat}&longitude=${SEOUL.lon}&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&hourly=temperature_2m,weather_code&timezone=Asia%2FSeoul`;
-  const r=await fetch(url); const j=await r.json();
-  const c=j.current;
+  const elTemp  = document.getElementById("weatherTemp");
+  const elDesc  = document.getElementById("weatherDesc");
+  const elWind  = document.getElementById("weatherWind");
+  const elHum   = document.getElementById("weatherHum");
+  const elTime  = document.getElementById("weatherTime");
+  const elHours = document.getElementById("weatherHours");
 
-  weatherTemp.textContent=c.temperature_2m+"°";
-  weatherDesc.textContent=wc(c.weather_code);
-  weatherWind.textContent="바람 "+c.wind_speed_10m+"km/h";
-  weatherHum.textContent="습도 "+c.relative_humidity_2m+"%";
-  weatherTime.textContent=c.time.slice(11,16);
+  try{
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${SEOUL.lat}&longitude=${SEOUL.lon}&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&hourly=temperature_2m,weather_code&timezone=Asia%2FSeoul`;
+    const r = await fetch(url);
+    const j = await r.json();
+    const c = j.current;
 
-  const now=new Date(c.time).getHours();
-  weatherHours.innerHTML="";
-  j.hourly.time.forEach((t,i)=>{
-    const h=new Date(t).getHours();
-    if(h>=now && h%3===0 && weatherHours.children.length<4){
-      const d=document.createElement("div");
-      d.className="hour";
-      d.innerHTML=`${h}시<br>${wc(j.hourly.weather_code[i])}<div class="t">${j.hourly.temperature_2m[i]}°</div>`;
-      weatherHours.appendChild(d);
+    elTemp.textContent = c.temperature_2m + "°";
+    elDesc.textContent = wc(c.weather_code);
+    elWind.textContent = "바람 " + c.wind_speed_10m + "km/h";
+    elHum.textContent  = "습도 " + c.relative_humidity_2m + "%";
+    elTime.textContent = c.time.slice(11,16);
+
+    const nowH = new Date(c.time).getHours();
+    elHours.innerHTML = "";
+
+    // "지금 이후" 3시간 간격 4칸
+    for(let i=0;i<j.hourly.time.length;i++){
+      const t = j.hourly.time[i];
+      const h = new Date(t).getHours();
+
+      if(h >= nowH && h % 3 === 0 && elHours.children.length < 4){
+        const d = document.createElement("div");
+        d.className = "hour";
+        d.innerHTML = `${h}시<br>${wc(j.hourly.weather_code[i])}<div class="t">${j.hourly.temperature_2m[i]}°</div>`;
+        elHours.appendChild(d);
+      }
     }
-  });
+  }catch(e){
+    elDesc.textContent = "날씨 로딩 실패";
+  }
 }
 
-loadWeather();
+/* =========================
+   부팅
+   ========================= */
+document.addEventListener("DOMContentLoaded", () => {
+  // links
+  renderLinks();
+
+  // todo
+  const dateEl = document.getElementById("memoDate");
+  if(dateEl) dateEl.textContent = todayLabel();
+
+  const input = document.getElementById("todoInput");
+  input.addEventListener("keydown", e => {
+    if(e.key === "Enter" && e.target.value.trim()){
+      const todos = loadTodos();
+      todos.unshift({
+        id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random(),
+        text: e.target.value.trim(),
+        done: false,
+        p: 1
+      });
+      saveTodos(todos);
+      e.target.value = "";
+      renderTodos();
+    }
+  });
+  renderTodos();
+
+  // weather
+  loadWeather();
+});
 </script>
 
 </body>
