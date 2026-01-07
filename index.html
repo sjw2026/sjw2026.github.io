@@ -40,7 +40,7 @@
       max-width: 1440px;
       margin: 0 auto;
       padding: 18px 14px 30px;
-      padding-left: calc(14px + var(--sidebarW)); /* 사이드바 공간 */
+      padding-left: calc(14px + var(--sidebarW));
     }
 
     /* ===== AI Sidebar (SVG) ===== */
@@ -89,7 +89,6 @@
       box-shadow: 0 18px 44px rgba(0,0,0,.62);
     }
 
-    /* Tooltip */
     .ai-btn .tip{
       position:absolute;
       left: 64px;
@@ -112,7 +111,6 @@
       transform: translateY(-50%) translateX(0);
     }
 
-    /* SVG */
     .ai-btn svg{
       width: 26px;
       height: 26px;
@@ -120,21 +118,11 @@
       filter: drop-shadow(0 6px 10px rgba(0,0,0,.35));
     }
 
-    /* Brand-ish gradients (추상 심볼 + 컬러) */
-    .ai-chatgpt{
-      background: linear-gradient(135deg, rgba(16,163,127,.95), rgba(10,122,95,.92));
-    }
-    .ai-gemini{
-      background: linear-gradient(135deg, rgba(66,133,244,.96), rgba(123,97,255,.92));
-    }
-    .ai-claude{
-      background: linear-gradient(135deg, rgba(249,115,22,.95), rgba(251,113,133,.92));
-    }
-    .ai-perplexity{
-      background: linear-gradient(135deg, rgba(99,102,241,.95), rgba(34,211,238,.88));
-    }
+    .ai-chatgpt{ background: linear-gradient(135deg, rgba(16,163,127,.95), rgba(10,122,95,.92)); }
+    .ai-gemini{ background: linear-gradient(135deg, rgba(66,133,244,.96), rgba(123,97,255,.92)); }
+    .ai-claude{ background: linear-gradient(135deg, rgba(249,115,22,.95), rgba(251,113,133,.92)); }
+    .ai-perplexity{ background: linear-gradient(135deg, rgba(99,102,241,.95), rgba(34,211,238,.88)); }
 
-    /* Mobile: sidebar -> top bar */
     @media (max-width: 900px){
       .wrap{
         padding-left: 14px;
@@ -244,6 +232,67 @@
       border-color: rgba(155,188,255,.22);
     }
 
+    /* ===== Weather slot ===== */
+    .weather-slot{
+      flex: 0 1 420px; /* 검색칸과 비슷한 높이/느낌, 폭은 적당히 */
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      padding: 12px 14px;
+    }
+    .weather-left{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      background: rgba(10,14,22,.55);
+      display:grid;
+      place-items:center;
+      flex: 0 0 auto;
+    }
+    .weather-left svg{ width: 22px; height: 22px; opacity: .92; }
+
+    .weather-main{
+      display:flex;
+      flex-direction:column;
+      gap: 4px;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+    .weather-row{
+      display:flex;
+      align-items:baseline;
+      gap: 10px;
+      min-width: 0;
+      flex-wrap:wrap;
+    }
+    .weather-temp{
+      font-size: 18px;
+      font-weight: 650;
+      letter-spacing: .2px;
+    }
+    .weather-desc{
+      color: rgba(255,255,255,.70);
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 260px;
+    }
+    .weather-meta{
+      color: var(--muted);
+      font-size: 12px;
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+    }
+    .pill{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
     /* ===== Link grid ===== */
     .grid{
       display:grid;
@@ -316,48 +365,29 @@
       opacity:.85;
     }
 
-    /* ===== Calendar card inside grid (no header) ===== */
-  /* ===== Calendar card inside grid (2 columns + darker) ===== */
-/* ===== Calendar card inside grid (2 columns, same height as others) ===== */
-.calendar-card{
-  padding: 0;
-  overflow: hidden;
+    /* ===== Calendar card inside grid (half width, dark, same height vibe) ===== */
+    .calendar-card{
+      padding: 0;
+      overflow: hidden;
+      min-height: 210px;
 
-  /* 링크 카드와 동일한 기준 */
-  min-height: 210px;
+      background: rgba(7,10,16,.78) !important;
+      border: 1px solid rgba(255,255,255,.12) !important;
+      box-shadow: 0 18px 40px rgba(0,0,0,.55) !important;
 
-  background: rgba(7,10,16,.78) !important;
-  border: 1px solid rgba(255,255,255,.12) !important;
-  box-shadow: 0 18px 40px rgba(0,0,0,.55) !important;
-
-  /* 가로 2칸 */
-  grid-column: span 2;
-
-  /* ⭐ 중요: 내부 레이아웃 */
-  display: flex;
-}
-
-/* 모바일에선 1칸 */
-@media (max-width: 720px){
-  .calendar-card{
-    grid-column: span 1;
-  }
-}
-
-.calendar-card iframe{
-  width: 100%;
-  height: 100%;          /* ⭐ 카드 높이에 맞춤 */
-  border: 0;
-
-  filter: brightness(0.72) contrast(1.10) saturate(0.85);
-}
-
-
+      display: flex;
+    }
+    .calendar-card iframe{
+      width: 100%;
+      height: 100%;
+      border: 0;
+      filter: brightness(0.72) contrast(1.10) saturate(0.85);
+    }
   </style>
 </head>
 
 <body>
-  <!-- 왼쪽 AI 아이콘 바 (SVG 고급 버전) -->
+  <!-- 왼쪽 AI 아이콘 바 -->
   <nav class="ai-sidebar" aria-label="AI shortcuts">
     <a class="ai-btn ai-chatgpt" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" aria-label="ChatGPT">
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -395,7 +425,7 @@
   </nav>
 
   <div class="wrap">
-    <!-- 검색 -->
+    <!-- 상단: 검색 + 서울 날씨 -->
     <div class="topbar">
       <div class="slot">
         <div class="search-grid">
@@ -434,6 +464,29 @@
           </form>
         </div>
       </div>
+
+      <!-- 서울 날씨 슬롯 -->
+      <div class="slot weather-slot" aria-label="Seoul weather">
+        <div class="weather-left" aria-hidden="true">
+          <!-- 간단한 날씨 아이콘 -->
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M8.8 18.6h8.4a3.6 3.6 0 0 0 0-7.2 5.2 5.2 0 0 0-10.1 1.6A3.3 3.3 0 0 0 8.8 18.6Z"
+              stroke="rgba(255,255,255,.85)" stroke-width="1.2" opacity=".9"/>
+            <path d="M7.2 20.2h9.6" stroke="rgba(155,188,255,.75)" stroke-width="1.2" stroke-linecap="round" opacity=".9"/>
+          </svg>
+        </div>
+        <div class="weather-main">
+          <div class="weather-row">
+            <div class="weather-temp" id="w-temp">서울 · --°C</div>
+            <div class="weather-desc" id="w-desc">불러오는 중…</div>
+          </div>
+          <div class="weather-meta" id="w-meta">
+            <span class="pill">습도 --%</span>
+            <span class="pill">풍속 -- m/s</span>
+            <span class="pill">업데이트 --:--</span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- 링크/캘린더 그리드 -->
@@ -446,9 +499,101 @@
   </div>
 
   <script>
+    /********************
+     * Google Calendar
+     ********************/
     const CALENDAR_IFRAME_SRC =
       "https://calendar.google.com/calendar/embed?mode=AGENDA&showTitle=0&showPrint=0&showCalendars=0&showTabs=0&showTz=0&wkst=1&bgcolor=%23070a10&ctz=Asia%2FSeoul&src=shineway2011%40gmail.com";
 
+    /********************
+     * Weather (Seoul) - Open-Meteo (no key)
+     ********************/
+    const SEOUL = { lat: 37.5665, lon: 126.9780 };
+    const WEATHER_ENDPOINT = (lat, lon) =>
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,wind_speed_10m&hourly=relativehumidity_2m&timezone=Asia%2FSeoul`;
+
+    const WCODE = {
+      0: "맑음",
+      1: "대체로 맑음",
+      2: "부분적으로 흐림",
+      3: "흐림",
+      45: "안개",
+      48: "짙은 안개",
+      51: "이슬비(약함)",
+      53: "이슬비(보통)",
+      55: "이슬비(강함)",
+      61: "비(약함)",
+      63: "비(보통)",
+      65: "비(강함)",
+      71: "눈(약함)",
+      73: "눈(보통)",
+      75: "눈(강함)",
+      80: "소나기(약함)",
+      81: "소나기(보통)",
+      82: "소나기(강함)",
+      95: "뇌우",
+      96: "뇌우(우박 가능)",
+      99: "강한 뇌우(우박 가능)"
+    };
+
+    function fmtTime(date){
+      const hh = String(date.getHours()).padStart(2,"0");
+      const mm = String(date.getMinutes()).padStart(2,"0");
+      return `${hh}:${mm}`;
+    }
+
+    async function updateWeather(){
+      const tempEl = document.getElementById("w-temp");
+      const descEl = document.getElementById("w-desc");
+      const metaEl = document.getElementById("w-meta");
+
+      try{
+        const res = await fetch(WEATHER_ENDPOINT(SEOUL.lat, SEOUL.lon), { cache: "no-store" });
+        if(!res.ok) throw new Error("weather fetch failed");
+        const data = await res.json();
+
+        const cur = data.current;
+        const t = Math.round(cur.temperature_2m);
+        const code = cur.weather_code;
+        const wind = cur.wind_speed_10m; // m/s (Open-Meteo 표기 단위)
+        const desc = WCODE[code] ?? "날씨";
+
+        // 현재 시간에 가장 가까운 hourly 습도 가져오기
+        let humidity = null;
+        if(data.hourly?.time?.length && data.hourly?.relativehumidity_2m?.length){
+          const nowISO = cur.time; // timezone=Asia/Seoul 기준
+          const idx = data.hourly.time.indexOf(nowISO);
+          if(idx >= 0) humidity = data.hourly.relativehumidity_2m[idx];
+          else humidity = data.hourly.relativehumidity_2m[0];
+        }
+
+        tempEl.textContent = `서울 · ${t}°C`;
+        descEl.textContent = desc;
+
+        const now = new Date();
+        const humText = (humidity === null || humidity === undefined) ? "--" : `${Math.round(humidity)}`;
+        const windText = (wind === null || wind === undefined) ? "--" : `${Number(wind).toFixed(1)}`;
+
+        metaEl.innerHTML = `
+          <span class="pill">습도 ${humText}%</span>
+          <span class="pill">풍속 ${windText} m/s</span>
+          <span class="pill">업데이트 ${fmtTime(now)}</span>
+        `;
+      }catch(e){
+        // 조용히 실패 표시
+        tempEl.textContent = "서울 · --°C";
+        descEl.textContent = "날씨를 불러오지 못했어요";
+        metaEl.innerHTML = `
+          <span class="pill">습도 --%</span>
+          <span class="pill">풍속 -- m/s</span>
+          <span class="pill">업데이트 --:--</span>
+        `;
+      }
+    }
+
+    /********************
+     * Links + Calendar placement
+     ********************/
     const LINK_SECTIONS = [
       { items: [
         { label: "구글 캘린더", url: "https://calendar.google.com/calendar/r" },
@@ -493,6 +638,7 @@
         { label: "브런치", url: "https://brunch.co.kr/@shineway2011" }
       ]},
 
+      /* ✅ 유튜브 인급동/구글 트렌드 카드 */
       { items: [
         { label: "유튜브 인급동", url: "https://www.youtube.com/feed/trending?bp=6gQJRkVleHBsb3Jl" },
         { label: "구글 트렌드", url: "https://trends.google.co.kr/trending?geo=KR&hl=ko" },
@@ -500,6 +646,9 @@
         { label: "인베스팅닷컴", url: "https://kr.investing.com/indices/major-indices" },
         { label: "Finviz", url: "https://finviz.com/" }
       ]},
+
+      /* ✅ 요청: 위 카드 “다음(밑에 흐름)”에 캘린더 카드(가로 1칸) */
+      { type: "calendar" },
 
       { items: [
         { label: "내 블로그", url: "https://blog.naver.com/shineway2011" },
@@ -533,10 +682,7 @@
         { label: "내 블로그-비망록", url: "https://blog.naver.com/shineway0102" },
         { label: "모두의 풋살", url: "https://cafe.naver.com/haha999" },
         { label: "서경축구클럽", url: "https://cafe.daum.net/skfootball/IxUe" }
-      ]},
-
-      /* ✅ 쿠팡/네이버스토어/비망록 카드 '옆'에 오도록 바로 다음에 끼워 넣는 캘린더 카드 */
-      { type: "calendar" }
+      ]}
     ];
 
     function render(){
@@ -544,14 +690,13 @@
       grid.innerHTML = "";
 
       for(const section of LINK_SECTIONS){
-        // ✅ 캘린더 카드 (헤더 없음)
         if(section?.type === "calendar"){
           const card = document.createElement("section");
           card.className = "card calendar-card";
 
           const iframe = document.createElement("iframe");
           iframe.title = "Google Calendar Agenda";
-          iframe.src = CALENDAR_IFRAME_SRC;
+          iframe.src = CALENDAR_IFRAME_SRC; // 한 줄 URL
           iframe.setAttribute("frameborder", "0");
           iframe.setAttribute("scrolling", "no");
 
@@ -560,7 +705,6 @@
           continue;
         }
 
-        // ✅ 일반 링크 카드
         const card = document.createElement("section");
         card.className = "card";
 
@@ -601,8 +745,9 @@
     }
 
     render();
+    updateWeather();
+    // 10분마다 갱신
+    setInterval(updateWeather, 10 * 60 * 1000);
   </script>
 </body>
 </html>
-
-
