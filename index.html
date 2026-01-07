@@ -54,7 +54,6 @@
       align-items: center;
       pointer-events: auto;
     }
-
     .ai-btn{
       width: 56px;
       height: 56px;
@@ -100,10 +99,7 @@
       pointer-events: none;
       transition: opacity .12s ease, transform .12s ease;
     }
-    .ai-btn:hover .tip{
-      opacity: 1;
-      transform: translateY(-50%) translateX(0);
-    }
+    .ai-btn:hover .tip{ opacity: 1; }
     .ai-btn svg{
       width: 26px;
       height: 26px;
@@ -115,6 +111,7 @@
     .ai-claude{ background: linear-gradient(135deg, rgba(249,115,22,.95), rgba(251,113,133,.92)); }
     .ai-perplexity{ background: linear-gradient(135deg, rgba(99,102,241,.95), rgba(34,211,238,.88)); }
 
+    /* Mobile: sidebar -> top bar */
     @media (max-width: 900px){
       .wrap{ padding-left: 14px; padding-top: 88px; }
       .ai-sidebar{
@@ -136,12 +133,9 @@
         top: 68px;
         transform: translateX(-50%);
       }
-      .ai-btn:hover .tip{
-        transform: translateX(-50%);
-      }
     }
 
-    /* ===== Common slot/card ===== */
+    /* ===== Shared card ===== */
     .slot, .card{
       border-radius: var(--radius);
       border: 1px solid var(--stroke);
@@ -149,20 +143,37 @@
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
     }
-    .slot{ padding: 12px; min-height: 64px; }
+    .slot{ padding: 12px; }
     .card{ padding: 12px; min-height: 210px; }
 
-    /* ===== Top area ===== */
+    /* ===== Topbar: LEFT(stack) + RIGHT(weather) height match ===== */
     .topbar{
       display:flex;
       gap:12px;
-      flex-wrap:wrap;
-      align-items:stretch;
-      margin-bottom: 12px;
+      align-items: stretch; /* 핵심: 좌/우 높이 동일 */
+      margin-bottom: 14px;
     }
-    .slot.search-slot{ flex: 2 1 740px; }
-    .slot.weather-slot{ flex: 1 1 320px; }
 
+    .stack-slot{
+      flex: 2 1 740px;
+      display:flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .weather-slot{
+      flex: 1 1 320px;
+      display:flex;
+      min-width: 0;
+    }
+
+    @media (max-width: 980px){
+      .topbar{ flex-direction: column; }
+      .weather-slot{ min-height: 220px; }
+    }
+
+    /* ===== Search grid ===== */
     .search-grid{
       display:grid;
       grid-template-columns: repeat(3, minmax(220px, 1fr));
@@ -198,7 +209,6 @@
       flex: 0 0 auto;
     }
     .sicon svg{ width:18px; height:18px; opacity:.95; }
-
     .search input{
       width:100%;
       background: transparent;
@@ -208,7 +218,6 @@
       font-size: 14px;
     }
     .search input::placeholder{ color: rgba(255,255,255,.40); }
-
     .search button{
       border: 1px solid var(--stroke);
       background: rgba(255,255,255,.05);
@@ -225,8 +234,26 @@
       border-color: rgba(155,188,255,.22);
     }
 
+    /* ===== Calendar (fills remaining height in LEFT stack) ===== */
+    .calendar-inner{
+      flex: 1 1 auto;              /* 핵심: 남은 높이를 캘린더가 먹음 */
+      overflow: hidden;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(7,10,16,.85); /* 어두운 배경 */
+      min-height: 160px;           /* 너무 눌리지 않게 안전장치 */
+    }
+    .calendar-inner iframe{
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #070a10;
+      filter: brightness(0.82) contrast(1.08) saturate(0.92);
+    }
+
     /* ===== Weather ===== */
     .weather{
+      flex: 1;
       height: 100%;
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,.10);
@@ -242,15 +269,8 @@
       justify-content:space-between;
       gap: 10px;
     }
-    .weather-title{
-      font-size: 13px;
-      color: rgba(255,255,255,.82);
-    }
-    .weather-city{
-      font-size: 18px;
-      font-weight: 650;
-      letter-spacing: .2px;
-    }
+    .weather-title{ font-size: 13px; color: rgba(255,255,255,.82); }
+    .weather-city{ font-size: 18px; font-weight: 650; letter-spacing: .2px; }
     .weather-main{
       display:flex;
       align-items:flex-end;
@@ -258,16 +278,8 @@
       gap: 10px;
       margin-top: 2px;
     }
-    .weather-temp{
-      font-size: 42px;
-      font-weight: 750;
-      line-height: 1;
-    }
-    .weather-desc{
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 6px;
-    }
+    .weather-temp{ font-size: 42px; font-weight: 750; line-height: 1; }
+    .weather-desc{ color: var(--muted); font-size: 12px; margin-top: 6px; }
     .weather-kv{
       display:flex;
       gap: 8px;
@@ -307,41 +319,6 @@
     .weather-actions button:hover, .weather-actions a:hover{
       background: rgba(155,188,255,.10);
       border-color: rgba(155,188,255,.20);
-    }
-
-    /* ===== Calendar below search ===== */
-    .calendar-row{
-      display:flex;
-      gap:12px;
-      align-items:stretch;
-      margin-bottom: 14px;
-    }
-
-    /* 가로 1.5배 느낌: max-width를 넉넉히 주고 왼쪽 정렬 */
-    .calendar-slot{
-      flex: 1 1 980px;
-      max-width: 980px;
-      padding: 0;
-      overflow: hidden;
-      height: 260px; /* 세로: 상단바와 분리되어 “상단바 높이”는 안 올라감 */
-    }
-    .calendar-slot iframe{
-      width: 100%;
-      height: 100%;
-      border: 0;
-      background: #070a10;
-      filter: brightness(0.82) contrast(1.08) saturate(0.92);
-    }
-    /* 오른쪽 빈 공간 채움(레이아웃 안정용) */
-    .calendar-spacer{
-      flex: 999 1 0;
-      min-width: 0;
-    }
-
-    @media (max-width: 980px){
-      .calendar-row{ flex-direction: column; }
-      .calendar-slot{ max-width: 100%; }
-      .calendar-spacer{ display:none; }
     }
 
     /* ===== Link grid ===== */
@@ -439,9 +416,10 @@
   </nav>
 
   <div class="wrap">
-    <!-- 상단: 검색 + 날씨 -->
+    <!-- 상단: LEFT(검색+캘린더) + RIGHT(날씨) -->
     <div class="topbar">
-      <div class="slot search-slot">
+      <!-- LEFT: 검색 + 캘린더(남은높이 자동) -->
+      <div class="slot stack-slot">
         <div class="search-grid">
           <!-- Google -->
           <form class="search" action="https://www.google.com/search" method="get" target="_blank">
@@ -477,8 +455,19 @@
             <button type="submit">Search</button>
           </form>
         </div>
+
+        <!-- 캘린더: LEFT 스택에서 남은 높이 전부 사용 -->
+        <div class="calendar-inner">
+          <iframe
+            title="Google Calendar Agenda"
+            src="https://calendar.google.com/calendar/embed?mode=AGENDA&showTitle=0&showPrint=0&showCalendars=0&showTabs=0&showTz=0&wkst=1&bgcolor=%23070a10&ctz=Asia%2FSeoul&src=shineway2011%40gmail.com"
+            frameborder="0"
+            scrolling="no">
+          </iframe>
+        </div>
       </div>
 
+      <!-- RIGHT: 날씨 -->
       <div class="slot weather-slot">
         <div class="weather" id="weatherBox">
           <div class="weather-top">
@@ -506,19 +495,6 @@
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- ✅ 캘린더: 검색 아래로 이동(상단바 높이 영향 없음) -->
-    <div class="calendar-row">
-      <div class="slot calendar-slot">
-        <iframe
-          title="Google Calendar Agenda"
-          src="https://calendar.google.com/calendar/embed?mode=AGENDA&showTitle=0&showPrint=0&showCalendars=0&showTabs=0&showTz=0&wkst=1&bgcolor=%23070a10&ctz=Asia%2FSeoul&src=shineway2011%40gmail.com"
-          frameborder="0"
-          scrolling="no">
-        </iframe>
-      </div>
-      <div class="calendar-spacer"></div>
     </div>
 
     <!-- 링크 그리드 -->
@@ -689,17 +665,11 @@
         const json = await res.json();
 
         const cur = json.current || {};
-        const temp = cur.temperature_2m;
-        const code = cur.weather_code;
-        const wind = cur.wind_speed_10m;
-        const hum  = cur.relative_humidity_2m;
-        const t = cur.time;
-
-        tEl.textContent = (temp ?? "--") + "°";
-        dEl.textContent = wcText(code ?? -1);
-        wEl.textContent = "바람 " + (wind ?? "--") + " km/h";
-        hEl.textContent = "습도 " + (hum ?? "--") + "%";
-        timeEl.textContent = t ? t.replace("T"," ") : "업데이트";
+        tEl.textContent = (cur.temperature_2m ?? "--") + "°";
+        dEl.textContent = wcText(cur.weather_code ?? -1);
+        wEl.textContent = "바람 " + (cur.wind_speed_10m ?? "--") + " km/h";
+        hEl.textContent = "습도 " + (cur.relative_humidity_2m ?? "--") + "%";
+        timeEl.textContent = cur.time ? cur.time.replace("T"," ") : "업데이트";
       }catch(e){
         tEl.textContent = "--°";
         dEl.textContent = "날씨 로딩 실패";
