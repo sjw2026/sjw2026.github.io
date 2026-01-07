@@ -315,6 +315,19 @@
       gap:8px;
       opacity:.85;
     }
+    /* ===== Google Calendar Agenda (Dark Fit) ===== */
+    .agenda-slot{
+      padding: 0;
+      overflow: hidden;
+      min-height: 300px;
+    }
+
+    .agenda-slot iframe{
+      width: 100%;
+      height: 300px;
+      border: 0;
+      filter: brightness(0.85) contrast(1.05) saturate(0.9);
+     }
   </style>
 </head>
 
@@ -398,7 +411,25 @@
       </div>
 
       <!-- 추후 위젯/템플릿 자리 -->
-      <div class="slot" id="top-slot"></div>
+      <div class="slot agenda-slot">
+        <iframe
+         title="Google Calendar Agenda"
+         src="https://calendar.google.com/calendar/embed
+         ?mode=AGENDA
+         &showTitle=0
+         &showPrint=0
+         &showCalendars=0
+         &showTabs=0
+         &showTz=0
+         &wkst=1
+         &bgcolor=%23070a10
+         &ctz=Asia%2FSeoul
+         &src=shineway2011@gmail.com"
+         frameborder="0"
+         scrolling="no">
+        </iframe>
+     </div>
+
     </div>
 
     <!-- 링크 그리드 -->
