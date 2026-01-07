@@ -318,33 +318,40 @@
 
     /* ===== Calendar card inside grid (no header) ===== */
   /* ===== Calendar card inside grid (2 columns + darker) ===== */
+/* ===== Calendar card inside grid (2 columns, same height as others) ===== */
 .calendar-card{
   padding: 0;
   overflow: hidden;
+
+  /* 링크 카드와 동일한 기준 */
   min-height: 210px;
 
-  /* 카드 자체를 더 어둡게 */
   background: rgba(7,10,16,.78) !important;
   border: 1px solid rgba(255,255,255,.12) !important;
   box-shadow: 0 18px 40px rgba(0,0,0,.55) !important;
 
-  /* ✅ 가로 2칸 차지 */
+  /* 가로 2칸 */
   grid-column: span 2;
+
+  /* ⭐ 중요: 내부 레이아웃 */
+  display: flex;
 }
 
-/* 모바일에선 1칸으로 */
+/* 모바일에선 1칸 */
 @media (max-width: 720px){
-  .calendar-card{ grid-column: span 1; }
+  .calendar-card{
+    grid-column: span 1;
+  }
 }
 
 .calendar-card iframe{
   width: 100%;
-  height: 240px;
+  height: 100%;          /* ⭐ 카드 높이에 맞춤 */
   border: 0;
 
-  /* ✅ 더 다크 + 눈부심 줄이기 */
   filter: brightness(0.72) contrast(1.10) saturate(0.85);
 }
+
 
   </style>
 </head>
