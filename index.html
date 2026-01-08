@@ -40,13 +40,12 @@
       max-width: 1440px;
       margin: 0 auto;
       padding: 18px 14px 30px;
-      padding-left: calc(14px + var(--sidebarW)); /* ✅ 고정 AI바 공간 확보 */
+      padding-left: calc(14px + var(--sidebarW));
     }
-
     @media (max-width: 980px){
       .wrap{
         padding-left: 14px;
-        padding-top: 92px; /* ✅ 모바일에서 상단바로 올라오니 내용 밀기 */
+        padding-top: 92px;
       }
     }
 
@@ -69,7 +68,7 @@
     }
 
     .stack-slot{
-      flex:2 1 840px;
+      flex:2 1 740px;
       display:flex;
       flex-direction:column;
       gap:12px;
@@ -77,16 +76,16 @@
     }
 
     .weather-slot{
-      flex:1 1 220px;
+      flex:1 1 320px;
       display:flex;
       min-width: 280px;
     }
 
-    /* ===== ✅ AI Sidebar (fixed, 위/오른쪽으로 올림) ===== */
+    /* ===== ✅ AI Sidebar (fixed) ===== */
     .ai-sidebar{
       position: fixed;
-      top: 18px;     /* ✅ 위쪽으로 */
-      left: 150px;    /* ✅ 오른쪽으로(=좌측 여백 줄이고 더 안쪽으로) */
+      top: 18px;
+      left: 28px;
       transform: none;
 
       display: flex;
@@ -98,7 +97,6 @@
       pointer-events: auto;
     }
 
-    /* Mobile: sidebar -> top bar */
     @media (max-width: 980px){
       .ai-sidebar{
         top: 10px;
@@ -140,7 +138,6 @@
       overflow: hidden;
       transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
     }
-
     .ai-btn::before{
       content:"";
       position:absolute;
@@ -149,14 +146,11 @@
       opacity:.55;
       pointer-events:none;
     }
-
     .ai-btn:hover{
       transform: translateY(-2px) scale(1.04);
       border-color: rgba(255,255,255,.26);
       box-shadow: 0 18px 44px rgba(0,0,0,.62);
     }
-
-    /* Tooltip */
     .ai-btn .tip{
       position:absolute;
       left: 64px;
@@ -178,14 +172,12 @@
       opacity: 1;
       transform: translateY(-50%) translateX(0);
     }
-
     .ai-btn svg{
       width: 26px;
       height: 26px;
       opacity: .96;
       filter: drop-shadow(0 6px 10px rgba(0,0,0,.35));
     }
-
     .ai-chatgpt{ background: linear-gradient(135deg, rgba(16,163,127,.95), rgba(10,122,95,.92)); }
     .ai-gemini{ background: linear-gradient(135deg, rgba(66,133,244,.96), rgba(123,97,255,.92)); }
     .ai-claude{ background: linear-gradient(135deg, rgba(249,115,22,.95), rgba(251,113,133,.92)); }
@@ -200,7 +192,6 @@
     @media (max-width: 980px){
       .search-grid{ grid-template-columns:1fr; }
     }
-
     .search{
       display:flex;
       align-items:center;
@@ -210,7 +201,6 @@
       border:1px solid var(--stroke);
       background:rgba(10,14,22,.55);
     }
-
     .sicon{
       width:34px;
       height:34px;
@@ -222,7 +212,6 @@
       flex: 0 0 auto;
     }
     .sicon svg{ width:18px;height:18px;opacity:.95; }
-
     .search input{
       flex:1;
       background:none;
@@ -232,7 +221,6 @@
       font-size: 14px;
     }
     .search input::placeholder{ color: rgba(255,255,255,.40); }
-
     .search button{
       border: 1px solid var(--stroke);
       background: rgba(255,255,255,.05);
@@ -253,7 +241,7 @@
       display:flex;
       gap:12px;
       align-items:stretch;
-      height: 160px; /* ✅ 320 -> 160 */
+      height: 160px;
     }
     @media (max-width: 980px){
       .bottom-row{ flex-direction:column; height: auto; }
@@ -276,33 +264,43 @@
       filter:brightness(.82) contrast(1.05) saturate(.9);
     }
 
-    /* ===== Todo (localStorage) ===== */
+    /* =========================
+       ✅ Todo 카드(그림처럼)
+       - 상단: "To Do" + 입력 + [추가]
+       - 하단: [전체삭제]
+       ========================= */
     .todo-inner{
       display:flex;
       flex-direction:column;
       padding:12px;
       gap:10px;
-      overflow:auto;
+      overflow:hidden; /* ✅ 내부 스크롤은 목록에만 */
     }
-    .todo-head{
+
+    .todo-toprow{
       display:flex;
       align-items:center;
-      justify-content:space-between;
       gap:10px;
+      flex: 0 0 auto;
     }
-    .todo-title{
-      font-weight:700;
-      font-size: 14px;
-      color: rgba(255,255,255,.88);
+
+    .todo-label{
+      font-weight:800;
+      font-size: 16px;
+      letter-spacing: .2px;
+      color: rgba(255,255,255,.90);
+      flex: 0 0 auto;
+      min-width: 54px;
     }
-    .todo-sub{
-      font-size: 12px;
-      color: var(--muted);
-    }
+
     .todo-form{
+      flex:1;
       display:flex;
-      gap:8px;
+      gap:10px;
+      align-items:center;
+      margin:0;
     }
+
     .todo-form input{
       flex:1;
       border:1px solid rgba(255,255,255,.12);
@@ -312,17 +310,38 @@
       color: var(--text);
       outline:none;
       font-size: 13px;
+      min-width: 0;
     }
-    .todo-form button{
+
+    .todo-add{
       border:1px solid rgba(255,255,255,.12);
       background: rgba(155,188,255,.10);
       color: var(--text);
       border-radius: 12px;
-      padding: 10px 10px;
+      padding: 10px 12px;
       cursor:pointer;
       font-size: 13px;
       white-space:nowrap;
+      flex: 0 0 auto;
     }
+
+    .todo-actions{
+      display:flex;
+      justify-content:flex-start;
+      flex: 0 0 auto;
+    }
+
+    .todo-del{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.80);
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor:pointer;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
     .todo-list{
       list-style:none;
       margin:0;
@@ -330,8 +349,10 @@
       display:flex;
       flex-direction:column;
       gap:8px;
-      overflow:auto;
+      overflow:auto;              /* ✅ 목록만 스크롤 */
+      min-height: 0;
     }
+
     .todo-item{
       display:flex;
       align-items:center;
@@ -354,15 +375,10 @@
       text-decoration: line-through;
       color: rgba(255,255,255,.45);
     }
-    .todo-del{
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.04);
-      color: rgba(255,255,255,.75);
+    .todo-item .todo-del{
       border-radius: 10px;
       padding: 6px 8px;
-      cursor:pointer;
       font-size: 12px;
-      white-space: nowrap;
     }
 
     /* ===== Weather ===== */
@@ -466,7 +482,7 @@
 </head>
 
 <body>
-  <!-- ✅ 고정 AI 사이드바(카드 밖, 더 위/오른쪽) -->
+  <!-- AI Sidebar -->
   <nav class="ai-sidebar" aria-label="AI shortcuts">
     <a class="ai-btn ai-chatgpt" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" aria-label="ChatGPT">
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -548,19 +564,20 @@
             </iframe>
           </div>
 
+          <!-- ✅ Todo 카드(그림처럼 변경) -->
           <div class="todo-inner" aria-label="오늘 할일">
-            <div class="todo-head">
-              <div>
-                <div class="todo-title">오늘 할일</div>
-                <div class="todo-sub">체크/삭제 가능 · 브라우저에 자동 저장</div>
-              </div>
-              <button class="todo-del" id="todoClearBtn" type="button" title="전체 삭제">전체삭제</button>
+            <div class="todo-toprow">
+              <div class="todo-label">To Do</div>
+
+              <form class="todo-form" id="todoForm" autocomplete="off">
+                <input id="todoInput" placeholder="" autocomplete="off" aria-label="할 일 입력" />
+                <button class="todo-add" type="submit">추가</button>
+              </form>
             </div>
 
-            <form class="todo-form" id="todoForm" autocomplete="off">
-              <input id="todoInput" placeholder="할 일을 입력하고 Enter" autocomplete="off" aria-label="할 일 입력" />
-              <button type="submit">추가</button>
-            </form>
+            <div class="todo-actions">
+              <button class="todo-del" id="todoClearBtn" type="button" title="전체 삭제">전체삭제</button>
+            </div>
 
             <ul class="todo-list" id="todoList" aria-label="할 일 목록"></ul>
           </div>
@@ -625,6 +642,27 @@
         { label: "네이버 사전", url: "https://dict.naver.com/" }
       ]},
       { items: [
+        { label: "의안 정보 시스템", url: "http://likms.assembly.go.kr/bill/main.do" },
+        { label: "입법조사처 보고서", url: "https://www.nars.go.kr/report/list.do?cmsCode=CM0043" },
+        { label: "전자공시시스템", url: "http://dart.fss.or.kr/" },
+        { label: "빅카인즈", url: "https://www.bigkinds.or.kr/" }
+      ]},
+      { items: [
+        { label: "바이브", url: "https://vibe.naver.com/today" },
+        { label: "페이스북", url: "https://www.facebook.com/" },
+        { label: "링크드인", url: "https://www.linkedin.com/feed/" },
+        { label: "인스타그램", url: "https://www.instagram.com/seowoog/" },
+        { label: "X(트위터)", url: "https://twitter.com/" },
+        { label: "브런치", url: "https://brunch.co.kr/@shineway2011" }
+      ]},
+      { items: [
+        { label: "유튜브 인급동", url: "https://www.youtube.com/feed/trending?bp=6gQJRkVleHBsb3Jl" },
+        { label: "구글 트렌드", url: "https://trends.google.co.kr/trending?geo=KR&hl=ko" },
+        { label: "교보 베셀", url: "https://store.kyobobook.co.kr/bestseller/online/daily?page=1" },
+        { label: "인베스팅닷컴", url: "https://kr.investing.com/indices/major-indices" },
+        { label: "Finviz", url: "https://finviz.com/" }
+      ]},
+      { items: [
         { label: "내 블로그", url: "https://blog.naver.com/shineway2011" },
         { label: "네이버 증권", url: "https://finance.naver.com/sise/" },
         { label: "업비트", url: "https://upbit.com/exchange?code=CRIX.UPBIT.KRW-BTC" },
@@ -646,27 +684,6 @@
         { label: "넷플릭스", url: "https://www.netflix.com/browse" },
         { label: "디즈니플러스", url: "https://www.disneyplus.com/ko-kr" },
         { label: "샥톡", url: "https://sharktalk.imweb.me/index" }
-      ]},
-      { items: [
-        { label: "의안 정보 시스템", url: "http://likms.assembly.go.kr/bill/main.do" },
-        { label: "입법조사처 보고서", url: "https://www.nars.go.kr/report/list.do?cmsCode=CM0043" },
-        { label: "전자공시시스템", url: "http://dart.fss.or.kr/" },
-        { label: "빅카인즈", url: "https://www.bigkinds.or.kr/" }
-      ]},
-      { items: [
-        { label: "바이브", url: "https://vibe.naver.com/today" },
-        { label: "페이스북", url: "https://www.facebook.com/" },
-        { label: "링크드인", url: "https://www.linkedin.com/feed/" },
-        { label: "인스타그램", url: "https://www.instagram.com/seowoog/" },
-        { label: "X(트위터)", url: "https://twitter.com/" },
-        { label: "브런치", url: "https://brunch.co.kr/@shineway2011" }
-      ]},
-      { items: [
-        { label: "유튜브 인급동", url: "https://www.youtube.com/feed/trending?bp=6gQJRkVleHBsb3Jl" },
-        { label: "구글 트렌드", url: "https://trends.google.co.kr/trending?geo=KR&hl=ko" },
-        { label: "교보 베셀", url: "https://store.kyobobook.co.kr/bestseller/online/daily?page=1" },
-        { label: "인베스팅닷컴", url: "https://kr.investing.com/indices/major-indices" },
-        { label: "Finviz", url: "https://finviz.com/" }
       ]},
       { items: [
         { label: "쿠팡", url: "https://www.coupang.com/" },
