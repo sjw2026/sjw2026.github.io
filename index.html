@@ -40,24 +40,58 @@
       max-width: 1440px;
       margin: 0 auto;
       padding: 18px 14px 30px;
-      padding-left: calc(14px + var(--sidebarW)); /* 사이드바 공간 */
     }
 
-    /* ===== AI Sidebar (SVG) ===== */
-    .ai-sidebar{
-      position: fixed;
-      top: 50%;
-      left: 14px;
-      transform: translateY(-50%);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 200;
-      width: var(--sidebarW);
-      align-items: center;
-      pointer-events: auto;
+    /* ===== Top ===== */
+    .topbar{
+      display:flex;
+      gap:12px;
+      align-items:stretch;
+      margin-bottom:14px;
+      flex-wrap:wrap;
     }
 
+    .slot{
+      border-radius:var(--radius);
+      border:1px solid var(--stroke);
+      background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      padding:12px;
+    }
+
+    .stack-slot{
+      flex:2 1 740px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      min-width: 320px;
+    }
+
+    /* ✅ AI rail: 검색/캘린더 카드 바로 옆 */
+    .ai-rail{
+      flex: 0 0 var(--sidebarW);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 12px 10px;
+    }
+    .ai-rail-inner{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      align-items:center;
+      justify-content:center;
+      width: 100%;
+    }
+
+    .weather-slot{
+      flex:1 1 320px;
+      display:flex;
+      min-width: 280px;
+    }
+
+    /* ===== AI Buttons ===== */
     .ai-btn{
       width: 56px;
       height: 56px;
@@ -73,7 +107,6 @@
       overflow: hidden;
       transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
     }
-
     .ai-btn::before{
       content:"";
       position:absolute;
@@ -82,7 +115,6 @@
       opacity:.55;
       pointer-events:none;
     }
-
     .ai-btn:hover{
       transform: translateY(-2px) scale(1.04);
       border-color: rgba(255,255,255,.26);
@@ -112,7 +144,6 @@
       transform: translateY(-50%) translateX(0);
     }
 
-    /* SVG */
     .ai-btn svg{
       width: 26px;
       height: 26px;
@@ -120,33 +151,23 @@
       filter: drop-shadow(0 6px 10px rgba(0,0,0,.35));
     }
 
-    /* Brand-ish gradients */
-    .ai-chatgpt{
-      background: linear-gradient(135deg, rgba(16,163,127,.95), rgba(10,122,95,.92));
-    }
-    .ai-gemini{
-      background: linear-gradient(135deg, rgba(66,133,244,.96), rgba(123,97,255,.92));
-    }
-    .ai-claude{
-      background: linear-gradient(135deg, rgba(249,115,22,.95), rgba(251,113,133,.92));
-    }
-    .ai-perplexity{
-      background: linear-gradient(135deg, rgba(99,102,241,.95), rgba(34,211,238,.88));
-    }
+    .ai-chatgpt{ background: linear-gradient(135deg, rgba(16,163,127,.95), rgba(10,122,95,.92)); }
+    .ai-gemini{ background: linear-gradient(135deg, rgba(66,133,244,.96), rgba(123,97,255,.92)); }
+    .ai-claude{ background: linear-gradient(135deg, rgba(249,115,22,.95), rgba(251,113,133,.92)); }
+    .ai-perplexity{ background: linear-gradient(135deg, rgba(99,102,241,.95), rgba(34,211,238,.88)); }
 
-    /* Mobile: sidebar -> top bar */
-    @media (max-width: 900px){
-      .wrap{
-        padding-left: 14px;
-        padding-top: 88px;
+    /* Mobile: AI rail -> horizontal, above weather */
+    @media (max-width: 980px){
+      .ai-rail{
+        flex: 1 1 100%;
+        order: 2; /* stack-slot 다음에 오도록 */
+        padding: 10px 12px;
       }
-      .ai-sidebar{
-        top: 10px;
-        left: 50%;
-        transform: translateX(-50%);
+      .ai-rail-inner{
         flex-direction: row;
-        width: auto;
+        justify-content: center;
         gap: 10px;
+        width: auto;
         background: rgba(255,255,255,.04);
         border: 1px solid rgba(255,255,255,.12);
         border-radius: 999px;
@@ -162,38 +183,6 @@
       .ai-btn:hover .tip{
         transform: translateX(-50%);
       }
-    }
-
-    /* ===== Top ===== */
-    .topbar{
-      display:flex;
-      gap:12px;
-      align-items:stretch;
-      margin-bottom:14px;
-      flex-wrap:wrap;
-    }
-
-    .slot{
-      border-radius:var(--radius);
-      border:1px solid var(--stroke);
-      background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      padding:12px;
-    }
-
-    .stack-slot{
-      flex:2 1 740px;
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      min-width: 320px;
-    }
-
-    .weather-slot{
-      flex:1 1 320px;
-      display:flex;
-      min-width: 280px;
     }
 
     /* ===== Search ===== */
@@ -258,11 +247,11 @@
       display:flex;
       gap:12px;
       align-items:stretch;
-      height: 320px; /* ✅ 상단 높이 고정(날씨와 맞추기 좋게) */
+      height: 160px; /* ✅ 320 -> 160 (반으로 줄임) */
     }
     @media (max-width: 980px){
       .bottom-row{ flex-direction:column; height: auto; }
-      .calendar-inner, .todo-inner{ min-height: 280px; }
+      .calendar-inner, .todo-inner{ min-height: 220px; }
     }
 
     .calendar-inner,
@@ -353,6 +342,7 @@
       flex:1;
       font-size: 13px;
       line-height: 1.3;
+      word-break: break-word;
     }
     .todo-item.done .todo-text{
       text-decoration: line-through;
@@ -366,6 +356,7 @@
       padding: 6px 8px;
       cursor:pointer;
       font-size: 12px;
+      white-space: nowrap;
     }
 
     /* ===== Weather ===== */
@@ -379,13 +370,13 @@
       background:rgba(10,14,22,.55);
       padding:12px;
     }
-    .weather-top{ display:flex; justify-content:space-between; }
+    .weather-top{ display:flex; justify-content:space-between; align-items:baseline; }
     .weather-city{ font-size:18px; font-weight:600; }
+    .weather-time{ font-size:12px; color: rgba(255,255,255,.62); }
     .weather-temp{ font-size:42px; font-weight:700; line-height:1; }
     .weather-desc{ font-size:12px; color:var(--muted); }
-    .weather-kv{ display:flex; gap:8px; flex-wrap:wrap; }
+    .weather-kv{ display:flex; gap:8px; flex-wrap:wrap; font-size:12px; color: rgba(255,255,255,.72); }
 
-    /* 3시간 단위 타임라인 */
     .weather-hours{ display:flex; gap:6px; margin-top:8px; }
     .hour{
       flex:1;
@@ -420,6 +411,8 @@
       padding:12px;
       min-height:210px;
       backdrop-filter: blur(10px);
+      display:flex;
+      flex-direction:column;
     }
 
     .links{
@@ -429,6 +422,8 @@
       display:flex;
       flex-direction:column;
       gap:8px;
+      overflow:auto;
+      max-height: 100%;
     }
 
     .links a{
@@ -465,42 +460,6 @@
 </head>
 
 <body>
-  <!-- ✅ AI 서비스 버튼 되살림 -->
-  <nav class="ai-sidebar" aria-label="AI shortcuts">
-    <a class="ai-btn ai-chatgpt" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" aria-label="ChatGPT">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M12 3.2c1.8 0 3.4.8 4.5 2.1 1.9.1 3.4 1.7 3.4 3.6 0 .6-.1 1.2-.4 1.7.9 1.1 1.2 2.7.6 4.1-.6 1.5-2 2.4-3.6 2.5-.7 1.5-2.2 2.6-4 2.6-1 0-2-.3-2.8-.8-1.7.5-3.6-.3-4.5-2-.4-.8-.5-1.7-.3-2.5C4 13.8 3.2 12.6 3.2 11.2c0-1.8 1.2-3.3 2.8-3.8C6.7 5 8.2 3.2 10.2 3.2c.7 0 1.3.1 1.8.3Z" stroke="rgba(255,255,255,.92)" stroke-width="1.3" opacity=".95"/>
-        <path d="M8.2 7.4 12 9.6l3.8-2.2M12 9.6v4.5l-3.8 2.2M12 9.6l3.8 2.2v4.5" stroke="rgba(255,255,255,.9)" stroke-width="1.2" opacity=".8"/>
-      </svg>
-      <span class="tip">ChatGPT</span>
-    </a>
-
-    <a class="ai-btn ai-gemini" href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" aria-label="Gemini">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M12 2.8l1.7 5.7 5.7 1.7-5.7 1.7L12 17.6l-1.7-5.7-5.7-1.7 5.7-1.7L12 2.8Z" fill="rgba(255,255,255,.92)" opacity=".92"/>
-        <path d="M18.8 13.5l.8 2.7 2.7.8-2.7.8-.8 2.7-.8-2.7-2.7-.8 2.7-.8.8-2.7Z" fill="rgba(255,255,255,.88)" opacity=".78"/>
-      </svg>
-      <span class="tip">Gemini</span>
-    </a>
-
-    <a class="ai-btn ai-claude" href="https://claude.ai/" target="_blank" rel="noopener noreferrer" aria-label="Claude">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M12 3.2c3.8 0 6.8 2.5 6.8 5.6 0 2.5-2 4.7-5 5.4L12 20.8l-1.8-6.6c-3-.7-5-2.9-5-5.4 0-3.1 3-5.6 6.8-5.6Z" stroke="rgba(255,255,255,.92)" stroke-width="1.3" opacity=".95"/>
-        <path d="M9.2 9.6h5.6" stroke="rgba(255,255,255,.88)" stroke-width="1.3" stroke-linecap="round" opacity=".85"/>
-        <path d="M9.8 12.2h4.4" stroke="rgba(255,255,255,.88)" stroke-width="1.3" stroke-linecap="round" opacity=".7"/>
-      </svg>
-      <span class="tip">Claude</span>
-    </a>
-
-    <a class="ai-btn ai-perplexity" href="https://www.perplexity.ai/" target="_blank" rel="noopener noreferrer" aria-label="Perplexity">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M12 3.4c4.7 0 8.6 3.9 8.6 8.6S16.7 20.6 12 20.6 3.4 16.7 3.4 12 7.3 3.4 12 3.4Z" stroke="rgba(255,255,255,.9)" stroke-width="1.3" opacity=".9"/>
-        <path d="M9 8.2h4.2c1.8 0 3 1.1 3 2.7 0 1.7-1.2 2.7-3 2.7H9V8.2Z" stroke="rgba(255,255,255,.92)" stroke-width="1.3" opacity=".9"/>
-        <path d="M9 13.6v2.8" stroke="rgba(255,255,255,.92)" stroke-width="1.3" opacity=".9" stroke-linecap="round"/>
-      </svg>
-      <span class="tip">Perplexity</span>
-    </a>
-  </nav>
 
   <div class="wrap">
     <!-- TOP -->
@@ -510,37 +469,37 @@
       <div class="slot stack-slot">
         <div class="search-grid">
           <!-- Google -->
-          <form class="search" action="https://www.google.com/search" method="get" target="_blank">
+          <form class="search" action="https://www.google.com/search" method="get" target="_blank" rel="noopener">
             <div class="sicon" aria-hidden="true" title="Google">
               <svg viewBox="0 0 24 24" fill="none">
                 <path d="M12 3a9 9 0 1 0 0 18c2.6 0 5.8-1.2 7.3-4.9.6-1.5.7-2.9.6-4.1H12v3h4.7c-.5 2.2-2.4 4-4.7 4a6 6 0 1 1 0-12c1.5 0 2.8.5 3.8 1.5l2.1-2.1C16.3 3.8 14.3 3 12 3Z" fill="rgba(155,188,255,.95)"/>
               </svg>
             </div>
-            <input name="q" placeholder="Google 검색" autocomplete="off" />
-            <button type="submit">Search</button>
+            <input name="q" placeholder="Google 검색" autocomplete="off" aria-label="Google 검색어" />
+            <button type="submit" aria-label="Google 검색">Search</button>
           </form>
 
           <!-- Naver -->
-          <form class="search" action="https://search.naver.com/search.naver" method="get" target="_blank">
+          <form class="search" action="https://search.naver.com/search.naver" method="get" target="_blank" rel="noopener">
             <div class="sicon" aria-hidden="true" title="Naver">
               <svg viewBox="0 0 24 24" fill="none">
                 <path d="M7 6h3.2l3.8 5.7V6H17v12h-3.2L10 12.3V18H7V6Z" fill="rgba(130,255,194,.95)"/>
               </svg>
             </div>
-            <input name="query" placeholder="Naver 검색" autocomplete="off" />
-            <button type="submit">Search</button>
+            <input name="query" placeholder="Naver 검색" autocomplete="off" aria-label="Naver 검색어" />
+            <button type="submit" aria-label="Naver 검색">Search</button>
           </form>
 
           <!-- YouTube -->
-          <form class="search" action="https://www.youtube.com/results" method="get" target="_blank">
+          <form class="search" action="https://www.youtube.com/results" method="get" target="_blank" rel="noopener">
             <div class="sicon" aria-hidden="true" title="YouTube">
               <svg viewBox="0 0 24 24" fill="none">
                 <path d="M10 16V8l7 4-7 4Z" fill="rgba(255,140,140,.95)"/>
                 <path d="M21 12s0-3.4-.4-5c-.2-.8-.9-1.4-1.7-1.6C17.4 5 12 5 12 5s-5.4 0-6.9.4c-.8.2-1.5.8-1.7 1.6C3 8.6 3 12 3 12s0 3.4.4 5c.2.8.9 1.4 1.7 1.6C6.6 19 12 19 12 19s5.4 0 6.9-.4c.8-.2 1.5-.8 1.7-1.6.4-1.6.4-5 .4-5Z" stroke="rgba(255,140,140,.75)" stroke-width="1.2"/>
               </svg>
             </div>
-            <input name="search_query" placeholder="YouTube 검색" autocomplete="off" />
-            <button type="submit">Search</button>
+            <input name="search_query" placeholder="YouTube 검색" autocomplete="off" aria-label="YouTube 검색어" />
+            <button type="submit" aria-label="YouTube 검색">Search</button>
           </form>
         </div>
 
@@ -560,25 +519,64 @@
                 <div class="todo-title">오늘 할일</div>
                 <div class="todo-sub">체크/삭제 가능 · 브라우저에 자동 저장</div>
               </div>
-              <button class="todo-del" id="todoClearBtn" title="전체 삭제">전체삭제</button>
+              <button class="todo-del" id="todoClearBtn" type="button" title="전체 삭제">전체삭제</button>
             </div>
 
-            <form class="todo-form" id="todoForm">
-              <input id="todoInput" placeholder="할 일을 입력하고 Enter" autocomplete="off" />
+            <form class="todo-form" id="todoForm" autocomplete="off">
+              <input id="todoInput" placeholder="할 일을 입력하고 Enter" autocomplete="off" aria-label="할 일 입력" />
               <button type="submit">추가</button>
             </form>
 
-            <ul class="todo-list" id="todoList"></ul>
+            <ul class="todo-list" id="todoList" aria-label="할 일 목록"></ul>
           </div>
         </div>
       </div>
 
+      <!-- ✅ AI 아이콘: 검색/캘린더 카드 바로 옆 -->
+      <nav class="slot ai-rail" aria-label="AI shortcuts">
+        <div class="ai-rail-inner">
+          <a class="ai-btn ai-chatgpt" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" aria-label="ChatGPT">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 3.2c1.8 0 3.4.8 4.5 2.1 1.9.1 3.4 1.7 3.4 3.6 0 .6-.1 1.2-.4 1.7.9 1.1 1.2 2.7.6 4.1-.6 1.5-2 2.4-3.6 2.5-.7 1.5-2.2 2.6-4 2.6-1 0-2-.3-2.8-.8-1.7.5-3.6-.3-4.5-2-.4-.8-.5-1.7-.3-2.5C4 13.8 3.2 12.6 3.2 11.2c0-1.8 1.2-3.3 2.8-3.8C6.7 5 8.2 3.2 10.2 3.2c.7 0 1.3.1 1.8.3Z" stroke="rgba(255,255,255,.92)" stroke-width="1.3" opacity=".95"/>
+              <path d="M8.2 7.4 12 9.6l3.8-2.2M12 9.6v4.5l-3.8 2.2M12 9.6l3.8 2.2v4.5" stroke="rgba(255,255,255,.9)" stroke-width="1.2" opacity=".8"/>
+            </svg>
+            <span class="tip">ChatGPT</span>
+          </a>
+
+          <a class="ai-btn ai-gemini" href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" aria-label="Gemini">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2.8l1.7 5.7 5.7 1.7-5.7 1.7L12 17.6l-1.7-5.7-5.7-1.7 5.7-1.7L12 2.8Z" fill="rgba(255,255,255,.92)" opacity=".92"/>
+              <path d="M18.8 13.5l.8 2.7 2.7.8-2.7.8-.8 2.7-.8-2.7-2.7-.8 2.7-.8.8-2.7Z" fill="rgba(255,255,255,.88)" opacity=".78"/>
+            </svg>
+            <span class="tip">Gemini</span>
+          </a>
+
+          <a class="ai-btn ai-claude" href="https://claude.ai/" target="_blank" rel="noopener noreferrer" aria-label="Claude">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 3.2c3.8 0 6.8 2.5 6.8 5.6 0 2.5-2 4.7-5 5.4L12 20.8l-1.8-6.6c-3-.7-5-2.9-5-5.4 0-3.1 3-5.6 6.8-5.6Z" stroke="rgba(255,255,255,.92)" stroke-width="1.3" opacity=".95"/>
+              <path d="M9.2 9.6h5.6" stroke="rgba(255,255,255,.88)" stroke-width="1.3" stroke-linecap="round" opacity=".85"/>
+              <path d="M9.8 12.2h4.4" stroke="rgba(255,255,255,.88)" stroke-width="1.3" stroke-linecap="round" opacity=".7"/>
+            </svg>
+            <span class="tip">Claude</span>
+          </a>
+
+          <a class="ai-btn ai-perplexity" href="https://www.perplexity.ai/" target="_blank" rel="noopener noreferrer" aria-label="Perplexity">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 3.4c4.7 0 8.6 3.9 8.6 8.6S16.7 20.6 12 20.6 3.4 16.7 3.4 12 7.3 3.4 12 3.4Z" stroke="rgba(255,255,255,.9)" stroke-width="1.3" opacity=".9"/>
+              <path d="M9 8.2h4.2c1.8 0 3 1.1 3 2.7 0 1.7-1.2 2.7-3 2.7H9V8.2Z" stroke="rgba(255,255,255,.92)" stroke-width="1.3" opacity=".9"/>
+              <path d="M9 13.6v2.8" stroke="rgba(255,255,255,.92)" stroke-width="1.3" opacity=".9" stroke-linecap="round"/>
+            </svg>
+            <span class="tip">Perplexity</span>
+          </a>
+        </div>
+      </nav>
+
       <!-- WEATHER -->
       <div class="slot weather-slot">
-        <div class="weather">
+        <div class="weather" aria-label="서울 날씨">
           <div class="weather-top">
             <div class="weather-city">서울</div>
-            <div id="weatherTime">--</div>
+            <div id="weatherTime" class="weather-time">--</div>
           </div>
 
           <div>
@@ -591,7 +589,7 @@
             <div id="weatherHum">습도 --</div>
           </div>
 
-          <div class="weather-hours" id="weatherHours"></div>
+          <div class="weather-hours" id="weatherHours" aria-label="3시간 단위 예보"></div>
         </div>
       </div>
 
@@ -743,52 +741,81 @@
     /* ===== Weather (Open-Meteo) ===== */
     const SEOUL = { lat:37.5665, lon:126.978 };
 
-    function wc(code){
-      return {
-        0:"☀️",1:"🌤",2:"⛅",3:"☁️",
-        45:"🌫",48:"🌫",
-        51:"🌦",53:"🌦",55:"🌦",
-        61:"🌧",63:"🌧",65:"🌧",
-        71:"❄️",73:"❄️",75:"❄️"
-      }[code] || "🌥";
+    function weatherLabel(code){
+      if(code === 0) return { icon:"☀️", text:"맑음" };
+      if(code === 1) return { icon:"🌤", text:"대체로 맑음" };
+      if(code === 2) return { icon:"⛅", text:"구름 조금" };
+      if(code === 3) return { icon:"☁️", text:"흐림" };
+      if(code === 45 || code === 48) return { icon:"🌫", text:"안개" };
+      if([51,53,55,56,57].includes(code)) return { icon:"🌦", text:"이슬비" };
+      if([61,63,65,66,67].includes(code)) return { icon:"🌧", text:"비" };
+      if([71,73,75,77].includes(code)) return { icon:"❄️", text:"눈" };
+      if([80,81,82].includes(code)) return { icon:"🌧", text:"소나기" };
+      if([95,96,99].includes(code)) return { icon:"⛈️", text:"뇌우" };
+      return { icon:"🌥", text:"구름" };
+    }
+
+    function setText(id, value){
+      const el = document.getElementById(id);
+      if(el) el.textContent = value;
     }
 
     async function loadWeather(){
-      const elTemp  = document.getElementById("weatherTemp");
-      const elDesc  = document.getElementById("weatherDesc");
-      const elWind  = document.getElementById("weatherWind");
-      const elHum   = document.getElementById("weatherHum");
-      const elTime  = document.getElementById("weatherTime");
       const elHours = document.getElementById("weatherHours");
-
       try{
         const url = `https://api.open-meteo.com/v1/forecast?latitude=${SEOUL.lat}&longitude=${SEOUL.lon}&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&hourly=temperature_2m,weather_code&timezone=Asia%2FSeoul`;
-        const r = await fetch(url);
+        const r = await fetch(url, { cache: "no-store" });
         const j = await r.json();
-        const c = j.current;
+        const c = j?.current;
+        const hourly = j?.hourly;
 
-        elTemp.textContent = c.temperature_2m + "°";
-        elDesc.textContent = wc(c.weather_code);
-        elWind.textContent = "바람 " + c.wind_speed_10m + "km/h";
-        elHum.textContent  = "습도 " + c.relative_humidity_2m + "%";
-        elTime.textContent = c.time.slice(11,16);
+        if(!c || !hourly?.time?.length){
+          setText("weatherDesc", "날씨 데이터 없음");
+          return;
+        }
 
-        const nowH = new Date(c.time).getHours();
-        elHours.innerHTML = "";
+        const label = weatherLabel(c.weather_code);
+        setText("weatherTemp", `${c.temperature_2m}°`);
+        setText("weatherDesc", `${label.icon} ${label.text}`);
+        setText("weatherWind", `바람 ${c.wind_speed_10m}km/h`);
+        setText("weatherHum",  `습도 ${c.relative_humidity_2m}%`);
+        setText("weatherTime", (c.time || "--").slice(11,16));
 
-        for(let i=0;i<j.hourly.time.length;i++){
-          const t = j.hourly.time[i];
-          const h = new Date(t).getHours();
+        if(elHours){
+          elHours.innerHTML = "";
 
-          if(h >= nowH && h % 3 === 0 && elHours.children.length < 4){
+          const now = new Date(c.time);
+          const nowH = now.getHours();
+          const base = Math.ceil((nowH + 0.0001) / 3) * 3;
+          const wantHours = [base, base+3, base+6, base+9].map(h => ((h%24)+24)%24);
+
+          const map = new Map();
+          for(let i=0;i<hourly.time.length;i++){
+            const t = hourly.time[i];
+            const dt = new Date(t);
+            const key = dt.toISOString().slice(0,10) + "_" + dt.getHours();
+            if(!map.has(key)) map.set(key, i);
+          }
+
+          const ymdToday = new Date(c.time).toISOString().slice(0,10);
+          const ymdTomorrow = new Date(new Date(c.time).getTime() + 24*3600*1000).toISOString().slice(0,10);
+
+          wantHours.forEach(h => {
+            let idx = map.get(`${ymdToday}_${h}`);
+            if(idx == null) idx = map.get(`${ymdTomorrow}_${h}`);
+
+            const temp = (idx != null) ? hourly.temperature_2m[idx] : "--";
+            const code = (idx != null) ? hourly.weather_code[idx] : null;
+            const lab = (code == null) ? {icon:"🌥", text:""} : weatherLabel(code);
+
             const d = document.createElement("div");
             d.className = "hour";
-            d.innerHTML = `${h}시<br>${wc(j.hourly.weather_code[i])}<div class="t">${j.hourly.temperature_2m[i]}°</div>`;
+            d.innerHTML = `${h}시<br>${lab.icon}<div class="t">${temp}°</div>`;
             elHours.appendChild(d);
-          }
+          });
         }
       }catch(e){
-        document.getElementById("weatherDesc").textContent = "날씨 로딩 실패";
+        setText("weatherDesc", "날씨 로딩 실패");
       }
     }
 
@@ -822,6 +849,7 @@
         cb.checked = !!t.done;
         cb.addEventListener("change", () => {
           const cur = loadTodos();
+          if(!cur[idx]) return;
           cur[idx].done = cb.checked;
           saveTodos(cur);
           renderTodos();
@@ -833,6 +861,7 @@
 
         const del = document.createElement("button");
         del.className = "todo-del";
+        del.type = "button";
         del.textContent = "삭제";
         del.addEventListener("click", () => {
           const cur = loadTodos();
@@ -852,6 +881,7 @@
       const form = document.getElementById("todoForm");
       const input = document.getElementById("todoInput");
       const clearBtn = document.getElementById("todoClearBtn");
+      if(!form || !input || !clearBtn) return;
 
       form.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -876,6 +906,7 @@
       loadWeather();
       bindTodo();
       renderTodos();
+      setInterval(loadWeather, 15 * 60 * 1000);
     });
   </script>
 </body>
