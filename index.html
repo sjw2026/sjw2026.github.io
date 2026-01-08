@@ -10,18 +10,19 @@
       --bg0:#070a10;
       --bg1:#0b1020;
 
+      --panel: rgba(255,255,255,.05);
+      --panel2: rgba(255,255,255,.035);
       --stroke: rgba(255,255,255,.10);
+
       --text: rgba(255,255,255,.88);
       --muted: rgba(255,255,255,.55);
 
       --shadow: 0 18px 40px rgba(0,0,0,.45);
       --radius: 16px;
 
-      /* ===== 고정 레이아웃 기준값 ===== */
-      --sidebarW: 74px;         /* AI 레일 폭 */
-      --sidebarGap: 14px;       /* AI 레일과 본문 간격 */
-      --weatherW: 360px;        /* 날씨 카드 폭(고정) */
-      --minLayoutW: 1180px;     /* 이 아래로는 가로스크롤로 유지 */
+      --sidebarW: 74px;      /* AI 버튼 레일 폭 */
+      --sidebarShift: 22px;  /* AI 레일을 오른쪽으로 밀기(값 올리면 더 오른쪽) */
+      --layoutMinW: 1180px;  /* ✅ 화면이 작아도 같은 배치 유지(가로 스크롤 허용) */
     }
 
     *{ box-sizing:border-box; }
@@ -35,7 +36,8 @@
         radial-gradient(900px 700px at 95% 0%, rgba(176,106,255,.18) 0%, rgba(176,106,255,0) 60%),
         linear-gradient(180deg, var(--bg1), var(--bg0));
 
-      /* ✅ 화면이 좁아져도 배치는 유지, 대신 가로 스크롤 */
+      /* ✅ 어떤 화면 크기에서도 동일 배치 유지 */
+      min-width: var(--layoutMinW);
       overflow-x: auto;
     }
 
@@ -44,12 +46,8 @@
       max-width: 1440px;
       margin: 0 auto;
       padding: 18px 14px 30px;
-
-      /* ✅ AI 레일만큼 항상 왼쪽 여백 확보 */
-      padding-left: calc(14px + var(--sidebarW) + var(--sidebarGap));
-
-      /* ✅ 레이아웃이 깨지지 않게 최소 폭 고정(좁으면 스크롤) */
-      min-width: var(--minLayoutW);
+      padding-left: calc(14px + var(--sidebarW) + var(--sidebarShift)); /* AI 레일 공간 */
+      min-width: var(--layoutMinW);
     }
 
     /* ===== Top ===== */
@@ -58,9 +56,7 @@
       gap:12px;
       align-items:stretch;
       margin-bottom:14px;
-
-      /* ✅ 절대 줄바꿈 금지(항상 같은 배치 유지) */
-      flex-wrap: nowrap;
+      flex-wrap:nowrap; /* ✅ 줄바꿈 금지(항상 같은 형태) */
     }
 
     .slot{
@@ -72,34 +68,35 @@
       padding:12px;
     }
 
-    /* 왼쪽(검색 + 캘린더 + todo) */
     .stack-slot{
       flex: 1 1 auto;
-      min-width: 720px;
       display:flex;
       flex-direction:column;
       gap:12px;
+      min-width: 860px; /* ✅ 검색+캘린더+투두 영역 폭 고정 느낌 */
     }
 
-    /* 오른쪽(날씨 고정폭) */
     .weather-slot{
-      flex: 0 0 var(--weatherW);
-      width: var(--weatherW);
+      flex: 0 0 320px;
+      width: 320px;
       display:flex;
-      min-width: var(--weatherW);
+      min-width: 320px;
     }
 
-    /* ===== ✅ AI Sidebar (항상 왼쪽 고정, 모바일에서도 바뀌지 않음) ===== */
+    /* ===== ✅ AI Sidebar (fixed) ===== */
     .ai-sidebar{
       position: fixed;
-      top: 120px;
-      left: 22px;
+      top: 96px; /* ✅ 위쪽으로 좀 더 올림 */
+      left: calc(14px + var(--sidebarShift)); /* ✅ 오른쪽으로 살짝 이동 */
+      transform: none;
+
       display: flex;
       flex-direction: column;
       gap: 10px;
       z-index: 200;
       width: var(--sidebarW);
       align-items: center;
+      pointer-events: auto;
     }
 
     /* ===== AI Buttons ===== */
@@ -148,8 +145,10 @@
       pointer-events: none;
       transition: opacity .12s ease, transform .12s ease;
     }
-    .ai-btn:hover .tip{ opacity: 1; }
-
+    .ai-btn:hover .tip{
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+    }
     .ai-btn svg{
       width: 26px;
       height: 26px;
@@ -161,7 +160,7 @@
     .ai-claude{ background: linear-gradient(135deg, rgba(249,115,22,.95), rgba(251,113,133,.92)); }
     .ai-perplexity{ background: linear-gradient(135deg, rgba(99,102,241,.95), rgba(34,211,238,.88)); }
 
-    /* ===== Search (항상 3칸 고정) ===== */
+    /* ===== Search ===== */
     .search-grid{
       display:grid;
       grid-template-columns:repeat(3, minmax(0,1fr));
@@ -176,7 +175,11 @@
       border-radius:14px;
       border:1px solid var(--stroke);
       background:rgba(10,14,22,.55);
+
+      /* ✅ 버튼이 폼 밖으로 삐져나오는 것 방지 */
+      overflow:hidden;
     }
+
     .sicon{
       width:34px;
       height:34px;
@@ -191,6 +194,7 @@
 
     .search input{
       flex:1;
+      min-width:0;         /* ✅ 핵심 */
       background:none;
       border:0;
       outline:none;
@@ -199,22 +203,33 @@
     }
     .search input::placeholder{ color: rgba(255,255,255,.40); }
 
+    /* ✅ Search 버튼: 아이콘/고정폭/안 튀어나오게 */
     .search button{
+      flex: 0 0 36px;
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+
       border: 1px solid var(--stroke);
       background: rgba(255,255,255,.05);
       color: var(--text);
-      border-radius: 12px;
-      padding: 8px 10px;
       cursor:pointer;
-      font-size: 13px;
-      white-space: nowrap;
+      font-size: 0;  /* 텍스트 숨김 */
+      line-height: 0;
+    }
+    .search button::before{
+      content: "🔍";
+      font-size: 16px;
     }
     .search button:hover{
       background: rgba(155,188,255,.12);
       border-color: rgba(155,188,255,.22);
     }
 
-    /* ===== Calendar + Todo row (항상 가로 2칸) ===== */
+    /* ===== Calendar + Todo row ===== */
     .bottom-row{
       display:flex;
       gap:12px;
@@ -229,7 +244,6 @@
       border:1px solid var(--stroke);
       background:rgba(7,10,16,.85);
       overflow:hidden;
-      min-width: 0;
     }
 
     .calendar-inner iframe{
@@ -239,7 +253,7 @@
       filter:brightness(.82) contrast(1.05) saturate(.9);
     }
 
-    /* ===== Todo (그림 구조) ===== */
+    /* ===== ✅ Todo 카드(그림 + 전체삭제 옆으로) ===== */
     .todo-inner{
       display:flex;
       flex-direction:column;
@@ -275,6 +289,7 @@
 
     .todo-form input{
       flex:1;
+      min-width:0;
       border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.04);
       border-radius: 12px;
@@ -282,7 +297,6 @@
       color: var(--text);
       outline:none;
       font-size: 13px;
-      min-width: 0;
     }
 
     .todo-add{
@@ -330,7 +344,9 @@
       border:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.03);
     }
-    .todo-item input[type="checkbox"]{ width:16px;height:16px; }
+    .todo-item input[type="checkbox"]{
+      width:16px;height:16px;
+    }
     .todo-text{
       flex:1;
       font-size: 13px;
@@ -384,13 +400,6 @@
       gap:12px;
       margin-top:14px;
     }
-    @media (max-width:1280px){
-      .grid{ grid-template-columns:repeat(3,minmax(200px,1fr)); }
-    }
-    @media (max-width:720px){
-      .grid{ grid-template-columns:1fr; }
-    }
-
     .card{
       border-radius:var(--radius);
       border:1px solid var(--stroke);
@@ -484,6 +493,7 @@
 
   <div class="wrap">
     <div class="topbar">
+
       <div class="slot stack-slot">
         <div class="search-grid">
           <form class="search" action="https://www.google.com/search" method="get" target="_blank" rel="noopener">
@@ -493,7 +503,7 @@
               </svg>
             </div>
             <input name="q" placeholder="Google 검색" autocomplete="off" aria-label="Google 검색어" />
-            <button type="submit" aria-label="Google 검색">Search</button>
+            <button type="submit" aria-label="Google 검색"></button>
           </form>
 
           <form class="search" action="https://search.naver.com/search.naver" method="get" target="_blank" rel="noopener">
@@ -503,7 +513,7 @@
               </svg>
             </div>
             <input name="query" placeholder="Naver 검색" autocomplete="off" aria-label="Naver 검색어" />
-            <button type="submit" aria-label="Naver 검색">Search</button>
+            <button type="submit" aria-label="Naver 검색"></button>
           </form>
 
           <form class="search" action="https://www.youtube.com/results" method="get" target="_blank" rel="noopener">
@@ -514,7 +524,7 @@
               </svg>
             </div>
             <input name="search_query" placeholder="YouTube 검색" autocomplete="off" aria-label="YouTube 검색어" />
-            <button type="submit" aria-label="YouTube 검색">Search</button>
+            <button type="submit" aria-label="YouTube 검색"></button>
           </form>
         </div>
 
@@ -562,6 +572,7 @@
           <div class="weather-hours" id="weatherHours" aria-label="3시간 단위 예보"></div>
         </div>
       </div>
+
     </div>
 
     <div class="grid" id="grid"></div>
@@ -787,10 +798,15 @@
     const TODO_KEY = "sjw2026_todos_v1";
 
     function loadTodos(){
-      try{ return JSON.parse(localStorage.getItem(TODO_KEY) || "[]"); }
-      catch{ return []; }
+      try{
+        return JSON.parse(localStorage.getItem(TODO_KEY) || "[]");
+      }catch{
+        return [];
+      }
     }
-    function saveTodos(todos){ localStorage.setItem(TODO_KEY, JSON.stringify(todos)); }
+    function saveTodos(todos){
+      localStorage.setItem(TODO_KEY, JSON.stringify(todos));
+    }
 
     function renderTodos(){
       const list = document.getElementById("todoList");
