@@ -20,7 +20,8 @@
       --shadow: 0 18px 40px rgba(0,0,0,.45);
       --radius: 16px;
 
-      --sidebarW: 74px; /* ✅ 고정 AI 사이드바 폭 */
+      --sidebarW: 74px;      /* AI 버튼 레일 폭 */
+      --sidebarShift: 22px;  /* ✅ AI 레일을 오른쪽으로 밀기(값 올리면 더 오른쪽) */
     }
 
     *{ box-sizing:border-box; }
@@ -40,7 +41,8 @@
       max-width: 1440px;
       margin: 0 auto;
       padding: 18px 14px 30px;
-      padding-left: calc(14px + var(--sidebarW));
+      /* ✅ AI 레일이 오른쪽으로 간 만큼 본문도 같이 밀어서 겹침 방지 */
+      padding-left: calc(14px + var(--sidebarW) + var(--sidebarShift));
     }
     @media (max-width: 980px){
       .wrap{
@@ -85,7 +87,7 @@
     .ai-sidebar{
       position: fixed;
       top: 18px;
-      left: 28px;
+      left: calc(28px + var(--sidebarShift)); /* ✅ 오른쪽으로 이동 */
       transform: none;
 
       display: flex;
@@ -264,17 +266,13 @@
       filter:brightness(.82) contrast(1.05) saturate(.9);
     }
 
-    /* =========================
-       ✅ Todo 카드(그림처럼)
-       - 상단: "To Do" + 입력 + [추가]
-       - 하단: [전체삭제]
-       ========================= */
+    /* ===== ✅ Todo 카드(그림 + 전체삭제 옆으로) ===== */
     .todo-inner{
       display:flex;
       flex-direction:column;
       padding:12px;
       gap:10px;
-      overflow:hidden; /* ✅ 내부 스크롤은 목록에만 */
+      overflow:hidden;
     }
 
     .todo-toprow{
@@ -299,6 +297,7 @@
       gap:10px;
       align-items:center;
       margin:0;
+      min-width: 0;
     }
 
     .todo-form input{
@@ -325,21 +324,16 @@
       flex: 0 0 auto;
     }
 
-    .todo-actions{
-      display:flex;
-      justify-content:flex-start;
-      flex: 0 0 auto;
-    }
-
     .todo-del{
       border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.04);
       color: rgba(255,255,255,.80);
       border-radius: 12px;
-      padding: 8px 10px;
+      padding: 10px 10px; /* ✅ 추가 버튼과 높이 맞춤 */
       cursor:pointer;
       font-size: 12px;
       white-space: nowrap;
+      flex: 0 0 auto;
     }
 
     .todo-list{
@@ -349,8 +343,9 @@
       display:flex;
       flex-direction:column;
       gap:8px;
-      overflow:auto;              /* ✅ 목록만 스크롤 */
+      overflow:auto;
       min-height: 0;
+      flex: 1; /* ✅ 남는 공간은 목록이 먹고 스크롤 */
     }
 
     .todo-item{
@@ -564,7 +559,7 @@
             </iframe>
           </div>
 
-          <!-- ✅ Todo 카드(그림처럼 변경) -->
+          <!-- ✅ Todo (전체삭제를 추가 옆으로 이동) -->
           <div class="todo-inner" aria-label="오늘 할일">
             <div class="todo-toprow">
               <div class="todo-label">To Do</div>
@@ -572,11 +567,8 @@
               <form class="todo-form" id="todoForm" autocomplete="off">
                 <input id="todoInput" placeholder="" autocomplete="off" aria-label="할 일 입력" />
                 <button class="todo-add" type="submit">추가</button>
+                <button class="todo-del" id="todoClearBtn" type="button" title="전체 삭제">전체삭제</button>
               </form>
-            </div>
-
-            <div class="todo-actions">
-              <button class="todo-del" id="todoClearBtn" type="button" title="전체 삭제">전체삭제</button>
             </div>
 
             <ul class="todo-list" id="todoList" aria-label="할 일 목록"></ul>
