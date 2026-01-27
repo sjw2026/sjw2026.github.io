@@ -171,7 +171,7 @@
       border-radius:14px;
       border:1px solid var(--stroke);
       background:rgba(10,14,22,.55);
-      overflow:hidden; /* ✅ 버튼 튀어나옴 방지 */
+      overflow:hidden;
     }
 
     .sicon{
@@ -188,7 +188,7 @@
 
     .search input{
       flex:1;
-      min-width:0; /* ✅ 핵심 */
+      min-width:0;
       background:none;
       border:0;
       outline:none;
@@ -197,7 +197,6 @@
     }
     .search input::placeholder{ color: rgba(255,255,255,.40); }
 
-    /* ✅ 동그란 돋보기 SVG 버튼 */
     .search button{
       flex: 0 0 38px;
       width: 38px;
@@ -231,7 +230,7 @@
       filter: drop-shadow(0 6px 10px rgba(0,0,0,.30));
     }
 
-    /* ===== Calendar + Todo row ===== */
+    /* ===== Calendar + Visited row ===== */
     .bottom-row{
       display:flex;
       gap:12px;
@@ -255,85 +254,36 @@
       filter:brightness(.82) contrast(1.05) saturate(.9);
     }
 
-    /* ===== Visited (Recent/Frequent) ===== */
+    /* ===== Visited (자주만, 2칸) ===== */
     .recent-inner{
+      position:relative;
       display:flex;
       flex-direction:column;
       padding:12px;
-      gap:10px;
-      overflow:hidden;
-    }
-
-    .recent-toprow{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex: 0 0 auto;
-    }
-
-    .recent-label{
-      font-weight:800;
-      font-size: 16px;
-      letter-spacing: .2px;
-      color: rgba(255,255,255,.90);
-      min-width: 54px;
-    }
-
-    .recent-actions{
-      display:flex;
-      gap:8px;
-      align-items:center;
-    }
-
-    .recent-btn{
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.04);
-      color: rgba(255,255,255,.82);
-      border-radius: 12px;
-      padding: 8px 10px;
-      cursor:pointer;
-      font-size: 12px;
-      white-space:nowrap;
-      flex: 0 0 auto;
-    }
-
-    .recent-columns{
-      flex:1;
-      min-height:0;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-
-    .recent-col{
-      min-width:0;
-      display:flex;
-      flex-direction:column;
       gap:8px;
       overflow:hidden;
     }
-
     .recent-title{
       font-size:12px;
       color: rgba(255,255,255,.62);
       padding: 0 2px;
       flex: 0 0 auto;
     }
-
-    .recent-list{
+    .freq-grid{
       list-style:none;
       margin:0;
       padding:0;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
+      flex:1;
+      min-height:0;
       overflow:auto;
-      min-height: 0;
-      flex: 1;
-    }
 
-    .recent-item a{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:8px 10px;
+
+      padding-bottom: 30px; /* 삭제 아이콘 겹침 방지 */
+    }
+    .freq-item a{
       color: var(--text);
       text-decoration:none;
       display:flex;
@@ -347,14 +297,12 @@
       background: rgba(255,255,255,.03);
       transition: .12s ease;
     }
-
-    .recent-item a:hover{
+    .freq-item a:hover{
       border-color:rgba(155,188,255,.22);
       background:rgba(155,188,255,.10);
       transform:translateY(-1px);
     }
-
-    .recent-text{
+    .freq-text{
       flex:1;
       min-width:0;
       font-size:13px;
@@ -362,12 +310,38 @@
       text-overflow:ellipsis;
       white-space:nowrap;
     }
-
-    .recent-meta{
+    .freq-meta{
       flex:0 0 auto;
       font-size:11px;
       color: rgba(255,255,255,.55);
       white-space:nowrap;
+    }
+    .clear-icon{
+      position:absolute;
+      right:8px;
+      bottom:8px;
+      width:28px;
+      height:28px;
+      border-radius:10px;
+
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      backdrop-filter: blur(10px);
+
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      opacity:.85;
+      transition: transform .12s ease, opacity .12s ease, background .12s ease;
+    }
+    .clear-icon:hover{
+      opacity:1;
+      transform: translateY(-1px);
+      background: rgba(155,188,255,.10);
+    }
+    .clear-icon svg{
+      width:16px;
+      height:16px;
     }
 
     /* ===== Weather ===== */
@@ -459,7 +433,6 @@
     }
   </style>
 </head>
-
 <body>
   <!-- AI Sidebar -->
   <nav class="ai-sidebar" aria-label="AI shortcuts">
@@ -561,26 +534,19 @@
             </iframe>
           </div>
 
-          <div class="recent-inner" aria-label="최근/자주 방문">
-            <div class="recent-toprow">
-              <div class="recent-label">Visited</div>
-              <div class="recent-actions">
-                <button class="recent-btn" id="recentClearBtn" type="button" title="기록 삭제">기록삭제</button>
-              </div>
-            </div>
+          <!-- ✅ To Do 제거 → 자주 방문(2칸) -->
+          <div class="recent-inner" aria-label="자주 방문">
+            <div class="recent-title">자주</div>
+            <ul class="freq-grid" id="freqList" aria-label="자주 방문 목록"></ul>
 
-            <div class="recent-columns">
-              <div class="recent-col">
-                <div class="recent-title">최근</div>
-                <ul class="recent-list" id="recentList" aria-label="최근 방문 목록"></ul>
-              </div>
-              <div class="recent-col">
-                <div class="recent-title">자주</div>
-                <ul class="recent-list" id="freqList" aria-label="자주 방문 목록"></ul>
-              </div>
-            </div>
+            <!-- 우측 하단 작은 아이콘 -->
+            <button class="clear-icon" id="recentClearBtn" type="button" title="기록 삭제" aria-label="기록 삭제">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M9 3h6m-8 4h10m-9 0 1 14h6l1-14" stroke="rgba(255,255,255,.85)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10 11v7M14 11v7" stroke="rgba(255,255,255,.75)" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </button>
           </div>
-
         </div>
       </div>
 
@@ -614,7 +580,6 @@
       <div>링크 수정은 <code>LINK_SECTIONS</code>만 편집</div>
     </footer>
   </div>
-
   <script>
     const LINK_SECTIONS = [
       { items: [
@@ -728,9 +693,10 @@
           a.href = url;
           a.target = "_blank";
           a.rel = "noopener noreferrer";
+
+          /* ✅ 방문 기록용 데이터(이벤트 위임에서 사용) */
           a.dataset.vLabel = label;
           a.dataset.vUrl = url;
-
 
           const dot = document.createElement("span");
           dot.className = "dot";
@@ -830,10 +796,10 @@
       }
     }
 
-        /* ===== Visited (localStorage) ===== */
+    /* ===== Visited (Frequent only, low load) ===== */
     const VISIT_KEY = "sjw2026_visits_v1";
-    const VISIT_MAX = 200;  // 저장 상한(렉 방지)
-    const LIST_N = 8;       // 화면 표시 개수
+    const VISIT_MAX = 200;   // 상한(렉 방지)
+    const LIST_N = 12;       // 2칸이므로 짝수 권장
 
     function loadVisits(){
       try{
@@ -859,73 +825,55 @@
         rows.unshift({ label, url, ts: now, count: 1 });
       }
 
-      // 최근순 정렬 + 상한 유지
+      // 저장 크기 제한(최근순 정리)
       rows.sort((a,b) => (b.ts||0) - (a.ts||0));
       saveVisits(rows.slice(0, VISIT_MAX));
-      renderVisited();
+      renderFrequent();
     }
 
-    function formatAgo(ts){
-      const d = Math.max(0, Date.now() - (ts||0));
-      const m = Math.floor(d / 60000);
-      if(m < 1) return "방금";
-      if(m < 60) return `${m}m`;
-      const h = Math.floor(m / 60);
-      if(h < 24) return `${h}h`;
-      return `${Math.floor(h / 24)}d`;
-    }
-
-    function renderVisited(){
-      const recentEl = document.getElementById("recentList");
+    function renderFrequent(){
       const freqEl = document.getElementById("freqList");
-      if(!recentEl || !freqEl) return;
+      if(!freqEl) return;
 
       const rows = loadVisits();
 
-      const recent = [...rows]
-        .sort((a,b) => (b.ts||0) - (a.ts||0))
-        .slice(0, LIST_N);
-
+      // 자주: count 우선, 동률이면 최근 우선
       const freq = [...rows]
         .sort((a,b) => (b.count||0) - (a.count||0) || (b.ts||0) - (a.ts||0))
         .slice(0, LIST_N);
 
-      const renderList = (el, arr, mode) => {
-        el.innerHTML = "";
-        if(!arr.length){
-          const li = document.createElement("li");
-          li.className = "recent-item";
-          li.innerHTML = `<a href="#" onclick="return false;"><span class="recent-text">기록 없음</span><span class="recent-meta">-</span></a>`;
-          el.appendChild(li);
-          return;
-        }
+      freqEl.innerHTML = "";
 
-        arr.forEach(r => {
-          const li = document.createElement("li");
-          li.className = "recent-item";
+      if(!freq.length){
+        const li = document.createElement("li");
+        li.className = "freq-item";
+        li.innerHTML = `<a href="#" onclick="return false;"><span class="freq-text">기록 없음</span><span class="freq-meta">-</span></a>`;
+        freqEl.appendChild(li);
+        return;
+      }
 
-          const a = document.createElement("a");
-          a.href = r.url;
-          a.target = "_blank";
-          a.rel = "noopener noreferrer";
+      freq.forEach(r => {
+        const li = document.createElement("li");
+        li.className = "freq-item";
 
-          const text = document.createElement("span");
-          text.className = "recent-text";
-          text.textContent = r.label || r.url;
+        const a = document.createElement("a");
+        a.href = r.url;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
 
-          const meta = document.createElement("span");
-          meta.className = "recent-meta";
-          meta.textContent = (mode === "freq") ? `${r.count||0}회` : formatAgo(r.ts);
+        const text = document.createElement("span");
+        text.className = "freq-text";
+        text.textContent = r.label || r.url;
 
-          a.appendChild(text);
-          a.appendChild(meta);
-          li.appendChild(a);
-          el.appendChild(li);
-        });
-      };
+        const meta = document.createElement("span");
+        meta.className = "freq-meta";
+        meta.textContent = `${r.count || 0}회`;
 
-      renderList(recentEl, recent, "recent");
-      renderList(freqEl, freq, "freq");
+        a.appendChild(text);
+        a.appendChild(meta);
+        li.appendChild(a);
+        freqEl.appendChild(li);
+      });
     }
 
     function bindVisitedUI(){
@@ -933,12 +881,12 @@
       if(clearBtn){
         clearBtn.addEventListener("click", () => {
           saveVisits([]);
-          renderVisited();
+          renderFrequent();
         });
       }
     }
 
-    // ✅ 이벤트 위임(한 번만): 중복 addEventListener로 인한 렉 방지
+    // ✅ 이벤트 위임 1개만(렉 방지)
     function bindVisitDelegation(){
       const grid = document.getElementById("grid");
       if(!grid) return;
@@ -957,15 +905,14 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       renderLinks();
+
       loadWeather();
+      setInterval(loadWeather, 15 * 60 * 1000);
 
       bindVisitedUI();
       bindVisitDelegation();
-      renderVisited();
-
-      setInterval(loadWeather, 15 * 60 * 1000);
+      renderFrequent();
     });
-
   </script>
 </body>
 </html>
