@@ -275,13 +275,12 @@
       padding:0;
       flex:1;
       min-height:0;
-      overflow:auto;
 
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap:8px 10px;
 
-      padding-bottom: 30px; /* 삭제 아이콘 겹침 방지 */
+      padding-bottom: 24px; /* 삭제 아이콘 겹침 방지 */
     }
     .freq-item a{
       color: var(--text);
@@ -798,7 +797,7 @@
     /* ===== Visited (Frequent only, low load) ===== */
     const VISIT_KEY = "sjw2026_visits_v1";
     const VISIT_MAX = 200;   // 상한(렉 방지)
-    const LIST_N = 12;       // 2칸이므로 짝수 권장
+    const LIST_N = 6;       // 2칸이므로 짝수 권장
 
     function loadVisits(){
       try{
