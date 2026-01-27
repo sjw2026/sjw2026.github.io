@@ -1,470 +1,909 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>shineway</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>shineway</title>
 
-<style>
-:root{
-  --bg0:#070a10;
-  --bg1:#0b1020;
-  --panel: rgba(255,255,255,.05);
-  --panel2: rgba(255,255,255,.035);
-  --stroke: rgba(255,255,255,.10);
-  --text: rgba(255,255,255,.88);
-  --muted: rgba(255,255,255,.55);
-  --shadow: 0 18px 40px rgba(0,0,0,.45);
-  --radius: 16px;
-  --sidebarW: 74px;
-  --sidebarShift: 22px;
-  --layoutMinW: 1180px;
-}
+  <style>
+    :root{
+      --bg0:#070a10;
+      --bg1:#0b1020;
 
-*{ box-sizing:border-box; }
-html,body{ height:100%; }
-body{
-  margin:0;
-  font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;
-  color: var(--text);
-  background:
-    radial-gradient(1100px 800px at 10% -10%, rgba(79,140,255,.22) 0%, rgba(79,140,255,0) 55%),
-    radial-gradient(900px 700px at 95% 0%, rgba(176,106,255,.18) 0%, rgba(176,106,255,0) 60%),
-    linear-gradient(180deg, var(--bg1), var(--bg0));
-  min-width: var(--layoutMinW);
-  overflow-x: auto;
-}
+      --panel: rgba(255,255,255,.05);
+      --panel2: rgba(255,255,255,.035);
+      --stroke: rgba(255,255,255,.10);
 
-.wrap{
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 18px 14px 30px;
-  padding-left: calc(14px + var(--sidebarW) + var(--sidebarShift));
-  min-width: var(--layoutMinW);
-}
+      --text: rgba(255,255,255,.88);
+      --muted: rgba(255,255,255,.55);
 
-.topbar{
-  display:flex;
-  gap:12px;
-  align-items:stretch;
-  margin-bottom:14px;
-  flex-wrap:nowrap;
-}
+      --shadow: 0 18px 40px rgba(0,0,0,.45);
+      --radius: 16px;
 
-.slot{
-  border-radius:var(--radius);
-  border:1px solid var(--stroke);
-  background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));
-  box-shadow:var(--shadow);
-  backdrop-filter:blur(10px);
-  padding:12px;
-}
+      --sidebarW: 74px;
+      --sidebarShift: 22px;
+      --layoutMinW: 1180px;
+    }
 
-.stack-slot{
-  flex: 1 1 auto;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  min-width: 860px;
-}
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1100px 800px at 10% -10%, rgba(79,140,255,.22) 0%, rgba(79,140,255,0) 55%),
+        radial-gradient(900px 700px at 95% 0%, rgba(176,106,255,.18) 0%, rgba(176,106,255,0) 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg0));
 
-.weather-slot{
-  flex: 0 0 320px;
-  width: 320px;
-  display:flex;
-  min-width: 320px;
-}
+      min-width: var(--layoutMinW);
+      overflow-x: auto;
+    }
 
-/* ===== Search ===== */
-.search-grid{
-  display:grid;
-  grid-template-columns:repeat(3, minmax(0,1fr));
-  gap:10px;
-}
+    .wrap{
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 18px 14px 30px;
+      padding-left: calc(14px + var(--sidebarW) + var(--sidebarShift));
+      min-width: var(--layoutMinW);
+    }
 
-.search{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:10px 12px;
-  border-radius:14px;
-  border:1px solid var(--stroke);
-  background:rgba(10,14,22,.55);
-  overflow:hidden;
-}
+    .topbar{
+      display:flex;
+      gap:12px;
+      align-items:stretch;
+      margin-bottom:14px;
+      flex-wrap:nowrap;
+    }
 
-.sicon{
-  width:34px;height:34px;
-  border-radius: 12px;
-  display:grid;
-  place-items:center;
-  border: 1px solid var(--stroke);
-  background: rgba(255,255,255,.04);
-}
+    .slot{
+      border-radius:var(--radius);
+      border:1px solid var(--stroke);
+      background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      padding:12px;
+    }
 
-.search input{
-  flex:1;
-  background:none;
-  border:0;
-  outline:none;
-  color:var(--text);
-  font-size: 14px;
-}
+    .stack-slot{
+      flex: 1 1 auto;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      min-width: 860px;
+    }
 
-.search button{
-  width:38px;height:38px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.06);
-  cursor:pointer;
-}
+    .weather-slot{
+      flex: 0 0 320px;
+      width: 320px;
+      display:flex;
+      min-width: 320px;
+    }
 
-/* ===== Bottom Row ===== */
-.bottom-row{
-  display:flex;
-  gap:12px;
-  align-items:stretch;
-  height: 160px;
-}
+    /* ===== AI Sidebar ===== */
+    .ai-sidebar{
+      position: fixed;
+      top: 96px;
+      left: calc(14px + var(--sidebarShift));
+      transform: none;
 
-.calendar-inner,
-.recent-inner{
-  flex:1;
-  border-radius:14px;
-  border:1px solid var(--stroke);
-  background:rgba(7,10,16,.85);
-  overflow:hidden;
-}
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 200;
+      width: var(--sidebarW);
+      align-items: center;
+      pointer-events: auto;
+    }
 
-/* ===== Calendar ===== */
-.calendar-inner iframe{
-  width:100%;
-  height:100%;
-  border:0;
-  filter:brightness(.82) contrast(1.05) saturate(.9);
-}
+    .ai-btn{
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 12px 26px rgba(0,0,0,.45);
+      position: relative;
+      overflow: hidden;
+      transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+    }
+    .ai-btn::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(60px 60px at 30% 20%, rgba(255,255,255,.22), transparent 60%);
+      opacity:.55;
+      pointer-events:none;
+    }
+    .ai-btn:hover{
+      transform: translateY(-2px) scale(1.04);
+      border-color: rgba(255,255,255,.26);
+      box-shadow: 0 18px 44px rgba(0,0,0,.62);
+    }
+    .ai-btn .tip{
+      position:absolute;
+      left: 64px;
+      top: 50%;
+      transform: translateY(-50%);
+      white-space: nowrap;
+      font-size: 12px;
+      color: rgba(255,255,255,.88);
+      background: rgba(15,20,30,.86);
+      border: 1px solid rgba(255,255,255,.14);
+      padding: 7px 10px;
+      border-radius: 12px;
+      box-shadow: 0 18px 44px rgba(0,0,0,.55);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .12s ease, transform .12s ease;
+    }
+    .ai-btn:hover .tip{
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+    }
+    .ai-btn svg{
+      width: 26px;
+      height: 26px;
+      opacity: .96;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,.35));
+    }
+    .ai-chatgpt{ background: linear-gradient(135deg, rgba(16,163,127,.95), rgba(10,122,95,.92)); }
+    .ai-gemini{ background: linear-gradient(135deg, rgba(66,133,244,.96), rgba(123,97,255,.92)); }
+    .ai-claude{ background: linear-gradient(135deg, rgba(249,115,22,.95), rgba(251,113,133,.92)); }
+    .ai-perplexity{ background: linear-gradient(135deg, rgba(99,102,241,.95), rgba(34,211,238,.88)); }
 
-/* ===== Visited ===== */
-.recent-inner{
-  display:flex;
-  flex-direction:column;
-  padding:12px;
-  gap:10px;
-}
+    /* ===== Search ===== */
+    .search-grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:10px;
+    }
 
-.recent-toprow{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
+    .search{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--stroke);
+      background:rgba(10,14,22,.55);
+      overflow:hidden; /* ✅ 버튼 튀어나옴 방지 */
+    }
 
-.recent-label{
-  font-weight:800;
-  font-size:16px;
-}
+    .sicon{
+      width:34px;
+      height:34px;
+      border-radius: 12px;
+      display:grid;
+      place-items:center;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      flex: 0 0 auto;
+    }
+    .sicon svg{ width:18px;height:18px;opacity:.95; }
 
-.recent-btn{
-  border:1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.04);
-  color: rgba(255,255,255,.82);
-  border-radius: 12px;
-  padding: 8px 10px;
-  cursor:pointer;
-  font-size: 12px;
-}
+    .search input{
+      flex:1;
+      min-width:0; /* ✅ 핵심 */
+      background:none;
+      border:0;
+      outline:none;
+      color:var(--text);
+      font-size: 14px;
+    }
+    .search input::placeholder{ color: rgba(255,255,255,.40); }
 
-.recent-columns{
-  flex:1;
-  min-height:0;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
+    /* ✅ 동그란 돋보기 SVG 버튼 */
+    .search button{
+      flex: 0 0 38px;
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
 
-.recent-col{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  overflow:hidden;
-}
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      backdrop-filter: blur(10px);
+      cursor:pointer;
 
-.recent-title{
-  font-size:12px;
-  color: rgba(255,255,255,.62);
-}
+      transition: transform .14s ease, background .14s ease, border-color .14s ease, box-shadow .14s ease;
+      box-shadow: 0 10px 22px rgba(0,0,0,.35);
+    }
+    .search button:hover{
+      transform: translateY(-1px);
+      background: rgba(155,188,255,.12);
+      border-color: rgba(155,188,255,.22);
+      box-shadow: 0 14px 32px rgba(0,0,0,.48);
+    }
+    .search button:active{
+      transform: translateY(0px) scale(.98);
+    }
+    .search button svg{
+      width: 18px;
+      height: 18px;
+      opacity: .92;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,.30));
+    }
 
-.recent-list{
-  list-style:none;
-  margin:0;
-  padding:0;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  overflow:auto;
-}
+    /* ===== Calendar + Todo row ===== */
+    .bottom-row{
+      display:flex;
+      gap:12px;
+      align-items:stretch;
+      height: 160px;
+    }
 
-.recent-item a{
-  color: var(--text);
-  text-decoration:none;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:8px 10px;
-  border-radius: 12px;
-  border:1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.03);
-  font-size:13px;
-}
+    .calendar-inner,
+    .todo-inner{
+      flex:1;
+      border-radius:14px;
+      border:1px solid var(--stroke);
+      background:rgba(7,10,16,.85);
+      overflow:hidden;
+    }
 
-.recent-text{
-  overflow:hidden;
-  white-space:nowrap;
-  text-overflow:ellipsis;
-  flex:1;
-}
+    .calendar-inner iframe{
+      width:100%;
+      height:100%;
+      border:0;
+      filter:brightness(.82) contrast(1.05) saturate(.9);
+    }
 
-.recent-meta{
-  font-size:11px;
-  color: rgba(255,255,255,.55);
-  margin-left:8px;
-}
+    /* ===== Todo ===== */
+    .todo-inner{
+      display:flex;
+      flex-direction:column;
+      padding:12px;
+      gap:10px;
+      overflow:hidden;
+    }
 
-/* ===== Grid ===== */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(6,minmax(180px,1fr));
-  gap:12px;
-  margin-top:14px;
-}
+    .todo-toprow{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex: 0 0 auto;
+    }
 
-.card{
-  border-radius:var(--radius);
-  border:1px solid var(--stroke);
-  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.03));
-  box-shadow:var(--shadow);
-  padding:12px;
-  min-height:210px;
-  backdrop-filter: blur(10px);
-  display:flex;
-  flex-direction:column;
-}
+    .todo-label{
+      font-weight:800;
+      font-size: 16px;
+      letter-spacing: .2px;
+      color: rgba(255,255,255,.90);
+      flex: 0 0 auto;
+      min-width: 54px;
+    }
 
-.links{
-  list-style:none;
-  margin:0;
-  padding:0;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  overflow:auto;
-}
+    .todo-form{
+      flex:1;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin:0;
+      min-width: 0;
+    }
 
-.links a{
-  color:var(--text);
-  text-decoration:none;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:8px 10px;
-  border-radius:12px;
-  background:rgba(255,255,255,.02);
-  border:1px solid transparent;
-}
+    .todo-form input{
+      flex:1;
+      min-width:0;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      border-radius: 12px;
+      padding: 10px 10px;
+      color: var(--text);
+      outline:none;
+      font-size: 13px;
+    }
 
-.dot{ width:7px;height:7px;border-radius:50%;background:#9bbcff; }
+    .todo-add{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(155,188,255,.10);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor:pointer;
+      font-size: 13px;
+      white-space:nowrap;
+      flex: 0 0 auto;
+    }
 
-footer{
-  margin-top:14px;
-  font-size:12px;
-  color:var(--muted);
-  display:flex;
-  justify-content:space-between;
-}
-</style>
+    .todo-del{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.80);
+      border-radius: 12px;
+      padding: 10px 10px;
+      cursor:pointer;
+      font-size: 12px;
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+
+    .todo-list{
+      list-style:none;
+      margin:0;
+      padding:0;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      overflow:auto;
+      min-height: 0;
+      flex: 1;
+    }
+
+    .todo-item{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 10px;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+    }
+    .todo-item input[type="checkbox"]{
+      width:16px;height:16px;
+    }
+    .todo-text{
+      flex:1;
+      font-size: 13px;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+    .todo-item.done .todo-text{
+      text-decoration: line-through;
+      color: rgba(255,255,255,.45);
+    }
+    .todo-item .todo-del{
+      border-radius: 10px;
+      padding: 6px 8px;
+      font-size: 12px;
+    }
+
+    /* ===== Weather ===== */
+    .weather{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      border-radius:14px;
+      border:1px solid var(--stroke);
+      background:rgba(10,14,22,.55);
+      padding:12px;
+    }
+    .weather-top{ display:flex; justify-content:space-between; align-items:baseline; }
+    .weather-city{ font-size:18px; font-weight:600; }
+    .weather-time{ font-size:12px; color: rgba(255,255,255,.62); }
+    .weather-temp{ font-size:42px; font-weight:700; line-height:1; }
+    .weather-desc{ font-size:12px; color:var(--muted); }
+    .weather-kv{ display:flex; gap:8px; flex-wrap:wrap; font-size:12px; color: rgba(255,255,255,.72); }
+
+    .weather-hours{ display:flex; gap:6px; margin-top:8px; }
+    .hour{
+      flex:1;
+      text-align:center;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+      padding:6px 4px;
+      font-size:11px;
+    }
+    .hour .t{ font-size:13px; font-weight:600; }
+
+    /* ===== Link Grid ===== */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(6,minmax(180px,1fr));
+      gap:12px;
+      margin-top:14px;
+    }
+    .card{
+      border-radius:var(--radius);
+      border:1px solid var(--stroke);
+      background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.03));
+      box-shadow:var(--shadow);
+      padding:12px;
+      min-height:210px;
+      backdrop-filter: blur(10px);
+      display:flex;
+      flex-direction:column;
+    }
+    .links{
+      list-style:none;
+      margin:0;
+      padding:0;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      overflow:auto;
+      max-height: 100%;
+    }
+    .links a{
+      color:var(--text);
+      text-decoration:none;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 10px;
+      border-radius:12px;
+      background:rgba(255,255,255,.02);
+      border:1px solid transparent;
+      transition:.12s ease;
+    }
+    .links a:hover{
+      border-color:rgba(155,188,255,.22);
+      background:rgba(155,188,255,.10);
+      transform:translateY(-1px);
+    }
+    .dot{ width:7px;height:7px;border-radius:50%;background:#9bbcff; }
+
+    footer{
+      margin-top:14px;
+      font-size:12px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      opacity:.85;
+    }
+  </style>
 </head>
 
 <body>
+  <!-- AI Sidebar -->
+  <nav class="ai-sidebar" aria-label="AI shortcuts">
+    <a class="ai-btn ai-chatgpt" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" aria-label="ChatGPT">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 3.2c1.8 0 3.4.8 4.5 2.1 1.9.1 3.4 1.7 3.4 3.6 0 .6-.1 1.2-.4 1.7.9 1.1 1.2 2.7.6 4.1-.6 1.5-2 2.4-3.6 2.5-.7 1.5-2.2 2.6-4 2.6-1 0-2-.3-2.8-.8-1.7.5-3.6-.3-4.5-2-.4-.8-.5-1.7-.3-2.5C4 13.8 3.2 12.6 3.2 11.2c0-1.8 1.2-3.3 2.8-3.8C6.7 5 8.2 3.2 10.2 3.2c.7 0 1.3.1 1.8.3Z" stroke="rgba(255,255,255,.92)" stroke-width="1.3" opacity=".95"/>
+        <path d="M8.2 7.4 12 9.6l3.8-2.2M12 9.6v4.5l-3.8 2.2M12 9.6l3.8 2.2v4.5" stroke="rgba(255,255,255,.9)" stroke-width="1.2" opacity=".8"/>
+      </svg>
+      <span class="tip">ChatGPT</span>
+    </a>
 
-<div class="wrap">
-<div class="topbar">
+    <a class="ai-btn ai-gemini" href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" aria-label="Gemini">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 2.8l1.7 5.7 5.7 1.7-5.7 1.7L12 17.6l-1.7-5.7-5.7-1.7 5.7-1.7L12 2.8Z" fill="rgba(255,255,255,.92)" opacity=".92"/>
+        <path d="M18.8 13.5l.8 2.7 2.7.8-2.7.8-.8 2.7-.8-2.7-2.7-.8 2.7-.8.8-2.7Z" fill="rgba(255,255,255,.88)" opacity=".78"/>
+      </svg>
+      <span class="tip">Gemini</span>
+    </a>
 
-<div class="slot stack-slot">
+    <a class="ai-btn ai-claude" href="https://claude.ai/" target="_blank" rel="noopener noreferrer" aria-label="Claude">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 3.2c3.8 0 6.8 2.5 6.8 5.6 0 2.5-2 4.7-5 5.4L12 20.8l-1.8-6.6c-3-.7-5-2.9-5-5.4 0-3.1 3-5.6 6.8-5.6Z" stroke="rgba(255,255,255,.92)" stroke-width="1.3" opacity=".95"/>
+        <path d="M9.2 9.6h5.6" stroke="rgba(255,255,255,.88)" stroke-width="1.3" stroke-linecap="round" opacity=".85"/>
+        <path d="M9.8 12.2h4.4" stroke="rgba(255,255,255,.88)" stroke-width="1.3" stroke-linecap="round" opacity=".7"/>
+      </svg>
+      <span class="tip">Claude</span>
+    </a>
 
-<div class="search-grid">
-<form class="search" action="https://www.google.com/search" method="get" target="_blank">
-<input name="q" placeholder="Google 검색" />
-<button type="submit">🔍</button>
-</form>
+    <a class="ai-btn ai-perplexity" href="https://www.perplexity.ai/" target="_blank" rel="noopener noreferrer" aria-label="Perplexity">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 3.4c4.7 0 8.6 3.9 8.6 8.6S16.7 20.6 12 20.6 3.4 16.7 3.4 12 7.3 3.4 12 3.4Z" stroke="rgba(255,255,255,.9)" stroke-width="1.3" opacity=".9"/>
+        <path d="M9 8.2h4.2c1.8 0 3 1.1 3 2.7 0 1.7-1.2 2.7-3 2.7H9V8.2Z" stroke="rgba(255,255,255,.92)" stroke-width="1.3" opacity=".9"/>
+        <path d="M9 13.6v2.8" stroke="rgba(255,255,255,.92)" stroke-width="1.3" opacity=".9" stroke-linecap="round"/>
+      </svg>
+      <span class="tip">Perplexity</span>
+    </a>
+  </nav>
 
-<form class="search" action="https://search.naver.com/search.naver" method="get" target="_blank">
-<input name="query" placeholder="Naver 검색" />
-<button type="submit">🔍</button>
-</form>
+  <div class="wrap">
+    <div class="topbar">
 
-<form class="search" action="https://www.youtube.com/results" method="get" target="_blank">
-<input name="search_query" placeholder="YouTube 검색" />
-<button type="submit">🔍</button>
-</form>
-</div>
+      <div class="slot stack-slot">
+        <div class="search-grid">
+          <!-- Google -->
+          <form class="search" action="https://www.google.com/search" method="get" target="_blank" rel="noopener">
+            <div class="sicon" aria-hidden="true" title="Google">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 3a9 9 0 1 0 0 18c2.6 0 5.8-1.2 7.3-4.9.6-1.5.7-2.9.6-4.1H12v3h4.7c-.5 2.2-2.4 4-4.7 4a6 6 0 1 1 0-12c1.5 0 2.8.5 3.8 1.5l2.1-2.1C16.3 3.8 14.3 3 12 3Z" fill="rgba(155,188,255,.95)"/>
+              </svg>
+            </div>
+            <input name="q" placeholder="Google 검색" autocomplete="off" aria-label="Google 검색어" />
+            <button type="submit" aria-label="Google 검색">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.4" stroke="rgba(255,255,255,.92)" stroke-width="1.6"/>
+                <path d="M16.2 16.2 20 20" stroke="rgba(255,255,255,.92)" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </form>
 
-<div class="bottom-row">
+          <!-- Naver -->
+          <form class="search" action="https://search.naver.com/search.naver" method="get" target="_blank" rel="noopener">
+            <div class="sicon" aria-hidden="true" title="Naver">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M7 6h3.2l3.8 5.7V6H17v12h-3.2L10 12.3V18H7V6Z" fill="rgba(130,255,194,.95)"/>
+              </svg>
+            </div>
+            <input name="query" placeholder="Naver 검색" autocomplete="off" aria-label="Naver 검색어" />
+            <button type="submit" aria-label="Naver 검색">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.4" stroke="rgba(255,255,255,.92)" stroke-width="1.6"/>
+                <path d="M16.2 16.2 20 20" stroke="rgba(255,255,255,.92)" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </form>
 
-<div class="calendar-inner">
-<iframe src="https://calendar.google.com/calendar/embed?mode=AGENDA&showTitle=0&ctz=Asia%2FSeoul"></iframe>
-</div>
+          <!-- YouTube -->
+          <form class="search" action="https://www.youtube.com/results" method="get" target="_blank" rel="noopener">
+            <div class="sicon" aria-hidden="true" title="YouTube">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M10 16V8l7 4-7 4Z" fill="rgba(255,140,140,.95)"/>
+                <path d="M21 12s0-3.4-.4-5c-.2-.8-.9-1.4-1.7-1.6C17.4 5 12 5 12 5s-5.4 0-6.9.4c-.8.2-1.5.8-1.7 1.6C3 8.6 3 12 3 12s0 3.4.4 5c.2.8.9 1.4 1.7 1.6C6.6 19 12 19 12 19s5.4 0 6.9-.4c.8-.2 1.5-.8 1.7-1.6.4-1.6.4-5 .4-5Z" stroke="rgba(255,140,140,.75)" stroke-width="1.2"/>
+              </svg>
+            </div>
+            <input name="search_query" placeholder="YouTube 검색" autocomplete="off" aria-label="YouTube 검색어" />
+            <button type="submit" aria-label="YouTube 검색">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.4" stroke="rgba(255,255,255,.92)" stroke-width="1.6"/>
+                <path d="M16.2 16.2 20 20" stroke="rgba(255,255,255,.92)" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </form>
+        </div>
 
-<!-- Visited -->
-<div class="recent-inner">
-  <div class="recent-toprow">
-    <div class="recent-label">Visited</div>
-    <button class="recent-btn" id="recentClearBtn">기록삭제</button>
+        <div class="bottom-row">
+          <div class="calendar-inner">
+            <iframe
+              title="Google Calendar Agenda"
+              src="https://calendar.google.com/calendar/embed?mode=AGENDA&showTitle=0&showPrint=0&showCalendars=0&showTabs=0&showTz=0&wkst=1&ctz=Asia%2FSeoul&src=shineway2011%40gmail.com">
+            </iframe>
+          </div>
+
+          <div class="todo-inner" aria-label="오늘 할일">
+            <div class="todo-toprow">
+              <div class="todo-label">To Do</div>
+
+              <form class="todo-form" id="todoForm" autocomplete="off">
+                <input id="todoInput" placeholder="" autocomplete="off" aria-label="할 일 입력" />
+                <button class="todo-add" type="submit">추가</button>
+                <button class="todo-del" id="todoClearBtn" type="button" title="전체 삭제">전체삭제</button>
+              </form>
+            </div>
+
+            <ul class="todo-list" id="todoList" aria-label="할 일 목록"></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="slot weather-slot">
+        <div class="weather" aria-label="서울 날씨">
+          <div class="weather-top">
+            <div class="weather-city">서울</div>
+            <div id="weatherTime" class="weather-time">--</div>
+          </div>
+
+          <div>
+            <div class="weather-temp" id="weatherTemp">--°</div>
+            <div class="weather-desc" id="weatherDesc">로딩중</div>
+          </div>
+
+          <div class="weather-kv">
+            <div id="weatherWind">바람 --</div>
+            <div id="weatherHum">습도 --</div>
+          </div>
+
+          <div class="weather-hours" id="weatherHours" aria-label="3시간 단위 예보"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <footer>
+      <div>© sjw2026</div>
+      <div>링크 수정은 <code>LINK_SECTIONS</code>만 편집</div>
+    </footer>
   </div>
 
-  <div class="recent-columns">
-    <div class="recent-col">
-      <div class="recent-title">최근</div>
-      <ul class="recent-list" id="recentList"></ul>
-    </div>
-    <div class="recent-col">
-      <div class="recent-title">자주</div>
-      <ul class="recent-list" id="freqList"></ul>
-    </div>
-  </div>
-</div>
+  <script>
+    const LINK_SECTIONS = [
+      { items: [
+        { label: "구글 캘린더", url: "https://calendar.google.com/calendar/r" },
+        { label: "서진욱 기자", url: "https://media.naver.com/journalist/008/31377" },
+        { label: "와이파이레터", url: "https://ictwifi.stibee.com/" },
+        { label: "정책 브리핑", url: "https://www.korea.kr/news/policyNewsList.do" },
+        { label: "네이버 뉴스", url: "https://news.naver.com/" },
+        { label: "주요 뉴스 크롤링", url: "https://sjw2026.github.io/news/" }
+      ]},
+      { items: [
+        { label: "기사 입력기", url: "https://mod.mt.co.kr/login" },
+        { label: "머투 인트라", url: "http://intra.mt.co.kr/login.html" },
+        { label: "머니투데이", url: "http://www.mt.co.kr/" },
+        { label: "머투 포데", url: "https://mpd.mt.co.kr/" },
+        { label: "머투 메일", url: "https://outlook.office.com/owa/?realm=mt.co.kr&exsvurl=1&ll-cc=1042&modurl=0" },
+        { label: "구글 메일", url: "https://mail.google.com/mail/u/0/#inbox" }
+      ]},
+      { items: [
+        { label: "구글 드라이브", url: "https://drive.google.com/drive/my-drive" },
+        { label: "클로바노트", url: "https://clovanote.naver.com/" },
+        { label: "구글 번역기", url: "https://translate.google.com/" },
+        { label: "네이버 번역기", url: "https://papago.naver.com/" },
+        { label: "네이버 지도", url: "https://map.naver.com/" },
+        { label: "네이버 사전", url: "https://dict.naver.com/" }
+      ]},
+      { items: [
+        { label: "내 블로그", url: "https://blog.naver.com/shineway2011" },
+        { label: "네이버 증권", url: "https://finance.naver.com/sise/" },
+        { label: "업비트", url: "https://upbit.com/exchange?code=CRIX.UPBIT.KRW-BTC" },
+        { label: "와이즈리포트", url: "https://www.wisereport.co.kr/" },
+        { label: "ETF CHECK", url: "https://www.etfcheck.co.kr/mobile/main" },
+        { label: "등락률", url: "https://docs.google.com/spreadsheets/d/1QhyZTNZmZCDxe2VnY3B-PWufQrubSDo8OHlIMK54d1g/edit?gid=0#gid=0" }
+      ]},
+      { items: [
+        { label: "위클리비즈", url: "http://weeklybiz.chosun.com/" },
+        { label: "미라클레터", url: "https://mirakle.mk.co.kr/list.php?sc=51800017" },
+        { label: "딥다이브", url: "https://www.donga.com/news/Series/70010000001020" },
+        { label: "아무튼 주말", url: "https://www.chosun.com/nsearch/?query=%EC%95%84%EB%AC%B4%ED%8A%BC%2C%20%EC%A3%BC%EB%A7%90&page=1&siteid=&sort=1&date_period=&date_start=&date_end=&writer=&field=&emd_word=&expt_word=&opt_chk=false&app_check=0&website=www,chosun&category=" },
+        { label: "칼럼", url: "https://news.naver.com/main/opinion/todayColumn.nhn" },
+        { label: "해외축구", url: "https://m.sports.naver.com/wfootball/news?sectionId=epl&sort=latest&date=20260117&isPhoto=N" }
+      ]},
+      { items: [
+        { label: "쿠팡플레이", url: "https://www.coupangplay.com/" },
+        { label: "스포티비", url: "https://www.spotvnow.co.kr/" },
+        { label: "티빙", url: "https://www.tving.com/onboarding" },
+        { label: "넷플릭스", url: "https://www.netflix.com/browse" },
+        { label: "디즈니플러스", url: "https://www.disneyplus.com/ko-kr" },
+        { label: "샥톡", url: "https://sharktalk.imweb.me/index" }
+      ]},
+      { items: [
+        { label: "의안 정보 시스템", url: "http://likms.assembly.go.kr/bill/main.do" },
+        { label: "입법조사처 보고서", url: "https://www.nars.go.kr/report/list.do?cmsCode=CM0043" },
+        { label: "전자공시시스템", url: "http://dart.fss.or.kr/" },
+        { label: "빅카인즈", url: "https://www.bigkinds.or.kr/" }
+      ]},
+      { items: [
+        { label: "바이브", url: "https://vibe.naver.com/today" },
+        { label: "페이스북", url: "https://www.facebook.com/" },
+        { label: "링크드인", url: "https://www.linkedin.com/feed/" },
+        { label: "인스타그램", url: "https://www.instagram.com/seowoog/" },
+        { label: "X(트위터)", url: "https://twitter.com/" },
+        { label: "브런치", url: "https://brunch.co.kr/@shineway2011" }
+      ]},
+      { items: [
+        { label: "유튜브 인급동", url: "https://www.youtube.com/feed/trending?bp=6gQJRkVleHBsb3Jl" },
+        { label: "구글 트렌드", url: "https://trends.google.co.kr/trending?geo=KR&hl=ko" },
+        { label: "교보 베셀", url: "https://store.kyobobook.co.kr/bestseller/online/daily?page=1" },
+        { label: "인베스팅닷컴", url: "https://kr.investing.com/indices/major-indices" },
+        { label: "Finviz", url: "https://finviz.com/" }
+      ]},
+      { items: [
+        { label: "쿠팡", url: "https://www.coupang.com/" },
+        { label: "네이버 스토어", url: "https://shopping.naver.com/ns/home" },
+        { label: "내 블로그-비망록", url: "https://blog.naver.com/shineway0102" },
+        { label: "모두의 풋살", url: "https://cafe.naver.com/haha999" },
+        { label: "서경축구클럽", url: "https://cafe.daum.net/skfootball/IxUe" }
+      ]}
+    ];
 
-</div>
-</div>
+    function safeUrl(u){
+      if(!u || typeof u !== "string") return "";
+      const trimmed = u.trim();
+      if(!trimmed) return "";
+      if(trimmed.startsWith("http://") || trimmed.startsWith("https://")) return trimmed;
+      return "https://" + trimmed;
+    }
 
-</div>
+    function renderLinks(){
+      const grid = document.getElementById("grid");
+      if(!grid) return;
+      grid.innerHTML = "";
 
-<div class="grid" id="grid"></div>
+      (LINK_SECTIONS || []).forEach(section => {
+        const items = Array.isArray(section?.items) ? section.items : [];
+        if(items.length === 0) return;
 
-<footer>
-<div>© sjw2026</div>
-<div>LINK_SECTIONS 수정</div>
-</footer>
+        const card = document.createElement("section");
+        card.className = "card";
 
-</div>
+        const ul = document.createElement("ul");
+        ul.className = "links";
 
-<script>
-const LINK_SECTIONS = [
-  { items: [
-    { label: "네이버 뉴스", url: "https://news.naver.com/" },
-    { label: "구글 메일", url: "https://mail.google.com/" },
-    { label: "유튜브", url: "https://youtube.com" }
-  ]}
-];
+        items.forEach(item => {
+          const label = (item?.label || "").toString().trim();
+          const url = safeUrl(item?.url);
+          if(!label || !url) return;
 
-function safeUrl(u){
-  if(!u) return "";
-  if(u.startsWith("http")) return u;
-  return "https://" + u;
-}
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+          a.href = url;
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
 
-function renderLinks(){
-  const grid = document.getElementById("grid");
-  grid.innerHTML = "";
-  LINK_SECTIONS.forEach(section=>{
-    const card=document.createElement("section");
-    card.className="card";
-    const ul=document.createElement("ul");
-    ul.className="links";
+          const dot = document.createElement("span");
+          dot.className = "dot";
 
-    section.items.forEach(item=>{
-      const li=document.createElement("li");
-      const a=document.createElement("a");
-      a.href=safeUrl(item.url);
-      a.target="_blank";
-      a.textContent=item.label;
+          const text = document.createElement("span");
+          text.textContent = label;
 
-      a.addEventListener("click",()=>recordVisit(item.label, a.href));
+          a.appendChild(dot);
+          a.appendChild(text);
+          li.appendChild(a);
+          ul.appendChild(li);
+        });
 
-      li.appendChild(a);
-      ul.appendChild(li);
+        card.appendChild(ul);
+        grid.appendChild(card);
+      });
+    }
+
+    /* ===== Weather (Open-Meteo) ===== */
+    const SEOUL = { lat:37.5665, lon:126.978 };
+
+    function weatherLabel(code){
+      if(code === 0) return { icon:"☀️", text:"맑음" };
+      if(code === 1) return { icon:"🌤", text:"대체로 맑음" };
+      if(code === 2) return { icon:"⛅", text:"구름 조금" };
+      if(code === 3) return { icon:"☁️", text:"흐림" };
+      if(code === 45 || code === 48) return { icon:"🌫", text:"안개" };
+      if([51,53,55,56,57].includes(code)) return { icon:"🌦", text:"이슬비" };
+      if([61,63,65,66,67].includes(code)) return { icon:"🌧", text:"비" };
+      if([71,73,75,77].includes(code)) return { icon:"❄️", text:"눈" };
+      if([80,81,82].includes(code)) return { icon:"🌧", text:"소나기" };
+      if([95,96,99].includes(code)) return { icon:"⛈️", text:"뇌우" };
+      return { icon:"🌥", text:"구름" };
+    }
+
+    function setText(id, value){
+      const el = document.getElementById(id);
+      if(el) el.textContent = value;
+    }
+
+    async function loadWeather(){
+      const elHours = document.getElementById("weatherHours");
+      try{
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${SEOUL.lat}&longitude=${SEOUL.lon}&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&hourly=temperature_2m,weather_code&timezone=Asia%2FSeoul`;
+        const r = await fetch(url, { cache: "no-store" });
+        const j = await r.json();
+        const c = j?.current;
+        const hourly = j?.hourly;
+
+        if(!c || !hourly?.time?.length){
+          setText("weatherDesc", "날씨 데이터 없음");
+          return;
+        }
+
+        const label = weatherLabel(c.weather_code);
+        setText("weatherTemp", `${c.temperature_2m}°`);
+        setText("weatherDesc", `${label.icon} ${label.text}`);
+        setText("weatherWind", `바람 ${c.wind_speed_10m}km/h`);
+        setText("weatherHum",  `습도 ${c.relative_humidity_2m}%`);
+        setText("weatherTime", (c.time || "--").slice(11,16));
+
+        if(elHours){
+          elHours.innerHTML = "";
+
+          const now = new Date(c.time);
+          const nowH = now.getHours();
+          const base = Math.ceil((nowH + 0.0001) / 3) * 3;
+          const wantHours = [base, base+3, base+6, base+9].map(h => ((h%24)+24)%24);
+
+          const map = new Map();
+          for(let i=0;i<hourly.time.length;i++){
+            const t = hourly.time[i];
+            const dt = new Date(t);
+            const key = dt.toISOString().slice(0,10) + "_" + dt.getHours();
+            if(!map.has(key)) map.set(key, i);
+          }
+
+          const ymdToday = new Date(c.time).toISOString().slice(0,10);
+          const ymdTomorrow = new Date(new Date(c.time).getTime() + 24*3600*1000).toISOString().slice(0,10);
+
+          wantHours.forEach(h => {
+            let idx = map.get(`${ymdToday}_${h}`);
+            if(idx == null) idx = map.get(`${ymdTomorrow}_${h}`);
+
+            const temp = (idx != null) ? hourly.temperature_2m[idx] : "--";
+            const code = (idx != null) ? hourly.weather_code[idx] : null;
+            const lab = (code == null) ? {icon:"🌥", text:""} : weatherLabel(code);
+
+            const d = document.createElement("div");
+            d.className = "hour";
+            d.innerHTML = `${h}시<br>${lab.icon}<div class="t">${temp}°</div>`;
+            elHours.appendChild(d);
+          });
+        }
+      }catch(e){
+        setText("weatherDesc", "날씨 로딩 실패");
+      }
+    }
+
+    /* ===== Todo (localStorage) ===== */
+    const TODO_KEY = "sjw2026_todos_v1";
+
+    function loadTodos(){
+      try{
+        return JSON.parse(localStorage.getItem(TODO_KEY) || "[]");
+      }catch{
+        return [];
+      }
+    }
+    function saveTodos(todos){
+      localStorage.setItem(TODO_KEY, JSON.stringify(todos));
+    }
+
+    function renderTodos(){
+      const list = document.getElementById("todoList");
+      if(!list) return;
+
+      const todos = loadTodos();
+      list.innerHTML = "";
+
+      todos.forEach((t, idx) => {
+        const li = document.createElement("li");
+        li.className = "todo-item" + (t.done ? " done" : "");
+
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.checked = !!t.done;
+        cb.addEventListener("change", () => {
+          const cur = loadTodos();
+          if(!cur[idx]) return;
+          cur[idx].done = cb.checked;
+          saveTodos(cur);
+          renderTodos();
+        });
+
+        const text = document.createElement("div");
+        text.className = "todo-text";
+        text.textContent = t.text;
+
+        const del = document.createElement("button");
+        del.className = "todo-del";
+        del.type = "button";
+        del.textContent = "삭제";
+        del.addEventListener("click", () => {
+          const cur = loadTodos();
+          cur.splice(idx, 1);
+          saveTodos(cur);
+          renderTodos();
+        });
+
+        li.appendChild(cb);
+        li.appendChild(text);
+        li.appendChild(del);
+        list.appendChild(li);
+      });
+    }
+
+    function bindTodo(){
+      const form = document.getElementById("todoForm");
+      const input = document.getElementById("todoInput");
+      const clearBtn = document.getElementById("todoClearBtn");
+      if(!form || !input || !clearBtn) return;
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const v = (input.value || "").trim();
+        if(!v) return;
+
+        const todos = loadTodos();
+        todos.unshift({ text: v, done: false, ts: Date.now() });
+        saveTodos(todos);
+        input.value = "";
+        renderTodos();
+      });
+
+      clearBtn.addEventListener("click", () => {
+        saveTodos([]);
+        renderTodos();
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderLinks();
+      loadWeather();
+      bindTodo();
+      renderTodos();
+      setInterval(loadWeather, 15 * 60 * 1000);
     });
-
-    card.appendChild(ul);
-    grid.appendChild(card);
-  });
-}
-
-/* ===== Visited ===== */
-const VISIT_KEY="sjw2026_visits_v1";
-const LIST_N=6;
-
-function loadVisits(){
-  return JSON.parse(localStorage.getItem(VISIT_KEY)||"[]");
-}
-function saveVisits(v){
-  localStorage.setItem(VISIT_KEY,JSON.stringify(v));
-}
-
-function recordVisit(label,url){
-  const v=loadVisits();
-  const now=Date.now();
-  const idx=v.findIndex(x=>x.url===url);
-  if(idx>=0){
-    v[idx].ts=now;
-    v[idx].count++;
-  }else{
-    v.unshift({label,url,ts:now,count:1});
-  }
-  saveVisits(v);
-  renderVisited();
-}
-
-function ago(ts){
-  const m=Math.floor((Date.now()-ts)/60000);
-  if(m<1) return "방금";
-  if(m<60) return m+"m";
-  const h=Math.floor(m/60);
-  if(h<24) return h+"h";
-  return Math.floor(h/24)+"d";
-}
-
-function renderVisited(){
-  const recentEl=document.getElementById("recentList");
-  const freqEl=document.getElementById("freqList");
-  const v=loadVisits();
-
-  const recent=[...v].sort((a,b)=>b.ts-a.ts).slice(0,LIST_N);
-  const freq=[...v].sort((a,b)=>b.count-a.count).slice(0,LIST_N);
-
-  const render=(el,arr,mode)=>{
-    el.innerHTML="";
-    arr.forEach(r=>{
-      const li=document.createElement("li");
-      li.className="recent-item";
-      const a=document.createElement("a");
-      a.href=r.url;
-      a.target="_blank";
-      const t=document.createElement("span");
-      t.className="recent-text";
-      t.textContent=r.label;
-      const m=document.createElement("span");
-      m.className="recent-meta";
-      m.textContent= mode==="freq"? r.count+"회": ago(r.ts);
-      a.appendChild(t);
-      a.appendChild(m);
-      li.appendChild(a);
-      el.appendChild(li);
-    });
-  };
-
-  render(recentEl,recent,"recent");
-  render(freqEl,freq,"freq");
-}
-
-document.getElementById("recentClearBtn").onclick=()=>{
-  saveVisits([]);
-  renderVisited();
-};
-
-document.addEventListener("DOMContentLoaded",()=>{
-  renderLinks();
-  renderVisited();
-});
-</script>
-
+  </script>
 </body>
 </html>
